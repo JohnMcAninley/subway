@@ -9,6 +9,7 @@ from PySide6.QtSvgWidgets import QSvgWidget
 
 from mta_feed import get_predictions
 from stops import load_headsigns, load_stop_names
+import download
 
 
 class SubwayDisplay(QWidget):
@@ -54,6 +55,11 @@ class SubwayDisplay(QWidget):
                 self.clearLayout(item.layout())
 
     def update_predictions(self):
+
+        if download.download_if_newer_zip("https://rrgtfsfeeds.s3.amazonaws.com/gtfs_supplemented.zip", "gtfs_supplemented.zip"):
+            download.unzip_and_replace("gtfs_supplemented.zip", "gtfs-supplemented")
+            self.headsigns = load_headsigns("gtfs-supplemented/trips.txt", self.headsigns)
+        
         preds = get_predictions()
         now = time.time()
         upcoming = sorted([p for p in preds if p['arrival_time'] >= now], key=lambda p: p['arrival_time'])
