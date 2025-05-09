@@ -46,5 +46,5 @@ def unzip_and_replace(zip_path, extract_to):
 
 
 if __name__ == "__main__":
-    if download_if_newer_zip("https://rrgtfsfeeds.s3.amazonaws.com/gtfs_supplemented.zip", "gtfs-test")
-        unzip_and_replace("gtfs-test", "gtfs-test-unzip")
+    if download_if_newer_zip("https://rrgtfsfeeds.s3.amazonaws.com/gtfs_supplemented.zip", "gtfs_supplemented.zip"):
+        unzip_and_replace("gtfs_supplemented.zip", "gtfs-supplemented")
