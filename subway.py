@@ -60,7 +60,7 @@ class SubwayDisplay(QWidget):
             download.unzip_and_replace("gtfs_supplemented.zip", "gtfs-supplemented")
             self.headsigns = load_headsigns("gtfs-supplemented/trips.txt", self.headsigns)
         
-        preds = get_predictions()
+        preds = get_predictions("R36")
         now = time.time()
         upcoming = sorted([p for p in preds if p['arrival_time'] >= now], key=lambda p: p['arrival_time'])
 
