@@ -1,14 +1,26 @@
+import json
 import requests
+
 from google.transit import gtfs_realtime_pb2
 
 
-FEED_URL = "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs"  # 1 train, etc.
+with open("urls.json", "r") as f:
+    URL_JSON = json.load(f)
+
+BASE_URL = URL_JSON["base"]
+URLS = {line: BASE_URL + suffix for line, suffix in URL_JSON["suffixes"].items()}
 
 
-def get_predictions():
+def get_predictions(stop_id):
     feed = gtfs_realtime_pb2.FeedMessage()
 
-    response = requests.get(FEED_URL)
+    line = stop_id[0]
+    if line == "S": # S is used for SIR
+        line = "SIR"
+    elif line == "9": # 9 is used for GC Shuttle
+        line = "S"
+    url = URLS[line]
+    response = requests.get(url)
     feed.ParseFromString(response.content)
 
     predictions = []
@@ -18,7 +30,7 @@ def get_predictions():
             trip = entity.trip_update
             for stop_time in trip.stop_time_update:
                 stop_id = stop_time.stop_id
-                if stop_id.startswith("631"):
+                if stop_id.startswith("R36"):
                     arrival = stop_time.arrival.time
                     predictions.append({
                         'trip_id': trip.trip.trip_id,
@@ -31,4 +43,4 @@ def get_predictions():
 
 
 if __name__ == "__main__":
-    preds = get_predictions()
+    preds = get_predictions("631")
