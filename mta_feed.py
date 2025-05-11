@@ -11,10 +11,10 @@ BASE_URL = URL_JSON["base"]
 URLS = {line: BASE_URL + suffix for line, suffix in URL_JSON["suffixes"].items()}
 
 
-def get_predictions(stop_id):
+def get_predictions(stop):
     feed = gtfs_realtime_pb2.FeedMessage()
 
-    line = stop_id[0]
+    line = stop[0]
     if line == "S": # S is used for SIR
         line = "SIR"
     elif line == "9": # 9 is used for GC Shuttle
@@ -30,7 +30,7 @@ def get_predictions(stop_id):
             trip = entity.trip_update
             for stop_time in trip.stop_time_update:
                 stop_id = stop_time.stop_id
-                if stop_id.startswith("R36"):
+                if stop_id.startswith(stop):
                     arrival = stop_time.arrival.time
                     predictions.append({
                         'trip_id': trip.trip.trip_id,
