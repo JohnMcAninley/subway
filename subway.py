@@ -72,7 +72,6 @@ class SubwayDisplay(QWidget):
 
         for i, pred in enumerate(upcoming[:2], start=1):  # Show up to 5 trains
             train_number = pred['route_id']
-            destination = self.stops.get(pred['stop_id'], pred['stop_id'])
             minutes = (pred['arrival_time'] - time.time()) / 60.0
             #eta_text = "Arriving" if minutes <= 1.0 else f"{int(minutes)} min"
             headsign = self.headsigns.get(pred['trip_id'], "Unknown")
@@ -88,6 +87,8 @@ class SubwayDisplay(QWidget):
         hbox = QHBoxLayout()
         #hbox.setSpacing(40)
         hbox.setContentsMargins(0,0,0,0)
+        if highlight:
+            row.setStyleSheet("background-color: black;")
 
         text_color = "yellow" if highlight else "white" if mode=="dark" else "black"
 
@@ -104,7 +105,8 @@ class SubwayDisplay(QWidget):
         hbox.addWidget(index_label)
 
         # Train bullet
-        svg_path = os.path.join("bullets-cropped", f"NYCS-bull-trans-{train_number.upper()}.svg")
+        bullet_id = train_number.upper().replace("X", "d")
+        svg_path = os.path.join("bullets-cropped", f"NYCS-bull-trans-{bullet_id}.svg")
         bullet = QSvgWidget(svg_path)
         bullet.setFixedSize(150, 150)
 
