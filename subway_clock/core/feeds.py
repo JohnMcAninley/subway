@@ -1,10 +1,11 @@
 import json
-import requests
+from pathlib import Path
 
+import requests
 from google.transit import gtfs_realtime_pb2
 
 
-with open("urls.json", "r") as f:
+with open(Path(__file__).with_name("urls.json"), "r") as f:
     URL_JSON = json.load(f)
 
 BASE_URL = URL_JSON["base"]
@@ -40,7 +41,3 @@ def get_predictions(stop):
                     })
 
     return predictions
-
-
-if __name__ == "__main__":
-    preds = get_predictions("631")

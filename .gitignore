@@ -1,7 +1,6 @@
 __pycache__/
 venv/
 
-gtfs/
-gtfs-supplemented/
-
-*.zip
+# Static GTFS cache and local settings
+data/
+settings.json

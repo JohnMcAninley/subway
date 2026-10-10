@@ -1,0 +1,118 @@
+from pathlib import Path
+
+from PySide6.QtWidgets import QLabel, QWidget, QVBoxLayout, QHBoxLayout, QFrame, QSpacerItem, QSizePolicy
+from PySide6.QtCore import Qt, QTimer
+from PySide6.QtSvgWidgets import QSvgWidget
+
+BULLETS_DIR = Path(__file__).resolve().parent.parent / "assets" / "bullets"
+
+
+class SubwayDisplay(QWidget):
+    def __init__(self, clock, width):
+        super().__init__()
+        self.clock = clock
+        self.setWindowTitle("NYC Subway Countdown Clock")
+        self.setWindowFlags(Qt.FramelessWindowHint)
+        self.setFixedSize(width, int(width / 3.2))  # Matches 3.2:1 aspect ratio
+        background = "white" if clock.settings.theme == "light" else "black"
+        self.setStyleSheet(f"background-color: {background};")
+
+        layout = QVBoxLayout()
+        layout.setSpacing(10)
+        layout.setContentsMargins(20, 20, 20, 20)
+        self.setLayout(layout)
+
+        self.update_timer = QTimer()
+        self.update_timer.timeout.connect(self.update_predictions)
+        self.update_timer.start(clock.settings.refresh_seconds * 1000)
+
+        self.rotation_timer = QTimer()
+        self.rotation_timer.timeout.connect(self.rotate_second_train)
+        self.rotation_timer.start(clock.settings.rotation_seconds * 1000)
+
+        self.update_predictions()
+
+    def keyPressEvent(self, event):
+        if event.key() == Qt.Key_Escape:
+            self.close()
+
+    def clearLayout(self, layout):
+        while layout.count():
+            item = layout.takeAt(0)
+            widget = item.widget()
+            if widget is not None:
+                widget.setParent(None)
+            elif item.layout() is not None:
+                self.clearLayout(item.layout())
+
+    def update_predictions(self):
+        self.clock.refresh()
+        self.render_display(self.clock.board())
+
+    def rotate_second_train(self):
+        if self.clock.rotate():
+            self.render_display(self.clock.board())
+
+    def train_row(self, train, mode):
+        row = QWidget()
+        hbox = QHBoxLayout()
+        hbox.setContentsMargins(0,0,0,0)
+        if train.arriving:
+            row.setStyleSheet("background-color: black;")
+
+        text_color = "yellow" if train.arriving else "white" if mode=="dark" else "black"
+
+        index_label = QLabel(f"{train.number}.")
+        index_label.setStyleSheet(
+            f"""
+            color: {text_color};
+            font-weight: 330;
+            font-size: 96pt;
+            """
+        )
+        index_label.setAlignment(Qt.AlignCenter)
+        index_label.setFixedWidth(85)
+        hbox.addWidget(index_label)
+
+        # Train bullet
+        bullet = QSvgWidget(str(BULLETS_DIR / f"NYCS-bull-trans-{train.bullet}.svg"))
+        bullet.setFixedSize(150, 150)
+
+        # Destination
+        dest = QLabel(train.destination)
+        dest.setStyleSheet(
+            f"""
+            color: {text_color};
+            font-size: 72pt;
+            font-weight: 330;
+            letter-spacing: -5px;
+            """
+        )
+        dest.setAlignment(Qt.AlignVCenter | Qt.AlignLeft)
+
+        # ETA
+        eta_label = QLabel()
+        eta_label.setText(f"<span style='font-size:96pt; font-weight: 330;'>{train.minutes}</span><span style='font-size:48pt'> min</span>")
+        eta_label.setStyleSheet(f"color: {text_color};")
+        eta_label.setAlignment(Qt.AlignVCenter | Qt.AlignRight)
+
+        hbox.addWidget(bullet)
+        hbox.addSpacerItem(QSpacerItem(20, 0, QSizePolicy.Fixed, QSizePolicy.Minimum))
+        hbox.addWidget(dest, 2)
+        hbox.addWidget(eta_label, 1)
+        row.setLayout(hbox)
+        return row
+
+    def line_separator(self):
+        line = QFrame()
+        line.setFrameShape(QFrame.HLine)
+        line.setFrameShadow(QFrame.Sunken)
+        line.setStyleSheet("color: #CCCCCC; background-color: #CCCCCC;")
+        line.setFixedHeight(2)  # Or 1px for super thin
+        return line
+
+    def render_display(self, board):
+        self.clearLayout(self.layout())
+        for train in board.rows:
+            self.layout().addWidget(self.train_row(train, board.theme))
+            self.layout().addWidget(self.line_separator())

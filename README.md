@@ -12,27 +12,51 @@ Requires Python 3.10+.
 ```sh
 python -m venv venv
 # Windows: venv\Scripts\activate    macOS/Linux: source venv/bin/activate
-pip install -r requirements.txt
+pip install -r requirements-dev.txt
 ```
 
-Download the static subway GTFS into `gtfs/` (not yet automated):
-
-```sh
-curl -L -o gtfs_subway.zip https://rrgtfsfeeds.s3.amazonaws.com/gtfs_subway.zip
-unzip gtfs_subway.zip -d gtfs
-```
-
-The supplemented GTFS (`gtfs-supplemented/`) is downloaded automatically on
-startup and refreshed when the MTA publishes a new version.
+PySide6 is pinned to 6.8.2.1 to match the version Debian (and so Raspberry Pi
+OS) packages.
 
 ## Run
 
 ```sh
-python subway.py
+python -m subway_clock [--settings settings.json] [--width 1280]
 ```
 
-The window is frameless and spans the primary screen's width; close it with
-Alt+F4 (Windows/Linux).
+On first run the static GTFS is downloaded into `data/` (about 40 MB unzipped).
+It is refreshed automatically when the MTA publishes a new version.
+
+The window is frameless and, by default, spans the primary screen's width.
+Press Esc to close it.
+
+## Settings
+
+Settings are read from `settings.json` (or the `--settings` path). Any setting
+left out uses its default, and the file is optional:
+
+```json
+{
+    "stop_id": "633S",
+    "theme": "light",
+    "max_trains": 5,
+    "refresh_seconds": 30,
+    "rotation_seconds": 5,
+    "data_dir": "data"
+}
+```
+
+- `stop_id`: GTFS stop ID; the `N`/`S` suffix selects the direction. Stop IDs are in `data/gtfs_subway/stops.txt`.
+- `theme`: `light` or `dark`.
+- `max_trains`: upcoming trains to show; the second line rotates through trains 2 to `max_trains`.
+- `data_dir`: static GTFS cache. Relative paths are relative to the settings file.
+
+## Layout
+
+- `subway_clock/core/`: data and display logic, with no UI code. `Clock` produces a `Board` (the screen description) that renderers draw as-is.
+- `subway_clock/ui/`: renderers. Currently a Qt widgets UI.
+- `subway_clock/assets/`: route bullets.
+- `tests/`: run with `pytest`.
 
 ## Design
 
