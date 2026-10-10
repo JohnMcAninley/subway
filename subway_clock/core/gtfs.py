@@ -1,6 +1,7 @@
 """Static GTFS: download, unzip, and load the tables the clock needs."""
 import collections
 import csv
+import json
 import os
 import zipfile
 from email.utils import formatdate, parsedate_to_datetime
@@ -60,15 +61,31 @@ def update(url, data_dir, name):
     return False
 
 
-def load_stop_names(gtfs_path):
-    stop_map = {}
+def load_stops(gtfs_path):
+    """Return (stop_id -> name, stop_id -> parent stop_id). Parent stops are their own parent."""
+    names = {}
+    parents = {}
 
     with open(gtfs_path, newline='', encoding='utf-8') as f:
         reader = csv.DictReader(f)
         for row in reader:
-            stop_map[row['stop_id']] = row['stop_name']
+            names[row['stop_id']] = row['stop_name']
+            parents[row['stop_id']] = row['parent_station'] or row['stop_id']
 
-    return stop_map
+    return names, parents
+
+
+def build_stop_routes(gtfs_dirs, parents):
+    """Map each parent stop ID to the sorted route IDs scheduled to stop there in any of gtfs_dirs."""
+    stop_routes = collections.defaultdict(set)
+    for gtfs_dir in gtfs_dirs:
+        with open(Path(gtfs_dir) / "trips.txt", newline='', encoding='utf-8') as f:
+            trip_routes = {row['trip_id']: row['route_id'] for row in csv.DictReader(f)}
+        with open(Path(gtfs_dir) / "stop_times.txt", newline='', encoding='utf-8') as f:
+            for row in csv.DictReader(f):
+                stop_id = row['stop_id']
+                stop_routes[parents.get(stop_id, stop_id)].add(trip_routes[row['trip_id']])
+    return {stop: sorted(routes) for stop, routes in stop_routes.items()}
 
 
 def load_headsigns(gtfs_path, headsigns=None):
@@ -131,19 +148,55 @@ def build_station_complexes(stops_path, transfers_path):
 
 
 class StaticData:
-    """Static GTFS tables kept in data_dir, refreshed from the MTA when they change."""
+    """Static GTFS tables kept in data_dir, refreshed from the MTA when they change.
+
+    The supplemented GTFS adds the next week of planned service changes to the
+    regular schedule, so routes rerouted onto a stop are included.
+    """
+
+    SOURCES = (("gtfs_subway", SUBWAY_URL), ("gtfs_supplemented", SUPPLEMENTED_URL))
 
     def __init__(self, data_dir):
         self.data_dir = Path(data_dir)
         self.data_dir.mkdir(parents=True, exist_ok=True)
-        update(SUBWAY_URL, self.data_dir, "gtfs_subway")
-        update(SUPPLEMENTED_URL, self.data_dir, "gtfs_supplemented")
+        for name, url in self.SOURCES:
+            update(url, self.data_dir, name)
 
-        self.stop_names = load_stop_names(self.data_dir / "gtfs_subway" / "stops.txt")
-        self.headsigns = load_headsigns(self.data_dir / "gtfs_subway" / "trips.txt")
-        load_headsigns(self.data_dir / "gtfs_supplemented" / "trips.txt", self.headsigns)
+        self.stop_names, self.stop_parents = load_stops(self.data_dir / "gtfs_subway" / "stops.txt")
+        self._load_schedules()
 
     def refresh(self):
         """Pick up new supplemented GTFS (planned service changes) if the MTA has published it."""
         if update(SUPPLEMENTED_URL, self.data_dir, "gtfs_supplemented"):
-            load_headsigns(self.data_dir / "gtfs_supplemented" / "trips.txt", self.headsigns)
+            self._load_schedules()
+
+    def routes_for(self, stops):
+        """Sorted route IDs scheduled at any of stops (directional or parent stop IDs)."""
+        routes = set()
+        for stop in stops:
+            routes.update(self.stop_routes.get(self.stop_parents.get(stop, stop), ()))
+        return sorted(routes)
+
+    def _load_schedules(self):
+        # Build into locals and assign at the end, so readers never see a half-loaded table.
+        headsigns = {}
+        for name, _ in self.SOURCES:
+            load_headsigns(self.data_dir / name / "trips.txt", headsigns)
+        stop_routes = self._cached_stop_routes()
+        self.headsigns, self.stop_routes = headsigns, stop_routes
+
+    def _cached_stop_routes(self):
+        """build_stop_routes takes seconds (millions of stop_times rows), so cache it until the GTFS changes."""
+        cache_path = self.data_dir / "stop_routes.json"
+        sources = {name: os.path.getmtime(self.data_dir / f"{name}.zip") for name, _ in self.SOURCES}
+        if cache_path.exists():
+            with open(cache_path, encoding="utf-8") as f:
+                cache = json.load(f)
+            if cache["sources"] == sources:
+                return cache["stop_routes"]
+
+        print("Building stop routes from GTFS schedules...")
+        stop_routes = build_stop_routes([self.data_dir / name for name, _ in self.SOURCES], self.stop_parents)
+        with open(cache_path, "w", encoding="utf-8") as f:
+            json.dump({"sources": sources, "stop_routes": stop_routes}, f)
+        return stop_routes

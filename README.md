@@ -24,7 +24,8 @@ OS) packages.
 python -m subway_clock [--settings settings.json] [--width 1280]
 ```
 
-On first run the static GTFS is downloaded into `data/` (about 40 MB unzipped).
+On first run the static GTFS is downloaded into `data/` and indexed, which takes
+about a minute.
 It is refreshed automatically when the MTA publishes a new version.
 
 The window is frameless and, by default, spans the primary screen's width.
@@ -37,7 +38,7 @@ left out uses its default, and the file is optional:
 
 ```json
 {
-    "stop_id": "633S",
+    "stops": ["633S"],
     "theme": "light",
     "max_trains": 5,
     "refresh_seconds": 30,
@@ -46,7 +47,9 @@ left out uses its default, and the file is optional:
 }
 ```
 
-- `stop_id`: GTFS stop ID; the `N`/`S` suffix selects the direction. Stop IDs are in `data/gtfs_subway/stops.txt`.
+- `stops`: GTFS stop IDs (listed in `data/gtfs_subway/stops.txt`). A directional ID like `633S` is one
+  direction; a parent ID like `633` is both. List several for a whole station complex or nearby
+  stations, e.g. Union Sq southbound is `["635S", "R20S", "L03S"]`.
 - `theme`: `light` or `dark`.
 - `max_trains`: upcoming trains to show; the second line rotates through trains 2 to `max_trains`.
 - `data_dir`: static GTFS cache. Relative paths are relative to the settings file.

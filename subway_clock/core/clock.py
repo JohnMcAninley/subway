@@ -1,7 +1,7 @@
 import time
 
 from .board import Board, Row, bullet_id
-from .feeds import get_predictions
+from .feeds import feed_urls, fetch_feed, get_predictions
 
 
 class Clock:
@@ -11,7 +11,7 @@ class Clock:
     rotate() every settings.rotation_seconds, then draw board().
     """
 
-    def __init__(self, settings, static, fetch=get_predictions):
+    def __init__(self, settings, static, fetch=fetch_feed):
         self.settings = settings
         self.static = static
         self.fetch = fetch
@@ -22,7 +22,10 @@ class Clock:
         now = time.time() if now is None else now
         self.static.refresh()
 
-        preds = self.fetch(self.settings.stop_id)
+        stops = set(self.settings.stops)
+        preds = []
+        for url in feed_urls(self.static.routes_for(stops)):
+            preds.extend(get_predictions(self.fetch(url), stops))
         upcoming = sorted([p for p in preds if p['arrival_time'] >= now], key=lambda p: p['arrival_time'])
 
         self.predictions = upcoming[:self.settings.max_trains]

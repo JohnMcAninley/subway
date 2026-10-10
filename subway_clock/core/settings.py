@@ -1,7 +1,7 @@
 """User settings, stored as JSON so any front end (Qt, web, ESP32) can share the format."""
 import dataclasses
 import json
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from pathlib import Path
 
 THEMES = ("light", "dark")
@@ -9,7 +9,10 @@ THEMES = ("light", "dark")
 
 @dataclass
 class Settings:
-    stop_id: str = "633S"  # GTFS stop ID; the N/S suffix selects the direction
+    # GTFS stop IDs to show trains for. A directional ID ("633S") is one platform
+    # direction; a parent ID ("633") is both directions. One stop, a whole
+    # station, or several stations are all just a list of stops.
+    stops: list[str] = field(default_factory=lambda: ["633S"])
     theme: str = "light"
     max_trains: int = 5  # upcoming trains to show, including the first
     refresh_seconds: int = 30
@@ -28,6 +31,8 @@ class Settings:
             return cls()
         with open(path, encoding="utf-8") as f:
             values = json.load(f)
+        if "stop_id" in values:  # Before multiple stops were supported
+            values.setdefault("stops", [values.pop("stop_id")])
         known = {field.name for field in dataclasses.fields(cls)}
         return cls(**{k: v for k, v in values.items() if k in known})
 
