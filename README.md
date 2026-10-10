@@ -65,7 +65,9 @@ left out uses its default, and the file is optional:
 - `subway_clock/core/`: data and display logic, with no UI code. `Clock` produces a `Board` (the screen description) that renderers draw as-is.
 - `subway_clock/ui/`: renderers. Currently a Qt widgets UI.
 - `subway_clock/assets/`: route bullets.
-- `tests/`: run with `pytest`.
+- `tests/`: run with `pytest`. `tests/golden/` holds golden cases (captured live feeds and the
+  boards they must produce), which double as the spec for other implementations of the core; see
+  [tests/golden/README.md](tests/golden/README.md).
 
 ## Design
 

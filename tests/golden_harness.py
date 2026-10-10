@@ -1,0 +1,185 @@
+"""Golden test cases: captured live feeds plus the boards the clock should produce from them.
+
+The case format is described in tests/golden/README.md. From the repo root:
+
+    python tests/golden_harness.py capture [case ...]   # capture live feeds (needs data/ and network)
+    python tests/golden_harness.py regenerate           # rewrite expected.json from the current code
+
+Regenerating changes the spec, so review the expected.json diffs before committing.
+"""
+import dataclasses
+import json
+import sys
+import time
+from datetime import datetime, timezone
+from pathlib import Path
+
+import requests
+from google.transit import gtfs_realtime_pb2
+
+ROOT = Path(__file__).resolve().parent.parent
+sys.path.insert(0, str(ROOT))
+
+from subway_clock.core.clock import Clock  # noqa: E402
+from subway_clock.core.feeds import ALL_FEED_URLS, fetch_feed  # noqa: E402
+from subway_clock.core.gtfs import StaticTables  # noqa: E402
+from subway_clock.core.settings import Settings  # noqa: E402
+
+GOLDEN_DIR = Path(__file__).resolve().parent / "golden"
+
+
+def standard_steps(t):
+    """Refresh, rotate the second line a few times, refresh again, then count down without refreshing."""
+    steps = [{"action": "refresh", "now": t}, {"action": "board", "now": t}]
+    for k in range(1, 5):
+        steps += [{"action": "rotate", "now": t + 5 * k}, {"action": "board", "now": t + 5 * k}]
+    steps += [{"action": "refresh", "now": t + 60}, {"action": "board", "now": t + 60},
+              {"action": "board", "now": t + 240}]
+    return steps
+
+
+def failing_feed_steps(t, feed):
+    """Refresh normally, then with feed failing until the board goes stale (after 3 refresh intervals)."""
+    return [{"action": "refresh", "now": t + 300}, {"action": "board", "now": t + 300},
+            {"action": "refresh", "now": t + 330, "fail": [feed]}, {"action": "board", "now": t + 330},
+            {"action": "refresh", "now": t + 420, "fail": [feed]}, {"action": "board", "now": t + 420}]
+
+
+CASES = {
+    "union-sq-south": {
+        "description": "14 St-Union Sq complex southbound: three feeds (4/5/6, N/Q/R/W, L) and second-line "
+                       "rotation, then the N/Q/R/W feed fails until the board goes stale.",
+        "settings": {"stops": ["635S", "R20S", "L03S"]},
+        "extra_steps": lambda t: failing_feed_steps(t, "gtfs-nqrw"),
+    },
+    "brooklyn-bridge-north": {
+        "description": "Brooklyn Bridge-City Hall northbound: 6 trains starting here have only departure times.",
+        "settings": {"stops": ["640N"]},
+    },
+    "broad-channel": {
+        "description": "Broad Channel, both directions: A trains and the Rockaway Park Shuttle (route H, SR "
+                       "bullet). Northbound H trips end at H19, an unnamed stop past Broad Channel.",
+        "settings": {"stops": ["H04"]},
+    },
+    "jackson-hts": {
+        "description": "Jackson Hts-Roosevelt Av complex, both directions: E/F/M/R and 7 across four feeds.",
+        "settings": {"stops": ["G14", "710"]},
+    },
+    "28-st-dark-short": {
+        "description": "28 St (6) southbound in the dark theme, limited to 3 trains within 20 minutes.",
+        "settings": {"stops": ["633S"], "theme": "dark", "max_trains": 3, "max_minutes": 20},
+    },
+    "kings-hwy-no-service": {
+        "description": "Kings Hwy (B/Q) southbound, captured on a weekend with the Q cut short by planned "
+                       "work and no B service: the board is empty.",
+        "settings": {"stops": ["D35S"]},
+    },
+}
+
+
+def feed_name(url):
+    """Short name for a feed URL, e.g. "gtfs-ace"."""
+    return url.rsplit("%2F", 1)[1]
+
+
+def run_case(case_dir):
+    """Run a case's steps and return the boards from its "board" steps, as JSON-ready dicts."""
+    case_dir = Path(case_dir)
+    case = json.loads((case_dir / "case.json").read_text(encoding="utf-8"))
+    static = StaticTables(**json.loads((case_dir / "static.json").read_text(encoding="utf-8")))
+    failing = set()
+
+    def fetch(url):
+        name = feed_name(url)
+        if name in failing:
+            raise requests.ConnectionError(f"{name} failing in this step")
+        feed = gtfs_realtime_pb2.FeedMessage()
+        feed.ParseFromString((case_dir / "feeds" / f"{name}.pb").read_bytes())
+        return feed
+
+    clock = Clock(Settings(**case["settings"]), static, fetch_feed=fetch)
+    boards = []
+    for step in case["steps"]:
+        if step["action"] == "refresh":
+            failing = set(step.get("fail", []))
+            clock.refresh(now=step["now"])
+        elif step["action"] == "rotate":
+            clock.rotate(now=step["now"])
+        elif step["action"] == "board":
+            boards.append({"now": step["now"], **dataclasses.asdict(clock.board(now=step["now"]))})
+        else:
+            raise ValueError(f"Unknown action {step['action']!r}")
+    return json.loads(json.dumps(boards))  # As stored: tuples become lists
+
+
+def write_json(path, value):
+    path.write_text(json.dumps(value, indent=2, ensure_ascii=False) + "\n", encoding="utf-8", newline="\n")
+
+
+def regenerate(case_dir):
+    write_json(Path(case_dir) / "expected.json", run_case(case_dir))
+
+
+def capture(names):
+    from subway_clock.core.gtfs import StaticData
+
+    static = StaticData(ROOT / "data")
+    captured_at = int(time.time())
+    feeds = {url: fetch_feed(url) for url in ALL_FEED_URLS}
+
+    for name in names:
+        definition = CASES[name]
+        settings = Settings(**definition["settings"])
+        stops = set(settings.stops)
+        case_dir = GOLDEN_DIR / name
+        (case_dir / "feeds").mkdir(parents=True, exist_ok=True)
+
+        # Keep only trips that stop at the case's stops, so the files stay small.
+        trip_stops = set()
+        trip_ids = set()
+        for url, feed in feeds.items():
+            trimmed = gtfs_realtime_pb2.FeedMessage()
+            trimmed.header.CopyFrom(feed.header)
+            for entity in feed.entity:
+                stop_ids = [u.stop_id for u in entity.trip_update.stop_time_update]
+                if any(s in stops or s[:-1] in stops for s in stop_ids):
+                    trimmed.entity.add().CopyFrom(entity)
+                    trip_stops.update(stop_ids)
+                    trip_ids.add(entity.trip_update.trip.trip_id)
+            (case_dir / "feeds" / f"{feed_name(url)}.pb").write_bytes(trimmed.SerializeToString())
+
+        # Only the static tables the case can look up.
+        parents = {s: static.stop_parents[s] for s in stops | trip_stops if s in static.stop_parents}
+        write_json(case_dir / "static.json", {
+            "stop_names": {s: static.stop_names[s] for s in sorted(trip_stops) if s in static.stop_names},
+            "stop_parents": dict(sorted(parents.items())),
+            "stop_routes": {p: static.stop_routes[p] for p in sorted({static.stop_parents.get(s, s) for s in stops})
+                            if p in static.stop_routes},
+            "headsigns": {t: static.headsigns[t] for t in sorted(trip_ids) if t in static.headsigns},
+        })
+
+        steps = standard_steps(captured_at) + definition.get("extra_steps", lambda t: [])(captured_at)
+        write_json(case_dir / "case.json", {
+            "description": definition["description"],
+            "captured_at": datetime.fromtimestamp(captured_at, timezone.utc).isoformat(),
+            "settings": definition["settings"],
+            "steps": steps,
+        })
+        regenerate(case_dir)
+        print(f"captured {name}: {len(trip_ids)} trips")
+
+
+def case_dirs():
+    return sorted(p for p in GOLDEN_DIR.iterdir() if (p / "case.json").exists())
+
+
+if __name__ == "__main__":
+    command, *args = sys.argv[1:] or ["help"]
+    if command == "capture":
+        capture(args or list(CASES))
+    elif command == "regenerate":
+        for case_dir in case_dirs():
+            regenerate(case_dir)
+            print(f"regenerated {case_dir.name}")
+    else:
+        print(__doc__)

@@ -2,6 +2,7 @@ from google.transit import gtfs_realtime_pb2
 
 from subway_clock.core.clock import Clock
 from subway_clock.core.feeds import ROUTE_FEEDS
+from subway_clock.core.gtfs import StaticTables
 from subway_clock.core.settings import Settings
 
 NOW = 1_000_000.0
@@ -31,17 +32,11 @@ def feed(*trips):
     return message
 
 
-class FakeStatic:
-    def __init__(self, stop_routes=None, headsigns=None, stop_names=None):
-        self.stop_routes = stop_routes or {"633": ["6", "6X"]}
-        self.headsigns = headsigns or {}
-        self.stop_names = stop_names or {}
-
-    def refresh(self):
-        pass
-
-    def routes_for(self, stops):
-        return sorted({route for stop in stops for route in self.stop_routes.get(stop[:3], ())})
+def FakeStatic(stop_routes=None, headsigns=None, stop_names=None):
+    """StaticTables for parent stops in stop_routes and their N/S platforms."""
+    stop_routes = stop_routes or {"633": ["6", "6X"]}
+    parents = {stop + direction: stop for stop in stop_routes for direction in ("", "N", "S")}
+    return StaticTables(stop_names or {}, parents, stop_routes, headsigns or {})
 
 
 def make_clock(*trips, static=None, feeds=None, **settings):

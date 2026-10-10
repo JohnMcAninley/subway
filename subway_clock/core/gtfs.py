@@ -168,7 +168,33 @@ def build_station_complexes(stops_path, transfers_path):
     return parent_to_name, complexes
 
 
-class StaticData:
+class StaticTables:
+    """The static GTFS lookups the clock uses, as plain JSON-friendly dicts.
+
+    stop_names: stop ID (parent or directional) -> station name
+    stop_parents: stop ID -> parent stop ID (parents map to themselves)
+    stop_routes: parent stop ID -> sorted route IDs scheduled there
+    headsigns: realtime-style trip ID -> scheduled headsign
+    """
+
+    def __init__(self, stop_names, stop_parents, stop_routes, headsigns):
+        self.stop_names = stop_names
+        self.stop_parents = stop_parents
+        self.stop_routes = stop_routes
+        self.headsigns = headsigns
+
+    def refresh(self):
+        """Fixed tables never change."""
+
+    def routes_for(self, stops):
+        """Sorted route IDs scheduled at any of stops (directional or parent stop IDs)."""
+        routes = set()
+        for stop in stops:
+            routes.update(self.stop_routes.get(self.stop_parents.get(stop, stop), ()))
+        return sorted(routes)
+
+
+class StaticData(StaticTables):
     """Static GTFS tables kept in data_dir, refreshed from the MTA when they change.
 
     The supplemented GTFS adds the next week of planned service changes to the
@@ -209,15 +235,7 @@ class StaticData:
         for name, _ in self.SOURCES:
             load_headsigns(self.data_dir / name / "trips.txt", headsigns)
         stop_routes = self._cached_stop_routes(stop_parents)
-        self.stop_names, self.stop_parents, self.headsigns, self.stop_routes = (
-            stop_names, stop_parents, headsigns, stop_routes)
-
-    def routes_for(self, stops):
-        """Sorted route IDs scheduled at any of stops (directional or parent stop IDs)."""
-        routes = set()
-        for stop in stops:
-            routes.update(self.stop_routes.get(self.stop_parents.get(stop, stop), ()))
-        return sorted(routes)
+        super().__init__(stop_names, stop_parents, stop_routes, headsigns)
 
     def _cached_stop_routes(self, stop_parents):
         """build_stop_routes takes seconds (millions of stop_times rows), so cache it until the GTFS changes."""

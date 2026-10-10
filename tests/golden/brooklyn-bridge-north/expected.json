@@ -1,0 +1,163 @@
+[
+  {
+    "now": 1791668837,
+    "theme": "light",
+    "rows": [
+      {
+        "number": 1,
+        "route": "6",
+        "bullet": "6",
+        "destination": "149 St-Hostos",
+        "minutes": 3,
+        "arriving": false
+      },
+      {
+        "number": 2,
+        "route": "4",
+        "bullet": "4",
+        "destination": "Woodlawn",
+        "minutes": 4,
+        "arriving": false
+      }
+    ],
+    "stale": false
+  },
+  {
+    "now": 1791668842,
+    "theme": "light",
+    "rows": [
+      {
+        "number": 1,
+        "route": "6",
+        "bullet": "6",
+        "destination": "149 St-Hostos",
+        "minutes": 3,
+        "arriving": false
+      },
+      {
+        "number": 3,
+        "route": "5",
+        "bullet": "5",
+        "destination": "Eastchester-Dyre Av",
+        "minutes": 9,
+        "arriving": false
+      }
+    ],
+    "stale": false
+  },
+  {
+    "now": 1791668847,
+    "theme": "light",
+    "rows": [
+      {
+        "number": 1,
+        "route": "6",
+        "bullet": "6",
+        "destination": "149 St-Hostos",
+        "minutes": 3,
+        "arriving": false
+      },
+      {
+        "number": 4,
+        "route": "6",
+        "bullet": "6",
+        "destination": "149 St-Hostos",
+        "minutes": 11,
+        "arriving": false
+      }
+    ],
+    "stale": false
+  },
+  {
+    "now": 1791668852,
+    "theme": "light",
+    "rows": [
+      {
+        "number": 1,
+        "route": "6",
+        "bullet": "6",
+        "destination": "149 St-Hostos",
+        "minutes": 2,
+        "arriving": false
+      },
+      {
+        "number": 5,
+        "route": "4",
+        "bullet": "4",
+        "destination": "Woodlawn",
+        "minutes": 11,
+        "arriving": false
+      }
+    ],
+    "stale": false
+  },
+  {
+    "now": 1791668857,
+    "theme": "light",
+    "rows": [
+      {
+        "number": 1,
+        "route": "6",
+        "bullet": "6",
+        "destination": "149 St-Hostos",
+        "minutes": 2,
+        "arriving": false
+      },
+      {
+        "number": 2,
+        "route": "4",
+        "bullet": "4",
+        "destination": "Woodlawn",
+        "minutes": 4,
+        "arriving": false
+      }
+    ],
+    "stale": false
+  },
+  {
+    "now": 1791668897,
+    "theme": "light",
+    "rows": [
+      {
+        "number": 1,
+        "route": "6",
+        "bullet": "6",
+        "destination": "149 St-Hostos",
+        "minutes": 2,
+        "arriving": false
+      },
+      {
+        "number": 2,
+        "route": "4",
+        "bullet": "4",
+        "destination": "Woodlawn",
+        "minutes": 3,
+        "arriving": false
+      }
+    ],
+    "stale": false
+  },
+  {
+    "now": 1791669077,
+    "theme": "light",
+    "rows": [
+      {
+        "number": 1,
+        "route": "6",
+        "bullet": "6",
+        "destination": "149 St-Hostos",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
+        "route": "4",
+        "bullet": "4",
+        "destination": "Woodlawn",
+        "minutes": 0,
+        "arriving": true
+      }
+    ],
+    "stale": true
+  }
+]

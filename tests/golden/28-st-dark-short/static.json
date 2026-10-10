@@ -1,0 +1,66 @@
+{
+  "stop_names": {
+    "415S": "149 St-Hostos",
+    "416S": "138 St-Grand Concourse",
+    "621S": "125 St",
+    "622S": "116 St",
+    "623S": "110 St",
+    "624S": "103 St",
+    "625S": "96 St",
+    "626S": "86 St",
+    "627S": "77 St",
+    "628S": "68 St-Hunter College",
+    "629S": "59 St",
+    "630S": "51 St",
+    "631S": "Grand Central-42 St",
+    "632S": "33 St",
+    "633S": "28 St",
+    "634S": "23 St-Baruch College",
+    "635S": "14 St-Union Sq",
+    "636S": "Astor Pl",
+    "637S": "Bleecker St",
+    "638S": "Spring St",
+    "639S": "Canal St",
+    "640S": "Brooklyn Bridge-City Hall"
+  },
+  "stop_parents": {
+    "415S": "415",
+    "416S": "416",
+    "621S": "621",
+    "622S": "622",
+    "623S": "623",
+    "624S": "624",
+    "625S": "625",
+    "626S": "626",
+    "627S": "627",
+    "628S": "628",
+    "629S": "629",
+    "630S": "630",
+    "631S": "631",
+    "632S": "632",
+    "633S": "633",
+    "634S": "634",
+    "635S": "635",
+    "636S": "636",
+    "637S": "637",
+    "638S": "638",
+    "639S": "639",
+    "640S": "640"
+  },
+  "stop_routes": {
+    "633": [
+      "4",
+      "6",
+      "6X"
+    ]
+  },
+  "headsigns": {
+    "104450_6..S04X001": "Brooklyn Bridge-City Hall",
+    "105050_6..S04X001": "Brooklyn Bridge-City Hall",
+    "105850_6..S04X001": "Brooklyn Bridge-City Hall",
+    "106650_6..S04X001": "Brooklyn Bridge-City Hall",
+    "107450_6..S04X001": "Brooklyn Bridge-City Hall",
+    "108450_6..S04X001": "Brooklyn Bridge-City Hall",
+    "109050_6..S04X001": "Brooklyn Bridge-City Hall"
+  }
+}

@@ -1,0 +1,163 @@
+[
+  {
+    "now": 1791668837,
+    "theme": "dark",
+    "rows": [
+      {
+        "number": 1,
+        "route": "6",
+        "bullet": "6",
+        "destination": "Brooklyn Bridge-City Hall",
+        "minutes": 9,
+        "arriving": false
+      },
+      {
+        "number": 2,
+        "route": "6",
+        "bullet": "6",
+        "destination": "Brooklyn Bridge-City Hall",
+        "minutes": 18,
+        "arriving": false
+      }
+    ],
+    "stale": false
+  },
+  {
+    "now": 1791668842,
+    "theme": "dark",
+    "rows": [
+      {
+        "number": 1,
+        "route": "6",
+        "bullet": "6",
+        "destination": "Brooklyn Bridge-City Hall",
+        "minutes": 9,
+        "arriving": false
+      },
+      {
+        "number": 2,
+        "route": "6",
+        "bullet": "6",
+        "destination": "Brooklyn Bridge-City Hall",
+        "minutes": 18,
+        "arriving": false
+      }
+    ],
+    "stale": false
+  },
+  {
+    "now": 1791668847,
+    "theme": "dark",
+    "rows": [
+      {
+        "number": 1,
+        "route": "6",
+        "bullet": "6",
+        "destination": "Brooklyn Bridge-City Hall",
+        "minutes": 9,
+        "arriving": false
+      },
+      {
+        "number": 2,
+        "route": "6",
+        "bullet": "6",
+        "destination": "Brooklyn Bridge-City Hall",
+        "minutes": 18,
+        "arriving": false
+      }
+    ],
+    "stale": false
+  },
+  {
+    "now": 1791668852,
+    "theme": "dark",
+    "rows": [
+      {
+        "number": 1,
+        "route": "6",
+        "bullet": "6",
+        "destination": "Brooklyn Bridge-City Hall",
+        "minutes": 9,
+        "arriving": false
+      },
+      {
+        "number": 2,
+        "route": "6",
+        "bullet": "6",
+        "destination": "Brooklyn Bridge-City Hall",
+        "minutes": 18,
+        "arriving": false
+      }
+    ],
+    "stale": false
+  },
+  {
+    "now": 1791668857,
+    "theme": "dark",
+    "rows": [
+      {
+        "number": 1,
+        "route": "6",
+        "bullet": "6",
+        "destination": "Brooklyn Bridge-City Hall",
+        "minutes": 9,
+        "arriving": false
+      },
+      {
+        "number": 2,
+        "route": "6",
+        "bullet": "6",
+        "destination": "Brooklyn Bridge-City Hall",
+        "minutes": 18,
+        "arriving": false
+      }
+    ],
+    "stale": false
+  },
+  {
+    "now": 1791668897,
+    "theme": "dark",
+    "rows": [
+      {
+        "number": 1,
+        "route": "6",
+        "bullet": "6",
+        "destination": "Brooklyn Bridge-City Hall",
+        "minutes": 8,
+        "arriving": false
+      },
+      {
+        "number": 2,
+        "route": "6",
+        "bullet": "6",
+        "destination": "Brooklyn Bridge-City Hall",
+        "minutes": 17,
+        "arriving": false
+      }
+    ],
+    "stale": false
+  },
+  {
+    "now": 1791669077,
+    "theme": "dark",
+    "rows": [
+      {
+        "number": 1,
+        "route": "6",
+        "bullet": "6",
+        "destination": "Brooklyn Bridge-City Hall",
+        "minutes": 5,
+        "arriving": false
+      },
+      {
+        "number": 2,
+        "route": "6",
+        "bullet": "6",
+        "destination": "Brooklyn Bridge-City Hall",
+        "minutes": 14,
+        "arriving": false
+      }
+    ],
+    "stale": true
+  }
+]

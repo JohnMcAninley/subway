@@ -1,0 +1,232 @@
+[
+  {
+    "now": 1791668837,
+    "theme": "light",
+    "rows": [
+      {
+        "number": 1,
+        "route": "6",
+        "bullet": "6",
+        "destination": "Brooklyn Bridge-City Hall",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
+        "route": "Q",
+        "bullet": "Q",
+        "destination": "Prospect Park",
+        "minutes": 2,
+        "arriving": false
+      }
+    ],
+    "stale": false
+  },
+  {
+    "now": 1791668842,
+    "theme": "light",
+    "rows": [
+      {
+        "number": 1,
+        "route": "6",
+        "bullet": "6",
+        "destination": "Brooklyn Bridge-City Hall",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 3,
+        "route": "4",
+        "bullet": "4",
+        "destination": "Crown Hts-Utica Av",
+        "minutes": 3,
+        "arriving": false
+      }
+    ],
+    "stale": false
+  },
+  {
+    "now": 1791668847,
+    "theme": "light",
+    "rows": [
+      {
+        "number": 1,
+        "route": "6",
+        "bullet": "6",
+        "destination": "Brooklyn Bridge-City Hall",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 4,
+        "route": "N",
+        "bullet": "N",
+        "destination": "Coney Island-Stillwell Av",
+        "minutes": 4,
+        "arriving": false
+      }
+    ],
+    "stale": false
+  },
+  {
+    "now": 1791668852,
+    "theme": "light",
+    "rows": [
+      {
+        "number": 1,
+        "route": "6",
+        "bullet": "6",
+        "destination": "Brooklyn Bridge-City Hall",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 5,
+        "route": "R",
+        "bullet": "R",
+        "destination": "Bay Ridge-95 St",
+        "minutes": 7,
+        "arriving": false
+      }
+    ],
+    "stale": false
+  },
+  {
+    "now": 1791668857,
+    "theme": "light",
+    "rows": [
+      {
+        "number": 1,
+        "route": "6",
+        "bullet": "6",
+        "destination": "Brooklyn Bridge-City Hall",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
+        "route": "Q",
+        "bullet": "Q",
+        "destination": "Prospect Park",
+        "minutes": 2,
+        "arriving": false
+      }
+    ],
+    "stale": false
+  },
+  {
+    "now": 1791668897,
+    "theme": "light",
+    "rows": [
+      {
+        "number": 1,
+        "route": "6",
+        "bullet": "6",
+        "destination": "Brooklyn Bridge-City Hall",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
+        "route": "Q",
+        "bullet": "Q",
+        "destination": "Prospect Park",
+        "minutes": 1,
+        "arriving": false
+      }
+    ],
+    "stale": false
+  },
+  {
+    "now": 1791669077,
+    "theme": "light",
+    "rows": [
+      {
+        "number": 1,
+        "route": "6",
+        "bullet": "6",
+        "destination": "Brooklyn Bridge-City Hall",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
+        "route": "Q",
+        "bullet": "Q",
+        "destination": "Prospect Park",
+        "minutes": 0,
+        "arriving": true
+      }
+    ],
+    "stale": true
+  },
+  {
+    "now": 1791669137,
+    "theme": "light",
+    "rows": [
+      {
+        "number": 1,
+        "route": "Q",
+        "bullet": "Q",
+        "destination": "Prospect Park",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
+        "route": "4",
+        "bullet": "4",
+        "destination": "Crown Hts-Utica Av",
+        "minutes": 0,
+        "arriving": true
+      }
+    ],
+    "stale": false
+  },
+  {
+    "now": 1791669167,
+    "theme": "light",
+    "rows": [
+      {
+        "number": 1,
+        "route": "Q",
+        "bullet": "Q",
+        "destination": "Prospect Park",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
+        "route": "4",
+        "bullet": "4",
+        "destination": "Crown Hts-Utica Av",
+        "minutes": 0,
+        "arriving": true
+      }
+    ],
+    "stale": false
+  },
+  {
+    "now": 1791669257,
+    "theme": "light",
+    "rows": [
+      {
+        "number": 1,
+        "route": "Q",
+        "bullet": "Q",
+        "destination": "Prospect Park",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
+        "route": "4",
+        "bullet": "4",
+        "destination": "Crown Hts-Utica Av",
+        "minutes": 0,
+        "arriving": true
+      }
+    ],
+    "stale": true
+  }
+]
