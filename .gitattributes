@@ -1,2 +1,3 @@
 # Captured GTFS-realtime protobufs: never convert line endings
 *.pb binary
+*.ttf binary

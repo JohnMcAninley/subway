@@ -21,15 +21,20 @@ OS) packages.
 ## Run
 
 ```sh
-python -m subway_clock [--settings settings.json] [--width 1280]
+python -m subway_clock [--settings settings.json] [--dev | --fullscreen | --size 1920x600 | --width 1920]
 ```
 
 On first run the static GTFS is downloaded into `data/` and indexed, which takes
-about a minute.
-It is refreshed automatically when the MTA publishes a new version.
+about a minute. It is refreshed automatically when the MTA publishes a new version.
 
-The window is frameless and, by default, spans the primary screen's width.
-Press Esc to close it.
+By default the window is frameless at the top left of the screen, the screen's
+width at a 3.2:1 ratio. `--fullscreen` is for the device. Press Esc to quit.
+
+`--dev` opens a normal, resizable window for working on the display:
+
+- The QML in `subway_clock/ui/qml/` reloads whenever a file there is saved.
+- Keys 1-4 resize the window to preview screen shapes: 3.2:1, 4:1, 16:9, and portrait.
+- T toggles the light and dark themes.
 
 ## Settings
 
@@ -63,8 +68,9 @@ left out uses its default, and the file is optional:
 ## Layout
 
 - `subway_clock/core/`: data and display logic, with no UI code. `Clock` produces a `Board` (the screen description) that renderers draw as-is.
-- `subway_clock/ui/`: renderers. Currently a Qt widgets UI.
-- `subway_clock/assets/`: route bullets.
+- `subway_clock/ui/`: the Qt Quick front end. `display.py` runs the clock's timers and passes the
+  `Board` to `qml/Main.qml`, which only draws it.
+- `subway_clock/assets/`: route bullets and the Roboto font.
 - `tests/`: run with `pytest`. `tests/golden/` holds golden cases (captured live feeds and the
   boards they must produce), which double as the spec for other implementations of the core; see
   [tests/golden/README.md](tests/golden/README.md).
@@ -77,3 +83,11 @@ See [docs/design.md](docs/design.md) for display modes, display logic, and theme
 
 - Realtime: `https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs*` (no API key required)
 - Static: `https://rrgtfsfeeds.s3.amazonaws.com/gtfs_subway.zip` and `gtfs_supplemented.zip`
+
+## Credits
+
+- Route bullets are MTA trademarks. TODO: credit their source.
+- [Roboto](https://github.com/googlefonts/roboto-classic) is licensed under the SIL Open Font License
+  (`subway_clock/assets/fonts/OFL.txt`).
+- The look of the light theme is based on photos of the MTA's platform countdown clocks on Wikimedia
+  Commons by Ytx21cn, Tdorante10, and others (CC BY-SA 4.0).
