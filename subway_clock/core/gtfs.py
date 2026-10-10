@@ -105,6 +105,19 @@ def load_headsigns(gtfs_path, headsigns=None):
     return headsigns
 
 
+def destination(stop_names, headsigns, trip_stops, trip_id):
+    """Where a realtime trip is headed: the last of its stops with a name.
+
+    Some trips end at unnamed non-revenue stops (northbound H trips end at H19,
+    past Broad Channel), so skip those. Fall back to the schedule's headsign,
+    which only exists for scheduled trips, not added or rerouted ones.
+    """
+    for stop_id in reversed(trip_stops):
+        if stop_id in stop_names:
+            return stop_names[stop_id]
+    return headsigns.get(trip_id, "Unknown")
+
+
 def build_station_complexes(stops_path, transfers_path):
     # First pass: find parent_station mappings
     stop_to_parent = {}

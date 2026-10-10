@@ -100,6 +100,30 @@ def test_fetches_every_feed_serving_the_stop():
     assert [r.route for r in clock.board(now=NOW).rows] == ["6", "Q"]
 
 
+# Destinations and times
+
+
+def test_destination_is_last_named_stop_of_the_trip():
+    # Northbound H trips end at H19, which isn't in stops.txt; Broad Channel is the real destination.
+    static = FakeStatic(stop_routes={"H15": ["H"]}, headsigns={"h": "Old headsign"},
+                        stop_names={"H15N": "Beach 105 St", "H04N": "Broad Channel"})
+    clock = make_clock(trip("h", "H", [("H15N", 2), ("H04N", 9), ("H19N", 12)]), static=static, stops=["H15N"])
+    assert clock.board(now=NOW).rows[0].destination == "Broad Channel"
+
+
+def test_destination_falls_back_to_headsign():
+    static = FakeStatic(headsigns={"a": "Brooklyn Bridge-City Hall"})
+    clock = make_clock(six("a", 3), static=static)
+    assert clock.board(now=NOW).rows[0].destination == "Brooklyn Bridge-City Hall"
+
+
+def test_departure_only_first_stop_is_shown():
+    # Trains starting at a terminal have only a departure time there.
+    clock = make_clock(trip("a", "6", [("640N", 4, "departure"), ("639N", 6)]), stops=["640N"],
+                       static=FakeStatic(stop_routes={"640": ["6"]}))
+    assert [r.minutes for r in clock.board(now=NOW).rows] == [4]
+
+
 # Settings
 
 

@@ -8,7 +8,11 @@ NOW = 1_000_000.0
 
 
 def trip(trip_id, route_id, stop_times):
-    """A trip update; stop_times is [(stop_id, minutes from NOW), ...]."""
+    """A trip update; stop_times is [(stop_id, minutes from NOW), ...].
+
+    Add "departure" to a stop time, as in (stop_id, minutes, "departure"), for a
+    stop with only a departure time, like a trip's first stop.
+    """
     return (trip_id, route_id, stop_times)
 
 
@@ -20,16 +24,18 @@ def feed(*trips):
         entity = message.entity.add(id=trip_id)
         entity.trip_update.trip.trip_id = trip_id
         entity.trip_update.trip.route_id = route_id
-        for stop_id, minutes in stop_times:
+        for stop_id, minutes, *kind in stop_times:
             update = entity.trip_update.stop_time_update.add(stop_id=stop_id)
-            update.arrival.time = int(NOW + minutes * 60)
+            event = update.departure if kind == ["departure"] else update.arrival
+            event.time = int(NOW + minutes * 60)
     return message
 
 
 class FakeStatic:
-    def __init__(self, stop_routes=None, headsigns=None):
+    def __init__(self, stop_routes=None, headsigns=None, stop_names=None):
         self.stop_routes = stop_routes or {"633": ["6", "6X"]}
         self.headsigns = headsigns or {}
+        self.stop_names = stop_names or {}
 
     def refresh(self):
         pass

@@ -2,6 +2,7 @@ import time
 
 from .board import Board, Row, bullet_id
 from .feeds import feed_urls, fetch_feed, get_predictions
+from .gtfs import destination
 
 
 class Clock:
@@ -26,7 +27,7 @@ class Clock:
         preds = []
         for url in feed_urls(self.static.routes_for(stops)):
             preds.extend(get_predictions(self.fetch(url), stops))
-        upcoming = sorted([p for p in preds if p['arrival_time'] >= now], key=lambda p: p['arrival_time'])
+        upcoming = sorted([p for p in preds if p.time >= now], key=lambda p: p.time)
 
         self.predictions = upcoming[:self.settings.max_trains]
         self.rotation_index = 1  # Reset rotation to 2nd train
@@ -56,12 +57,12 @@ class Clock:
 
     def _row(self, index, now):
         pred = self.predictions[index]
-        minutes = (pred['arrival_time'] - now) / 60.0
+        minutes = (pred.time - now) / 60.0
         return Row(
             number=index + 1,
-            route=pred['route_id'],
-            bullet=bullet_id(pred['route_id']),
-            destination=self.static.headsigns.get(pred['trip_id'], "Unknown"),
+            route=pred.route_id,
+            bullet=bullet_id(pred.route_id),
+            destination=destination(self.static.stop_names, self.static.headsigns, pred.trip_stops, pred.trip_id),
             minutes=int(minutes),
             arriving=minutes < 1,
         )
