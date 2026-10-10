@@ -41,6 +41,7 @@ left out uses its default, and the file is optional:
     "stops": ["633S"],
     "theme": "light",
     "max_trains": 5,
+    "max_minutes": 30,
     "refresh_seconds": 30,
     "rotation_seconds": 5,
     "data_dir": "data"
@@ -51,7 +52,8 @@ left out uses its default, and the file is optional:
   direction; a parent ID like `633` is both. List several for a whole station complex or nearby
   stations, e.g. Union Sq southbound is `["635S", "R20S", "L03S"]`.
 - `theme`: `light` or `dark`.
-- `max_trains`: upcoming trains to show; the second line rotates through trains 2 to `max_trains`.
+- `max_trains`, `max_minutes`: show up to `max_trains` trains, and only those arriving within
+  `max_minutes`. The second line rotates through trains 2 onward.
 - `data_dir`: static GTFS cache. Relative paths are relative to the settings file.
 
 ## Layout

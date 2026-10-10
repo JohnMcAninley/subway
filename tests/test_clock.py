@@ -15,11 +15,33 @@ def shown(clock):
     return [row.number for row in clock.board(now=NOW).rows]
 
 
-def test_upcoming_trains_sorted_and_past_trains_dropped():
-    clock = make_clock(six("b", 9), six("past", -2), six("a", 3))
+def test_upcoming_trains_sorted():
+    clock = make_clock(six("b", 9), six("a", 3))
     rows = clock.board(now=NOW).rows
     assert [r.destination for r in rows] == ["Dest a", "Dest b"]
     assert [r.minutes for r in rows] == [3, 9]
+
+
+def test_arriving_train_stays_until_the_feed_drops_it():
+    clock = make_clock(six("late", -2), six("next", 6))
+    first = clock.board(now=NOW).rows[0]
+    assert (first.destination, first.minutes, first.arriving) == ("Dest late", 0, True)
+
+
+def test_long_overdue_train_dropped():
+    clock = make_clock(six("stuck", -6), six("next", 6))
+    assert [r.destination for r in clock.board(now=NOW).rows] == ["Dest next"]
+
+
+def test_max_minutes():
+    clock = make_clock(six("a", 3), six("b", 29), six("c", 31), max_minutes=30)
+    assert [r.destination for r in clock.board(now=NOW).rows] == ["Dest a", "Dest b"]
+
+
+def test_second_arriving_train_is_fixed_on_bottom_line():
+    clock = make_clock(six("a", 0), six("b", 0.5), six("c", 5), six("d", 9))
+    assert not clock.rotate(now=NOW)
+    assert shown(clock) == [1, 2]
 
 
 def test_second_line_rotates_through_remaining_trains_and_wraps():
@@ -27,14 +49,14 @@ def test_second_line_rotates_through_remaining_trains_and_wraps():
     assert shown(clock) == [1, 2]
     states = []
     for _ in range(4):
-        assert clock.rotate()
+        assert clock.rotate(now=NOW)
         states.append(shown(clock))
     assert states == [[1, 3], [1, 4], [1, 2], [1, 3]]
 
 
 def test_refresh_resets_rotation():
     clock = make_clock(*[six(str(i), i * 2 + 2) for i in range(4)])
-    clock.rotate()
+    clock.rotate(now=NOW)
     clock.refresh(now=NOW)
     assert shown(clock) == [1, 2]
 
@@ -42,14 +64,14 @@ def test_refresh_resets_rotation():
 @pytest.mark.parametrize("count", [0, 1, 2])
 def test_nothing_to_rotate_with_two_or_fewer_trains(count):
     clock = make_clock(*[six(str(i), i + 2) for i in range(count)])
-    assert not clock.rotate()
+    assert not clock.rotate(now=NOW)
     assert len(clock.board(now=NOW).rows) == count
 
 
 def test_max_trains_limits_rotation():
     clock = make_clock(*[six(str(i), i + 2) for i in range(10)], max_trains=3)
-    clock.rotate()
-    clock.rotate()
+    clock.rotate(now=NOW)
+    clock.rotate(now=NOW)
     assert shown(clock) == [1, 2]
 
 

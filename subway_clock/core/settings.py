@@ -14,7 +14,10 @@ class Settings:
     # station, or several stations are all just a list of stops.
     stops: list[str] = field(default_factory=lambda: ["633S"])
     theme: str = "light"
-    max_trains: int = 5  # upcoming trains to show, including the first
+    # Show up to max_trains trains, and only those within max_minutes.
+    # TODO: calibrate both defaults against the real countdown clocks.
+    max_trains: int = 5
+    max_minutes: int = 30
     refresh_seconds: int = 30
     rotation_seconds: int = 5  # how long each train stays on the second line
     data_dir: str = "data"  # static GTFS cache; relative paths are relative to the settings file
