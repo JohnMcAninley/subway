@@ -113,7 +113,7 @@ def test_stop_ids_match_exactly_not_by_prefix():
     assert [r.destination for r in clock.board(now=NOW).rows] == ["Dest mine"]
 
 
-def test_fetches_every_feed_serving_the_stop():
+def test_scheduled_feeds_only():
     # Union Sq: 4/5/6 in the main feed, N/Q/R/W in the NQRW feed, L in the L feed
     static = FakeStatic(stop_routes={"635": ["4", "5", "6"], "R20": ["N", "Q", "R", "W"], "L03": ["L"]},
                         headsigns={"q": "Coney Island", "six": "Brooklyn Bridge"})
@@ -122,7 +122,7 @@ def test_fetches_every_feed_serving_the_stop():
         url("Q"): feed(trip("q", "Q", [("R20S", 5)])),
         url("L"): feed(),
     }
-    clock = make_clock(static=static, feeds=feeds, stops=["635S", "R20S"])
+    clock = make_clock(static=static, feeds=feeds, stops=["635S", "R20S"], fetch_all_feeds=False)
     assert sorted(clock.fetched) == sorted([url("6"), url("Q")])
     assert [r.route for r in clock.board(now=NOW).rows] == ["6", "Q"]
 
@@ -187,7 +187,7 @@ def union_sq_clock(feeds):
     responses = dict(feeds)
 
     def fetch(feed_url):
-        response = responses[feed_url]
+        response = responses.get(feed_url, feed())
         if isinstance(response, Exception):
             raise response
         return response
@@ -233,3 +233,23 @@ def test_static_refresh_failure_still_fetches_live_data():
     clock.static.refresh = offline
     clock.refresh(now=NOW)
     assert [r.route for r in clock.board(now=NOW).rows] == ["6"]
+
+
+def test_all_feeds_show_unscheduled_reroutes():
+    # An A train sent along the F line by an incident isn't in any schedule.
+    static = FakeStatic(stop_routes={"D20": ["B", "D", "F", "M"]})
+    feeds = {url("F"): feed(trip("f", "F", [("D20S", 4)])),
+             url("A"): feed(trip("a", "A", [("D20S", 2)]))}
+    assert [r.route for r in make_clock(static=static, feeds=feeds, stops=["D20S"]).board(now=NOW).rows] == ["A", "F"]
+    scheduled_only = make_clock(static=static, feeds=feeds, stops=["D20S"], fetch_all_feeds=False)
+    assert [r.route for r in scheduled_only.board(now=NOW).rows] == ["F"]
+
+
+def test_unrelated_feed_failure_is_not_stale():
+    clock, responses = union_sq_clock({url("SI"): requests.ConnectionError("down")})
+    clock.refresh(now=NOW)
+    assert not clock.stale(now=NOW)
+    responses[url("SI")] = requests.ConnectionError("still down")
+    for seconds in (30, 60, 90, 120):
+        clock.refresh(now=NOW + seconds)
+    assert not clock.stale(now=NOW + 120)

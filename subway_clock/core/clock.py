@@ -6,7 +6,7 @@ import requests
 from google.protobuf.message import DecodeError
 
 from .board import Board, Row, bullet_id
-from .feeds import feed_urls, fetch_feed, get_predictions
+from .feeds import ALL_FEED_URLS, feed_urls, fetch_feed, get_predictions
 from .gtfs import destination
 
 log = logging.getLogger(__name__)
@@ -23,6 +23,7 @@ STALE_REFRESHES = 3
 class FetchResult:
     fetched_at: float
     feeds: dict  # feed URL -> list of Predictions, or None if fetching that feed failed
+    scheduled: tuple  # URLs of the feeds for routes scheduled at the stops
 
 
 class Clock:
@@ -41,7 +42,7 @@ class Clock:
         self.predictions = []
         self.rotation_index = 1
         self._feeds = {}  # feed URL -> (predictions, fetched_at) from the last successful fetch
-        self._urls = []  # feed URLs the chosen stops need
+        self._scheduled = []  # feed URLs for routes scheduled at the chosen stops
 
     def refresh(self, now=None):
         self.apply(self.fetch(now), now)
@@ -55,14 +56,15 @@ class Clock:
             log.warning("Checking for new static GTFS failed, using the cached copy: %s", e)
 
         stops = set(self.settings.stops)
+        scheduled = feed_urls(self.static.routes_for(stops))
         feeds = {}
-        for url in feed_urls(self.static.routes_for(stops)):
+        for url in ALL_FEED_URLS if self.settings.fetch_all_feeds else scheduled:
             try:
                 feeds[url] = get_predictions(self.fetch_feed(url), stops)
             except (requests.RequestException, DecodeError) as e:
                 log.warning("Fetching %s failed: %s", url, e)
                 feeds[url] = None
-        return FetchResult(now, feeds)
+        return FetchResult(now, feeds, tuple(scheduled))
 
     def apply(self, result, now=None):
         """Update the upcoming trains from a fetch(). Feeds that failed keep their last good data."""
@@ -70,9 +72,9 @@ class Clock:
         for url, preds in result.feeds.items():
             if preds is not None:
                 self._feeds[url] = (preds, result.fetched_at)
-        self._urls = list(result.feeds)
+        self._scheduled = list(result.scheduled)
 
-        preds = [p for url in self._urls if url in self._feeds for p in self._feeds[url][0]]
+        preds = [p for url in result.feeds if url in self._feeds for p in self._feeds[url][0]]
         earliest = now - OVERDUE_SECONDS
         latest = now + self.settings.max_minutes * 60
         upcoming = sorted([p for p in preds if earliest <= p.time <= latest], key=lambda p: p.time)
@@ -81,10 +83,14 @@ class Clock:
         self.rotation_index = 1  # Reset rotation to 2nd train
 
     def stale(self, now=None):
-        """True if any feed the board needs hasn't been fetched successfully for a while."""
+        """True if any feed for the stops' scheduled routes hasn't been fetched successfully for a while.
+
+        Other feeds (fetched when fetch_all_feeds is on) only matter for
+        reroutes, so their failures don't mark the board stale.
+        """
         now = time.time() if now is None else now
         limit = STALE_REFRESHES * self.settings.refresh_seconds
-        return any(url not in self._feeds or now - self._feeds[url][1] > limit for url in self._urls)
+        return any(url not in self._feeds or now - self._feeds[url][1] > limit for url in self._scheduled)
 
     def rotate(self, now=None):
         """Advance the second line to the next train. Returns False if there is nothing to rotate."""

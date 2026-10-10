@@ -10,6 +10,7 @@ with open(Path(__file__).with_name("feeds.json"), encoding="utf-8") as f:
     _FEEDS = json.load(f)
 
 ROUTE_FEEDS = {route: _FEEDS["base"] + suffix for suffix, routes in _FEEDS["feeds"].items() for route in routes}
+ALL_FEED_URLS = sorted(set(ROUTE_FEEDS.values()))
 
 
 def feed_urls(routes):

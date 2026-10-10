@@ -42,6 +42,7 @@ left out uses its default, and the file is optional:
     "theme": "light",
     "max_trains": 5,
     "max_minutes": 30,
+    "fetch_all_feeds": true,
     "refresh_seconds": 30,
     "rotation_seconds": 5,
     "data_dir": "data"
@@ -54,6 +55,9 @@ left out uses its default, and the file is optional:
 - `theme`: `light` or `dark`.
 - `max_trains`, `max_minutes`: show up to `max_trains` trains, and only those arriving within
   `max_minutes`. The second line rotates through trains 2 onward.
+- `fetch_all_feeds`: fetch every realtime feed (about 430 KB per refresh) so rerouted trains always
+  appear, including unplanned reroutes. Set to `false` to fetch only the feeds for routes
+  scheduled at your stops, including the next week of planned work.
 - `data_dir`: static GTFS cache. Relative paths are relative to the settings file.
 
 ## Layout

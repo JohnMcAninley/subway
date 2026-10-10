@@ -18,6 +18,11 @@ class Settings:
     # TODO: calibrate both defaults against the real countdown clocks.
     max_trains: int = 5
     max_minutes: int = 30
+    # Fetch every realtime feed (about 430 KB per refresh), so trains rerouted
+    # onto the chosen stops always appear, even unplanned reroutes. If false,
+    # fetch only the feeds for routes scheduled at the stops (including the
+    # next week of planned work), which uses less data.
+    fetch_all_feeds: bool = True
     refresh_seconds: int = 30
     rotation_seconds: int = 5  # how long each train stays on the second line
     data_dir: str = "data"  # static GTFS cache; relative paths are relative to the settings file

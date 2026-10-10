@@ -45,13 +45,19 @@ class FakeStatic:
 
 
 def make_clock(*trips, static=None, feeds=None, **settings):
-    """A Clock refreshed at NOW. Trips go in every feed unless feeds maps URL -> FeedMessage."""
+    """A Clock refreshed at NOW.
+
+    Each trip is served by its route's feed, unless feeds maps URL -> FeedMessage
+    (feeds left out are empty).
+    """
     static = static or FakeStatic(headsigns={t[0]: f"Dest {t[0]}" for t in trips})
     fetched = []
 
-    def fetch(url):
-        fetched.append(url)
-        return feeds[url] if feeds is not None else feed(*trips)
+    def fetch(feed_url):
+        fetched.append(feed_url)
+        if feeds is not None:
+            return feeds.get(feed_url, feed())
+        return feed(*[t for t in trips if url(t[1]) == feed_url])
 
     clock = Clock(Settings(**settings), static, fetch_feed=fetch)
     clock.refresh(now=NOW)
