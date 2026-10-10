@@ -113,6 +113,7 @@ class SubwayDisplay(QWidget):
 
     def render_display(self, board):
         self.clearLayout(self.layout())
-        for train in board.rows:
+        for i, train in enumerate(board.rows):
+            if i:
+                self.layout().addWidget(self.line_separator())
             self.layout().addWidget(self.train_row(train, board.theme))
-            self.layout().addWidget(self.line_separator())
