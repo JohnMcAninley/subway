@@ -1,16 +1,26 @@
+import logging
+from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
 from PySide6.QtWidgets import QLabel, QWidget, QVBoxLayout, QHBoxLayout, QFrame, QSpacerItem, QSizePolicy
-from PySide6.QtCore import Qt, QTimer
+from PySide6.QtCore import Qt, QTimer, Signal
 from PySide6.QtSvgWidgets import QSvgWidget
 
 BULLETS_DIR = Path(__file__).resolve().parent.parent / "assets" / "bullets"
 
+log = logging.getLogger(__name__)
+
 
 class SubwayDisplay(QWidget):
+    # Carries a FetchResult from the worker thread back to the UI thread.
+    fetched = Signal(object)
+
     def __init__(self, clock, width):
         super().__init__()
         self.clock = clock
+        self.executor = ThreadPoolExecutor(max_workers=1)
+        self.fetching = None
+        self.fetched.connect(self.apply_predictions)
         self.setWindowTitle("NYC Subway Countdown Clock")
         self.setWindowFlags(Qt.FramelessWindowHint)
         self.setFixedSize(width, int(width / 3.2))  # Matches 3.2:1 aspect ratio
@@ -36,6 +46,10 @@ class SubwayDisplay(QWidget):
         if event.key() == Qt.Key_Escape:
             self.close()
 
+    def closeEvent(self, event):
+        self.executor.shutdown(wait=False, cancel_futures=True)
+        super().closeEvent(event)
+
     def clearLayout(self, layout):
         while layout.count():
             item = layout.takeAt(0)
@@ -46,14 +60,25 @@ class SubwayDisplay(QWidget):
                 self.clearLayout(item.layout())
 
     def update_predictions(self):
-        self.clock.refresh()
+        # Fetch off the UI thread so a slow network can't freeze the display.
+        if self.fetching is None or self.fetching.done():
+            self.fetching = self.executor.submit(self.fetch_predictions)
+
+    def fetch_predictions(self):
+        try:
+            self.fetched.emit(self.clock.fetch())
+        except Exception:
+            log.exception("Fetching predictions failed")
+
+    def apply_predictions(self, result):
+        self.clock.apply(result)
         self.render_display(self.clock.board())
 
     def rotate_second_train(self):
         if self.clock.rotate():
             self.render_display(self.clock.board())
 
-    def train_row(self, train, mode):
+    def train_row(self, train, mode, stale):
         row = QWidget()
         hbox = QHBoxLayout()
         hbox.setContentsMargins(0,0,0,0)
@@ -61,6 +86,8 @@ class SubwayDisplay(QWidget):
             row.setStyleSheet("background-color: black;")
 
         text_color = "yellow" if train.arriving else "white" if mode=="dark" else "black"
+        if stale and not train.arriving:
+            text_color = "gray"  # Out of date, e.g. the network is down
 
         index_label = QLabel(f"{train.number}.")
         index_label.setStyleSheet(
@@ -116,4 +143,4 @@ class SubwayDisplay(QWidget):
         for i, train in enumerate(board.rows):
             if i:
                 self.layout().addWidget(self.line_separator())
-            self.layout().addWidget(self.train_row(train, board.theme))
+            self.layout().addWidget(self.train_row(train, board.theme, board.stale))

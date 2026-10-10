@@ -2,7 +2,9 @@
 import collections
 import csv
 import json
+import logging
 import os
+import time
 import zipfile
 from email.utils import formatdate, parsedate_to_datetime
 from pathlib import Path
@@ -12,6 +14,8 @@ import requests
 SUBWAY_URL = "https://rrgtfsfeeds.s3.amazonaws.com/gtfs_subway.zip"
 SUPPLEMENTED_URL = "https://rrgtfsfeeds.s3.amazonaws.com/gtfs_supplemented.zip"
 
+log = logging.getLogger(__name__)
+
 
 def download_if_newer_zip(url, local_zip_path):
     headers = {}
@@ -19,13 +23,16 @@ def download_if_newer_zip(url, local_zip_path):
     if os.path.exists(local_zip_path):
         headers['If-Modified-Since'] = formatdate(os.path.getmtime(local_zip_path), usegmt=True)
 
-    response = requests.get(url, headers=headers, stream=True)
+    response = requests.get(url, headers=headers, stream=True, timeout=30)
 
     if response.status_code == 304:
-        print("ZIP file is up to date. No download needed.")
+        log.debug("%s is up to date", url)
         return False
     elif response.status_code == 200:
-        with open(local_zip_path, 'wb') as f:
+        # Download beside the old copy and swap it in once complete, so an
+        # interrupted download can't leave a truncated zip that looks current.
+        part_path = f"{local_zip_path}.part"
+        with open(part_path, 'wb') as f:
             for chunk in response.iter_content(chunk_size=8192):
                 f.write(chunk)
 
@@ -33,21 +40,22 @@ def download_if_newer_zip(url, local_zip_path):
         last_modified = response.headers.get('Last-Modified')
         if last_modified:
             remote_mtime = parsedate_to_datetime(last_modified).timestamp()
-            os.utime(local_zip_path, (remote_mtime, remote_mtime))
+            os.utime(part_path, (remote_mtime, remote_mtime))
+        os.replace(part_path, local_zip_path)
 
-        print("Downloaded updated ZIP file.")
+        log.info("Downloaded %s", url)
         return True
     else:
-        print(f"Failed to download ZIP. Status code: {response.status_code}")
+        log.warning("Downloading %s failed with status %s", url, response.status_code)
         return False
 
 
 def unzip_and_replace(zip_path, extract_to):
     if not zipfile.is_zipfile(zip_path):
-        print("Provided file is not a valid ZIP archive.")
+        log.warning("%s is not a valid ZIP archive", zip_path)
         return False
 
-    print(f"Extracting ZIP to: {extract_to}")
+    log.info("Extracting %s to %s", zip_path, extract_to)
     with zipfile.ZipFile(zip_path, 'r') as zip_ref:
         zip_ref.extractall(extract_to)
     return True
@@ -168,20 +176,41 @@ class StaticData:
     """
 
     SOURCES = (("gtfs_subway", SUBWAY_URL), ("gtfs_supplemented", SUPPLEMENTED_URL))
+    CHECK_SECONDS = 60 * 60  # The supplemented GTFS is republished about hourly
 
     def __init__(self, data_dir):
         self.data_dir = Path(data_dir)
         self.data_dir.mkdir(parents=True, exist_ok=True)
-        for name, url in self.SOURCES:
-            update(url, self.data_dir, name)
-
-        self.stop_names, self.stop_parents = load_stops(self.data_dir / "gtfs_subway" / "stops.txt")
-        self._load_schedules()
+        self._checked_at = 0
+        try:
+            self._update_sources()
+        except (requests.RequestException, OSError) as e:
+            # Without a cached copy, loading below fails and the clock can't start.
+            log.warning("Downloading static GTFS failed, using the cached copy: %s", e)
+        self._load()
 
     def refresh(self):
-        """Pick up new supplemented GTFS (planned service changes) if the MTA has published it."""
-        if update(SUPPLEMENTED_URL, self.data_dir, "gtfs_supplemented"):
-            self._load_schedules()
+        """Pick up new static GTFS if the MTA has published it, checking at most every CHECK_SECONDS."""
+        if time.time() - self._checked_at < self.CHECK_SECONDS:
+            return
+        if self._update_sources():
+            self._load()
+
+    def _update_sources(self):
+        """Download any static GTFS that has changed. Returns True if anything did."""
+        self._checked_at = time.time()
+        updated = [update(url, self.data_dir, name) for name, url in self.SOURCES]
+        return any(updated)
+
+    def _load(self):
+        # Build into locals and assign at the end, so readers never see half-loaded tables.
+        stop_names, stop_parents = load_stops(self.data_dir / "gtfs_subway" / "stops.txt")
+        headsigns = {}
+        for name, _ in self.SOURCES:
+            load_headsigns(self.data_dir / name / "trips.txt", headsigns)
+        stop_routes = self._cached_stop_routes(stop_parents)
+        self.stop_names, self.stop_parents, self.headsigns, self.stop_routes = (
+            stop_names, stop_parents, headsigns, stop_routes)
 
     def routes_for(self, stops):
         """Sorted route IDs scheduled at any of stops (directional or parent stop IDs)."""
@@ -190,15 +219,7 @@ class StaticData:
             routes.update(self.stop_routes.get(self.stop_parents.get(stop, stop), ()))
         return sorted(routes)
 
-    def _load_schedules(self):
-        # Build into locals and assign at the end, so readers never see a half-loaded table.
-        headsigns = {}
-        for name, _ in self.SOURCES:
-            load_headsigns(self.data_dir / name / "trips.txt", headsigns)
-        stop_routes = self._cached_stop_routes()
-        self.headsigns, self.stop_routes = headsigns, stop_routes
-
-    def _cached_stop_routes(self):
+    def _cached_stop_routes(self, stop_parents):
         """build_stop_routes takes seconds (millions of stop_times rows), so cache it until the GTFS changes."""
         cache_path = self.data_dir / "stop_routes.json"
         sources = {name: os.path.getmtime(self.data_dir / f"{name}.zip") for name, _ in self.SOURCES}
@@ -208,8 +229,8 @@ class StaticData:
             if cache["sources"] == sources:
                 return cache["stop_routes"]
 
-        print("Building stop routes from GTFS schedules...")
-        stop_routes = build_stop_routes([self.data_dir / name for name, _ in self.SOURCES], self.stop_parents)
+        log.info("Building stop routes from GTFS schedules")
+        stop_routes = build_stop_routes([self.data_dir / name for name, _ in self.SOURCES], stop_parents)
         with open(cache_path, "w", encoding="utf-8") as f:
             json.dump({"sources": sources, "stop_routes": stop_routes}, f)
         return stop_routes

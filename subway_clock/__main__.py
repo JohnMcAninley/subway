@@ -1,4 +1,5 @@
 import argparse
+import logging
 import sys
 from pathlib import Path
 
@@ -16,6 +17,7 @@ def main():
                         help="settings file (default: settings.json; defaults are used if it doesn't exist)")
     parser.add_argument("--width", type=int, help="window width in pixels (default: primary screen width)")
     args = parser.parse_args()
+    logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
 
     settings = Settings.load(args.settings)
     static = StaticData(args.settings.parent / settings.data_dir)

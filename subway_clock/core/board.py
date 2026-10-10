@@ -20,6 +20,7 @@ class Row:
 class Board:
     theme: str
     rows: tuple[Row, ...]
+    stale: bool = False  # live data is out of date, e.g. the network is down
 
 
 # Route IDs whose bullet isn't named after the route

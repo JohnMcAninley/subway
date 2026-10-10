@@ -1,9 +1,12 @@
 import json
 
 import pytest
+import requests
+from google.protobuf.message import DecodeError
 
 from conftest import NOW, FakeStatic, feed, make_clock, trip, url
 from subway_clock.core.board import bullet_id
+from subway_clock.core.clock import Clock
 from subway_clock.core.settings import Settings
 
 
@@ -173,3 +176,60 @@ def test_settings_single_stop_id_still_loads(tmp_path):
 def test_settings_rejects_unknown_theme():
     with pytest.raises(ValueError):
         Settings(theme="neon")
+
+
+# Network failures
+
+
+def union_sq_clock(feeds):
+    """A clock for Union Sq (6 and Q feeds) whose fetches return or raise from feeds[url]."""
+    static = FakeStatic(stop_routes={"635": ["6"], "R20": ["Q"]})
+    responses = dict(feeds)
+
+    def fetch(feed_url):
+        response = responses[feed_url]
+        if isinstance(response, Exception):
+            raise response
+        return response
+
+    clock = Clock(Settings(stops=["635S", "R20S"]), static, fetch_feed=fetch)
+    return clock, responses
+
+
+def test_failed_feed_keeps_its_last_good_data():
+    clock, responses = union_sq_clock({url("6"): feed(trip("six", "6", [("635S", 4)])),
+                                       url("Q"): feed(trip("q", "Q", [("R20S", 6)]))})
+    clock.refresh(now=NOW)
+    responses[url("Q")] = requests.ConnectionError("down")
+    responses[url("6")] = feed(trip("six2", "6", [("635S", 2)]))
+    clock.refresh(now=NOW + 30)
+    assert [r.route for r in clock.board(now=NOW + 30).rows] == ["6", "Q"]
+    assert clock.predictions[0].trip_id == "six2"
+
+
+def test_stale_after_three_failed_refreshes():
+    clock, responses = union_sq_clock({url("6"): feed(), url("Q"): feed()})
+    clock.refresh(now=NOW)
+    responses[url("Q")] = requests.Timeout("slow")
+    for seconds in (30, 60, 90):
+        clock.refresh(now=NOW + seconds)
+        assert not clock.board(now=NOW + seconds).stale
+    clock.refresh(now=NOW + 120)
+    assert clock.board(now=NOW + 120).stale
+
+
+def test_stale_if_a_feed_never_loaded():
+    clock, _ = union_sq_clock({url("6"): feed(), url("Q"): DecodeError("garbage")})
+    clock.refresh(now=NOW)
+    assert clock.board(now=NOW).stale
+
+
+def test_static_refresh_failure_still_fetches_live_data():
+    clock, _ = union_sq_clock({url("6"): feed(trip("six", "6", [("635S", 4)])), url("Q"): feed()})
+
+    def offline():
+        raise requests.ConnectionError("down")
+
+    clock.static.refresh = offline
+    clock.refresh(now=NOW)
+    assert [r.route for r in clock.board(now=NOW).rows] == ["6"]

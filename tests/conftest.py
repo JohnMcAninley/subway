@@ -53,7 +53,7 @@ def make_clock(*trips, static=None, feeds=None, **settings):
         fetched.append(url)
         return feeds[url] if feeds is not None else feed(*trips)
 
-    clock = Clock(Settings(**settings), static, fetch=fetch)
+    clock = Clock(Settings(**settings), static, fetch_feed=fetch)
     clock.refresh(now=NOW)
     clock.fetched = fetched
     return clock
