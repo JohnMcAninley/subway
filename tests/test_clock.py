@@ -88,6 +88,8 @@ def test_unknown_headsign():
 def test_express_bullets():
     assert bullet_id("6X") == "6d"
     assert bullet_id("6") == "6"
+    assert bullet_id("FX") == "Fd"
+    assert bullet_id("GS") == "S"
 
 
 # Stops and feeds

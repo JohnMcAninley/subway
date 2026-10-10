@@ -1,8 +1,19 @@
+from pathlib import Path
+
+from subway_clock.core.board import bullet_id
 from subway_clock.core.feeds import ROUTE_FEEDS, feed_urls
 from subway_clock.core.gtfs import build_stop_routes
 
 # route_id column of routes.txt in the MTA subway GTFS
 ALL_ROUTES = "A C E B D F FX M G J Z L N Q R W GS FS H 1 2 3 4 5 6 6X 7 7X SI".split()
+
+BULLETS_DIR = Path(__file__).resolve().parent.parent / "subway_clock" / "assets" / "bullets"
+
+
+def test_every_route_has_a_bullet():
+    missing = [route for route in ALL_ROUTES
+               if not (BULLETS_DIR / f"NYCS-bull-trans-{bullet_id(route)}.svg").exists()]
+    assert missing == []
 
 
 def test_every_route_has_a_feed():

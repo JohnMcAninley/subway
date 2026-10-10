@@ -22,6 +22,19 @@ class Board:
     rows: tuple[Row, ...]
 
 
+# Route IDs whose bullet isn't named after the route
+SPECIAL_BULLETS = {
+    "GS": "S",  # 42 St Shuttle
+    "FS": "SF",  # Franklin Av Shuttle
+    "H": "SR",  # Rockaway Park Shuttle
+    "SI": "SIR",  # Staten Island Railway
+}
+
+
 def bullet_id(route_id):
-    """Express routes end in X in the feed; their diamond bullets end in d."""
-    return route_id.upper().replace("X", "d")
+    """Bullet asset id for a route. Express routes end in X; their diamond bullets end in d."""
+    if route_id in SPECIAL_BULLETS:
+        return SPECIAL_BULLETS[route_id]
+    if route_id.endswith("X"):
+        return route_id[:-1] + "d"
+    return route_id
