@@ -23,6 +23,11 @@ class Row:
 class Message:
     text: str  # a service alert; routes are in brackets, like "[4]"
     planned: bool  # planned work, as opposed to something happening now like delays
+    title: str = ""  # what kind of alert it is, e.g. "Delays" or "Stops Skipped"; "" if the feed doesn't say
+    updated_minutes: int | None = None  # how long ago it was last changed; None if the feed doesn't say
+    # A route's trains aren't running, or aren't stopping, at the stops: the alert says so and
+    # none of the route's trains are on their way.
+    no_service: bool = False
 
 
 @dataclass(frozen=True)

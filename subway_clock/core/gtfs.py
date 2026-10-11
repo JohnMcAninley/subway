@@ -5,6 +5,7 @@ import io
 import json
 import logging
 import os
+import re
 import shutil
 import time
 import zipfile
@@ -22,6 +23,9 @@ STATIONS_PATH = Path(__file__).resolve().parent.parent / "assets" / "stations.js
 
 # Written into an extracted directory once it is complete: the mtime of the zip it came from.
 EXTRACTED_MARKER = ".extracted"
+
+# The route and direction in a realtime-style trip ID: "6" and "S" in "061200_6..S04X001"
+TRIP_ROUTE_DIRECTION = re.compile(r"_(\w+?)\.+([NS])")
 
 log = logging.getLogger(__name__)
 
@@ -264,9 +268,25 @@ class StaticTables:
         self.headsigns = headsigns
         self.direction_labels = direction_labels or {}
         self.stop_boroughs = stop_boroughs or {}
+        self._terminals = None  # see terminals(); worked out when first asked for
 
     def refresh(self):
         """Fixed tables never change."""
+
+    def terminals(self, route_id, direction):
+        """The headsigns of route_id's scheduled trips in a direction ("N" or "S"): where they end.
+
+        A trip ID like "061200_6..S04X001" names its route and direction after
+        the underscore. Express routes ("6X") are scheduled under the local's ID.
+        """
+        if self._terminals is None:
+            terminals = collections.defaultdict(set)
+            for trip_id, headsign in self.headsigns.items():
+                trip = TRIP_ROUTE_DIRECTION.search(trip_id)
+                if trip:
+                    terminals[trip.groups()].add(headsign)
+            self._terminals = terminals
+        return self._terminals.get((route_id.removesuffix("X"), direction), ())
 
     def direction_label(self, stop_id):
         """The direction label for a directional stop ID like "633S", or "" if there isn't one."""

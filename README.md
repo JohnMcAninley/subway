@@ -125,7 +125,8 @@ if it can't be read, the clock says so in its log and carries on as it was.
   scheduled at your stops, including the next week of planned work.
 - `show_alerts`: show the MTA's service alerts for your stops and their routes. The classic style
   scrolls them along the bottom strip; the new style shows them in turn with the trains on the
-  last line.
+  last line. An alert about a whole route's trains in one direction ("Downtown [4] trains are
+  running with delays") is left off a clock for the other direction.
 - `show_station`: head the screen as the sign over a station entrance does, for a clock that
   isn't in the station: the station's name, the bullets of the routes scheduled to stop at your
   stops, and the direction ("Downtown") when every stop listed is one direction and they share a

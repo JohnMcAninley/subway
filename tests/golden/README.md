@@ -80,7 +80,8 @@ One entry per `board` step:
      "minutes": 0, "arriving": true}
   ],
   "stale": false,
-  "messages": [{"text": "Downtown [4][6] trains are running with delays after ...", "planned": false}],
+  "messages": [{"text": "Downtown [4][6] trains are running with delays after ...", "planned": false,
+                "title": "Delays", "updated_minutes": 3, "no_service": false}],
   "message": "",
   "groups": [],
   "station": "28 St",
@@ -178,6 +179,10 @@ Nothing rotates, `message` is `""`, and `max_trains` doesn't apply:
 as last fetched:
 - An alert's text is its `header_text` translation with language `en`, with
   each run of whitespace replaced by one space. Alerts without one are ignored.
+- The MTA adds to each alert in field 1001, which isn't part of
+  GTFS-realtime: a message whose field 2 (a varint) is the time the alert was
+  last changed and whose field 3 (a string) is its type, such as `Delays` or
+  `Planned - Stops Skipped`. Either may be missing.
 - An alert is active if it has no `active_period`, or `start <= now` and
   (`end` is 0 or missing, or `now < end`) for one of them.
 - Call the settings stops' (parent, direction) pairs the shown platforms: a
@@ -186,13 +191,53 @@ as last fetched:
   and both if it has none. An alert is relevant if any `informed_entity`:
   - has a `stop_id` whose parent is a shown platform's parent in a direction
     it covers; or
-  - has no `stop_id`, covers the direction of some shown platform, and its
-    `route_id` is in `stop_routes` for the stops' parents or is the route of
-    a train on the board's kept list (see "Which trains").
-- `messages` is the active, relevant alerts: those whose ID starts with
-  `lmm:alert:` (happening now, `planned` false) first, then the rest (planned
-  work, `planned` true), each in feed order; with repeated texts dropped after
-  the first; and cut to the first 5.
+  - has no `stop_id`, and its `route_id` is in `stop_routes` for the stops'
+    parents or is the route of a train on the board's kept list (see "Which
+    trains"), and it covers the direction of some shown platform. If it has
+    no `direction_id`, that goes by the alert's text at that platform: see
+    below.
+  The alert's routes are the `route_id`s of the entities that make it
+  relevant.
+- A message has the alert's `text`, and:
+  - `planned`: false if the alert's ID starts with `lmm:alert:` (it is
+    happening now), otherwise true (planned work);
+  - `title`: the alert's type without `Planned - ` at its start, or `""` if
+    it has no type;
+  - `updated_minutes`: `floor((now - changed) / 60)`, but never below 0,
+    where `changed` is when the alert was last changed; `null` if it doesn't
+    say;
+  - `no_service`: true if `title` is `Suspended`, `Part Suspended`, `Stops
+    Skipped` or `No Scheduled Service`, and none of the trains kept on
+    `refresh` that haven't left (see "Which trains") is on one of the alert's
+    routes, comparing route IDs without a final `X`. (Suspensions name the
+    stops at their ends as well, where trains still run one way.)
+- `messages` is the messages of the active, relevant alerts: those with
+  `no_service` first, then the rest that are happening now, then the rest
+  that are planned work, each in feed order; with repeated texts dropped
+  after the first; and cut to the first 5.
+
+An alert for a whole route rarely has a `direction_id`, but its text often
+says which way its trains are headed: "Downtown [4][6] trains are running
+with delays". For an `informed_entity` with neither `stop_id` nor
+`direction_id`:
+- If the text contains `both directions` (in any case), it covers both.
+- Otherwise find, in the text, each whole word `uptown` or `northbound` (which
+  is `N`) and `downtown` or `southbound` (`S`), in any case; and each place
+  before `-bound`, which is the longest run of words there that each start
+  with a capital letter or a digit, with one space between them. Words are
+  letters, digits, `_`, `.`, `/` and `'`, and the last has at least two
+  characters. Leave out any of these followed by ` platform` or ` track`
+  ("board from the Manhattan-bound platform" is about where to board, not
+  which trains). If there are none, it covers both.
+- A place is `N`, `S` or both at a shown platform, according to where it is
+  found as whole words, in any case: in `direction_labels` for the platform's
+  parent, or in the headsign of a trip in `headsigns` on the entity's route.
+  A trip ID such as `061200_6..S04X001` has its route and direction after the
+  `_`, with dots between them; the route is the entity's `route_id` without a
+  final `X`. If the place is found for neither direction, try it without its
+  first word, and so on ("No Jamaica", then "Jamaica").
+- The entity covers the directions found. If a place is found nowhere, it
+  covers both.
 
 In the `new` style, alerts take turns with the trains on the last line. Unless
 L = 1 or train L is arriving, the last line goes through trains L to n (or

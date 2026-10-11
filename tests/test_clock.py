@@ -430,6 +430,65 @@ def test_alert_for_a_rerouted_train_on_the_board():
     assert texts(clock.messages(NOW)) == ("[2] runs local",)
 
 
+def test_alert_title_and_age_come_from_the_mta_extension():
+    clock = alert_clock(alert("a", "[6] delays", ("6", "", None), kind="Delays", updated=NOW - 15 * 60 - 30),
+                        alert("b", "[6] runs local", ("6", "", None), kind="Planned - Express to Local", updated=NOW + 60),
+                        alert("c", "[6] something", ("6", "", None)))
+    assert [(m.title, m.updated_minutes) for m in clock.messages(NOW)] == [
+        ("Delays", 15), ("Express to Local", 0), ("", None)]
+    assert clock.messages(NOW + 120)[0].updated_minutes == 17
+
+
+def test_route_alert_for_trains_headed_the_other_way_is_left_out():
+    alerts = [alert("a", "Uptown [6] trains are delayed", ("6", "", None)),
+              alert("b", "Southbound [6] trains are delayed", ("6", "", None)),
+              alert("c", "Uptown and downtown [6] trains are delayed", ("6", "", None)),
+              alert("d", "[6] trains are delayed in both directions. Uptown trains skip 23 St", ("6", "", None)),
+              alert("e", "All [6] trains board from the uptown platform", ("6", "", None))]
+    assert ids(alert_clock(*alerts)) == "bcde"
+    assert ids(alert_clock(*alerts, stops=["633N"])) == "acde"
+    assert ids(alert_clock(*alerts, stops=["633"])) == "abcde"
+
+
+def test_route_alert_bound_for_a_place_goes_by_direction_labels_and_terminals():
+    static = FakeStatic(headsigns={"000100_6..N01R": "Pelham Bay Park", "000200_6..S01R": "Brooklyn Bridge-City Hall"},
+                        direction_labels={"633": {"N": "Uptown & The Bronx", "S": "Downtown & Brooklyn"}})
+    alerts = [alert("a", "Pelham Bay Park-bound [6] trains are delayed", ("6", "", None)),
+              alert("b", "No Brooklyn Bridge-bound [6] trains", ("6", "", None)),
+              alert("c", "Bronx-bound [6X] trains are delayed", ("6X", "", None)),
+              alert("d", "Queens-bound [6] trains are delayed", ("6", "", None)),  # Nowhere the 6 goes
+              alert("e", "In Manhattan, all [6] trains board from the Bronx-bound platform", ("6", "", None)),
+              alert("f", "Bronx-bound [6] trains skip 28 St, Brooklyn-bound trains run express", ("6", "", None))]
+    assert ids(alert_clock(*alerts, static=static)) == "bdef"
+    assert ids(alert_clock(*alerts, static=static, stops=["633N"])) == "acdef"
+
+
+def ids(clock):
+    """The first letters of the clock's messages, which the tests above begin with their alerts' IDs."""
+    by_text = {a.text: a.id for a in clock.alerts}
+    return "".join(by_text[m.text] for m in clock.messages(NOW))
+
+
+def test_no_service_alert_only_while_none_of_its_trains_are_coming():
+    skipped = alert("a", "Downtown [6] skips 28 St", ("6", "633", 1), kind="Planned - Stops Skipped")
+    suspended = alert("b", "No [6] between 125 St and Brooklyn Bridge", ("6", "", None), kind="Part Suspended")
+    delays = alert("c", "[6] delays", ("6", "", None), kind="Delays")
+
+    def no_service(*trips):
+        return [m.no_service for m in alert_clock(skipped, suspended, delays, trips=trips).messages(NOW)]
+
+    assert no_service() == [True, True, False]
+    assert no_service(trip("two", "2", [("633S", 4)])) == [True, True, False]  # Rerouted here, but still no 6
+    assert no_service(six("a", 4)) == [False, False, False]
+    assert no_service(trip("express", "6X", [("633S", 4)])) == [False, False, False]
+
+
+def test_no_service_alerts_come_first():
+    clock = alert_clock(alert("lmm:alert:1:26", "[6] delays", ("6", "", None), kind="Delays"),
+                        alert("lmm:planned_work:2", "No [6] here", ("6", "633", None), kind="Planned - Suspended"))
+    assert [(m.text, m.no_service) for m in clock.messages(NOW)] == [("No [6] here", True), ("[6] delays", False)]
+
+
 def test_show_alerts_off():
     clock = alert_clock(alert("a", "[6] delays", ("6", "", None)), show_alerts=False)
     assert ALERTS_URL not in clock.fetched

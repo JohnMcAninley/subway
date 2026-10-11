@@ -32,15 +32,36 @@ def feed(*trips):
     return message
 
 
-def alert(alert_id, text, *affects, periods=()):
-    """An alert; affects is (route_id, stop_id, direction_id or None), ...; periods is [(start, end), ...]."""
-    return (alert_id, text, affects, periods)
+def alert(alert_id, text, *affects, periods=(), kind="", updated=0):
+    """An alert; affects is (route_id, stop_id, direction_id or None), ...; periods is [(start, end), ...].
+
+    kind and updated are the MTA's own alert type and when it last changed the alert.
+    """
+    return (alert_id, text, affects, periods, kind, updated)
+
+
+def varint(value):
+    """value in protobuf's variable-length encoding."""
+    encoded = bytearray()
+    while value > 0x7F:
+        encoded.append(value & 0x7F | 0x80)
+        value >>= 7
+    return bytes(encoded) + bytes([value])
+
+
+def mercury_alert(kind, updated):
+    """The MTA's extension to an alert, as it is in the feed: field 1001, a message with these two among its fields."""
+    kind = kind.encode()
+    fields = varint(2 << 3) + varint(int(updated)) + varint(3 << 3 | 2) + varint(len(kind)) + kind
+    return varint(1001 << 3 | 2) + varint(len(fields)) + fields
 
 
 def alerts_feed(*alerts):
     message = feed()
-    for alert_id, text, affects, periods in alerts:
+    for alert_id, text, affects, periods, kind, updated in alerts:
         entity = message.entity.add(id=alert_id)
+        if kind or updated:
+            entity.alert.MergeFromString(mercury_alert(kind, updated))
         entity.alert.header_text.translation.add(language="en", text=text)
         entity.alert.header_text.translation.add(language="en-html", text=f"<p>{text}</p>")
         for route_id, stop_id, direction_id in affects:

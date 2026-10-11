@@ -30,15 +30,24 @@
     "messages": [
       {
         "text": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
-        "planned": false
+        "planned": false,
+        "title": "Delays",
+        "updated_minutes": 3,
+        "no_service": false
       },
       {
         "text": "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
-        "planned": true
+        "planned": true,
+        "title": "Express to Local",
+        "updated_minutes": 4549,
+        "no_service": false
       },
       {
         "text": "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St",
-        "planned": true
+        "planned": true,
+        "title": "Express to Local",
+        "updated_minutes": 8825,
+        "no_service": false
       }
     ],
     "message": "",
@@ -95,15 +104,24 @@
     "messages": [
       {
         "text": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
-        "planned": false
+        "planned": false,
+        "title": "Delays",
+        "updated_minutes": 3,
+        "no_service": false
       },
       {
         "text": "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
-        "planned": true
+        "planned": true,
+        "title": "Express to Local",
+        "updated_minutes": 4549,
+        "no_service": false
       },
       {
         "text": "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St",
-        "planned": true
+        "planned": true,
+        "title": "Express to Local",
+        "updated_minutes": 8825,
+        "no_service": false
       }
     ],
     "message": "",
@@ -160,15 +178,24 @@
     "messages": [
       {
         "text": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
-        "planned": false
+        "planned": false,
+        "title": "Delays",
+        "updated_minutes": 3,
+        "no_service": false
       },
       {
         "text": "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
-        "planned": true
+        "planned": true,
+        "title": "Express to Local",
+        "updated_minutes": 4549,
+        "no_service": false
       },
       {
         "text": "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St",
-        "planned": true
+        "planned": true,
+        "title": "Express to Local",
+        "updated_minutes": 8825,
+        "no_service": false
       }
     ],
     "message": "",
@@ -225,15 +252,24 @@
     "messages": [
       {
         "text": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
-        "planned": false
+        "planned": false,
+        "title": "Delays",
+        "updated_minutes": 3,
+        "no_service": false
       },
       {
         "text": "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
-        "planned": true
+        "planned": true,
+        "title": "Express to Local",
+        "updated_minutes": 4549,
+        "no_service": false
       },
       {
         "text": "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St",
-        "planned": true
+        "planned": true,
+        "title": "Express to Local",
+        "updated_minutes": 8826,
+        "no_service": false
       }
     ],
     "message": "",
@@ -290,15 +326,24 @@
     "messages": [
       {
         "text": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
-        "planned": false
+        "planned": false,
+        "title": "Delays",
+        "updated_minutes": 3,
+        "no_service": false
       },
       {
         "text": "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
-        "planned": true
+        "planned": true,
+        "title": "Express to Local",
+        "updated_minutes": 4549,
+        "no_service": false
       },
       {
         "text": "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St",
-        "planned": true
+        "planned": true,
+        "title": "Express to Local",
+        "updated_minutes": 8826,
+        "no_service": false
       }
     ],
     "message": "",
@@ -355,15 +400,24 @@
     "messages": [
       {
         "text": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
-        "planned": false
+        "planned": false,
+        "title": "Delays",
+        "updated_minutes": 3,
+        "no_service": false
       },
       {
         "text": "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
-        "planned": true
+        "planned": true,
+        "title": "Express to Local",
+        "updated_minutes": 4549,
+        "no_service": false
       },
       {
         "text": "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St",
-        "planned": true
+        "planned": true,
+        "title": "Express to Local",
+        "updated_minutes": 8826,
+        "no_service": false
       }
     ],
     "message": "",
@@ -420,15 +474,24 @@
     "messages": [
       {
         "text": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
-        "planned": false
+        "planned": false,
+        "title": "Delays",
+        "updated_minutes": 3,
+        "no_service": false
       },
       {
         "text": "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
-        "planned": true
+        "planned": true,
+        "title": "Express to Local",
+        "updated_minutes": 4549,
+        "no_service": false
       },
       {
         "text": "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St",
-        "planned": true
+        "planned": true,
+        "title": "Express to Local",
+        "updated_minutes": 8826,
+        "no_service": false
       }
     ],
     "message": "",
@@ -485,15 +548,24 @@
     "messages": [
       {
         "text": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
-        "planned": false
+        "planned": false,
+        "title": "Delays",
+        "updated_minutes": 3,
+        "no_service": false
       },
       {
         "text": "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
-        "planned": true
+        "planned": true,
+        "title": "Express to Local",
+        "updated_minutes": 4549,
+        "no_service": false
       },
       {
         "text": "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St",
-        "planned": true
+        "planned": true,
+        "title": "Express to Local",
+        "updated_minutes": 8826,
+        "no_service": false
       }
     ],
     "message": "",
@@ -550,15 +622,24 @@
     "messages": [
       {
         "text": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
-        "planned": false
+        "planned": false,
+        "title": "Delays",
+        "updated_minutes": 3,
+        "no_service": false
       },
       {
         "text": "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
-        "planned": true
+        "planned": true,
+        "title": "Express to Local",
+        "updated_minutes": 4549,
+        "no_service": false
       },
       {
         "text": "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St",
-        "planned": true
+        "planned": true,
+        "title": "Express to Local",
+        "updated_minutes": 8826,
+        "no_service": false
       }
     ],
     "message": "",
@@ -615,15 +696,24 @@
     "messages": [
       {
         "text": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
-        "planned": false
+        "planned": false,
+        "title": "Delays",
+        "updated_minutes": 4,
+        "no_service": false
       },
       {
         "text": "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
-        "planned": true
+        "planned": true,
+        "title": "Express to Local",
+        "updated_minutes": 4549,
+        "no_service": false
       },
       {
         "text": "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St",
-        "planned": true
+        "planned": true,
+        "title": "Express to Local",
+        "updated_minutes": 8826,
+        "no_service": false
       }
     ],
     "message": "",
@@ -680,15 +770,24 @@
     "messages": [
       {
         "text": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
-        "planned": false
+        "planned": false,
+        "title": "Delays",
+        "updated_minutes": 4,
+        "no_service": false
       },
       {
         "text": "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
-        "planned": true
+        "planned": true,
+        "title": "Express to Local",
+        "updated_minutes": 4549,
+        "no_service": false
       },
       {
         "text": "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St",
-        "planned": true
+        "planned": true,
+        "title": "Express to Local",
+        "updated_minutes": 8826,
+        "no_service": false
       }
     ],
     "message": "",
@@ -745,15 +844,24 @@
     "messages": [
       {
         "text": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
-        "planned": false
+        "planned": false,
+        "title": "Delays",
+        "updated_minutes": 5,
+        "no_service": false
       },
       {
         "text": "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
-        "planned": true
+        "planned": true,
+        "title": "Express to Local",
+        "updated_minutes": 4551,
+        "no_service": false
       },
       {
         "text": "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St",
-        "planned": true
+        "planned": true,
+        "title": "Express to Local",
+        "updated_minutes": 8827,
+        "no_service": false
       }
     ],
     "message": "",

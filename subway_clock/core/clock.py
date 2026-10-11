@@ -1,4 +1,5 @@
 import logging
+import re
 import threading
 import time
 from concurrent.futures import ThreadPoolExecutor
@@ -205,19 +206,35 @@ class Clock:
         return any(url not in self._feeds or now - self._feeds[url][1] > STALE_SECONDS for url in self._scheduled)
 
     def messages(self, now=None):
-        """The active alerts for the stops and their routes: those happening now, then planned work."""
+        """The active alerts for the stops and their routes.
+
+        Those that leave the stops without a route's trains come first, then
+        the others happening now, then planned work.
+        """
         now = time.time() if now is None else now
         if not self.settings.show_alerts:
             return ()
         on_board = {p.route_id for p in self.predictions(now)}
-        relevant = [a for a in self.alerts if a.active(now) and self._affected(a, on_board)]
+        coming = {p.route_id.removesuffix("X") for p in self._waiting(now)}
+        messages = []
+        for alert in self.alerts:
+            routes = self._affected(alert, on_board) if alert.active(now) else ()
+            if routes:
+                # A suspension often names the stops at its ends too, where trains still run one way.
+                no_service = alert.no_service and coming.isdisjoint(route.removesuffix("X") for route in routes)
+                updated = max(0, int((now - alert.updated) // 60)) if alert.updated else None
+                messages.append(Message(alert.text, alert.planned, alert.title, updated, no_service))
         by_text = {}  # Alerts are often repeated per route
-        for alert in sorted(relevant, key=lambda a: a.planned):
-            by_text.setdefault(alert.text, Message(alert.text, alert.planned))
+        for message in sorted(messages, key=lambda m: (not m.no_service, m.planned)):
+            by_text.setdefault(message.text, message)
         return tuple(by_text.values())[:MAX_MESSAGES]
 
     def _affected(self, alert, on_board):
-        """True if alert names one of the stops (in a direction shown), or a whole route that serves them.
+        """The routes alert is about here: empty if it isn't about the stops at all.
+
+        They are the routes it names at one of the stops (in a direction shown),
+        or names as a whole when they serve the stops (and it isn't only about
+        trains headed the other way).
 
         on_board: the routes of the trains the board can show, which may include rerouted ones
         """
@@ -226,14 +243,48 @@ class Clock:
         shown = {(parents.get(stop, stop), d) for stop in self.settings.stops
                  for d in ("NS" if parents.get(stop, stop) == stop else stop[-1])}
         routes = set(self.static.routes_for(self.settings.stops)) | on_board
+        affected = set()
         for route, stop, direction in alert.affects:
-            directions = direction or "NS"
             if stop:
-                if any((parents.get(stop, stop), d) in shown for d in directions):
-                    return True
-            elif route in routes and any(d in directions for _, d in shown):
-                return True
-        return False
+                if any((parents.get(stop, stop), d) in shown for d in direction or "NS"):
+                    affected.add(route)
+            elif route in routes and any(d in (direction or self._headed(alert, route, parent))
+                                         for parent, d in shown):
+                affected.add(route)
+        return affected
+
+    def _headed(self, alert, route, parent):
+        """The directions at a parent stop, "N" and "S", of the trains a route-wide alert is about.
+
+        Alerts for a whole route rarely give a direction, but their text often
+        does: "Downtown [4] trains are running with delays". Both directions,
+        unless everywhere the text says its trains are headed (see
+        feeds.headings) can be told apart.
+        """
+        directions = set()
+        for heading in alert.toward:
+            found = heading if heading in ("N", "S") else self._toward(heading, route, parent)
+            if not found:
+                return {"N", "S"}
+            directions.update(found)
+        return directions or {"N", "S"}
+
+    def _toward(self, place, route, parent):
+        """The directions in which route's trains at a parent stop are headed for place; empty if unknown.
+
+        place is from an alert's text, like "Woodlawn" or "Manhattan". It is
+        looked for in the stop's direction labels ("Manhattan", "Uptown & The
+        Bronx") and in the route's terminals ("Woodlawn", "Jamaica-179 St").
+        """
+        labels = self.static.direction_labels.get(parent, {})
+        words = place.split()
+        for start in range(len(words)):  # "No Jamaica" is tried whole, then as "Jamaica"
+            name = re.compile(rf"(?<!\w){re.escape(' '.join(words[start:]))}(?!\w)", re.IGNORECASE)
+            found = {d for d in "NS" if name.search(labels.get(d, ""))
+                     or any(name.search(end) for end in self.static.terminals(route, d))}
+            if found:
+                return found
+        return set()
 
     def _rotation(self, now):
         """What the last line rotates through: ("train", index) and ("message", text) entries."""

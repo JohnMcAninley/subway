@@ -54,7 +54,7 @@ Sizes are rough: S is an hour or two, M a day, L several days.
 |---|---|---|---|
 | A1 | **Arriving trains: check against a real clock** | S | The feeds have no door or departure signal; the nearest is a train's list of stops no longer including the station. The clock now follows that, refreshing every 10 seconds (the feeds are republished about that often). Measured on 2026-10-11 (47 trains on the 1 to 6, N/Q/R/W and L): the feeds list a train for a median of 39 to 51 seconds after its arrival time, and up to 166. `departed_seconds` can drop trains sooner (30 suits a clock at home). Open: John will take the clock to a station and compare when the real one removes a train and moves line 2 up. The vehicle "stopped at" reports aren't consistent between the numbered and lettered lines, so nothing depends on them. |
 | A2 | **Headline override table** | M | A hand-made table for what the borough rule gets wrong or can't know: the F at 75 Av and the 2 at Franklin Av ("Manhattan", not "Manhattan & ..."), short terminal names ("Coney Island", "Whitehall St"), the JFK plane, "via Court Square", and the H train ending at Broad Channel. Needs photos (P1) for the uncertain cases. |
-| A3 | **Alerts, second pass** | M | Read the alert type so "no service" alerts can take the whole screen in the `new` style; pass the alert's title ("Delays", "Planned work") and age to the board; stop route-wide alerts for one direction showing on clocks for the other (the direction is only in the text). |
+| A3 | **Alerts, second pass** | done | The alerts feed carries an extension of the MTA's own, with each alert's type and when it was last changed. Each of `Board.messages` now has a `title` (the type: "Delays", "Stops Skipped"), `updated_minutes`, and `no_service`: true when the type is a suspension or skipped stops and none of the route's trains are on their way (a suspension names the stops at its ends too, where trains still run one way). No-service messages come first. Route-wide alerts are left off clocks for the other direction, going by "uptown", "southbound" or "Woodlawn-bound" in the text; places are looked up in the stop's direction labels and the route's terminals, and one found in neither ("Bronx-bound" for a D in Brooklyn) still shows both ways. Nothing draws the new fields yet: that is C2 and C3. |
 | A4 | **Calibrate `max_minutes`** | S | Compare against real clocks: how far ahead do they list trains? Needs observation (P1). |
 | A5 | **Station name on the board** | done | `Board.station` is the chosen stops' station names, each once, with " / " between different ones; `Board.direction` is the direction label when every stop is one direction and they share it, otherwise ""; `Board.routes` is the routes scheduled at the stops, with their bullets (from the schedules, which include late-night service and the coming week's planned work, so 28 St lists the 4 beside the 6). The rule is under "The station" in `tests/golden/README.md`. At Union Sq downtown the direction is empty, because the L's platform is labelled "Brooklyn" and the others "Downtown & Brooklyn"; say if it should pick one (the commonest, or the first stop's) instead. |
 
@@ -140,8 +140,8 @@ it and a product, as read on 2026-10-11; none of it is legal advice.
 
 ## Suggested order
 
-1. Done: A5 and D1 (the home header), B1 and B2, C1, and E1.
-2. A2 and A4 as photos come in. A3, then C2 and C3.
+1. Done: A3, A5 and D1 (the home header), B1 and B2, C1, and E1.
+2. A2 and A4 as photos come in. C2 and C3.
 3. E2 (E3 is done).
 4. S1 early if the clock is to be sold: the answer decides whether there is a
    product, and it may take a while.

@@ -29,16 +29,25 @@
     "stale": false,
     "messages": [
       {
+        "text": "No [L] between Lorimer St, Brooklyn and 8 Av, Manhattan",
+        "planned": true,
+        "title": "Part Suspended",
+        "updated_minutes": 6961,
+        "no_service": true
+      },
+      {
         "text": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
-        "planned": false
+        "planned": false,
+        "title": "Delays",
+        "updated_minutes": 3,
+        "no_service": false
       },
       {
         "text": "Downtown [N][R] trains are running with delays after we removed a train with a door problem from service at 57 St/7 Av.",
-        "planned": false
-      },
-      {
-        "text": "No [L] between Lorimer St, Brooklyn and 8 Av, Manhattan",
-        "planned": true
+        "planned": false,
+        "title": "Delays",
+        "updated_minutes": 10,
+        "no_service": false
       }
     ],
     "message": "",
@@ -114,16 +123,25 @@
     "stale": false,
     "messages": [
       {
+        "text": "No [L] between Lorimer St, Brooklyn and 8 Av, Manhattan",
+        "planned": true,
+        "title": "Part Suspended",
+        "updated_minutes": 6961,
+        "no_service": true
+      },
+      {
         "text": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
-        "planned": false
+        "planned": false,
+        "title": "Delays",
+        "updated_minutes": 3,
+        "no_service": false
       },
       {
         "text": "Downtown [N][R] trains are running with delays after we removed a train with a door problem from service at 57 St/7 Av.",
-        "planned": false
-      },
-      {
-        "text": "No [L] between Lorimer St, Brooklyn and 8 Av, Manhattan",
-        "planned": true
+        "planned": false,
+        "title": "Delays",
+        "updated_minutes": 10,
+        "no_service": false
       }
     ],
     "message": "",
@@ -199,16 +217,25 @@
     "stale": false,
     "messages": [
       {
+        "text": "No [L] between Lorimer St, Brooklyn and 8 Av, Manhattan",
+        "planned": true,
+        "title": "Part Suspended",
+        "updated_minutes": 6961,
+        "no_service": true
+      },
+      {
         "text": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
-        "planned": false
+        "planned": false,
+        "title": "Delays",
+        "updated_minutes": 3,
+        "no_service": false
       },
       {
         "text": "Downtown [N][R] trains are running with delays after we removed a train with a door problem from service at 57 St/7 Av.",
-        "planned": false
-      },
-      {
-        "text": "No [L] between Lorimer St, Brooklyn and 8 Av, Manhattan",
-        "planned": true
+        "planned": false,
+        "title": "Delays",
+        "updated_minutes": 10,
+        "no_service": false
       }
     ],
     "message": "",
@@ -273,19 +300,28 @@
     "stale": false,
     "messages": [
       {
+        "text": "No [L] between Lorimer St, Brooklyn and 8 Av, Manhattan",
+        "planned": true,
+        "title": "Part Suspended",
+        "updated_minutes": 6961,
+        "no_service": true
+      },
+      {
         "text": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
-        "planned": false
+        "planned": false,
+        "title": "Delays",
+        "updated_minutes": 3,
+        "no_service": false
       },
       {
         "text": "Downtown [N][R] trains are running with delays after we removed a train with a door problem from service at 57 St/7 Av.",
-        "planned": false
-      },
-      {
-        "text": "No [L] between Lorimer St, Brooklyn and 8 Av, Manhattan",
-        "planned": true
+        "planned": false,
+        "title": "Delays",
+        "updated_minutes": 10,
+        "no_service": false
       }
     ],
-    "message": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
+    "message": "No [L] between Lorimer St, Brooklyn and 8 Av, Manhattan",
     "groups": [],
     "station": "14 St-Union Sq",
     "direction": "",
@@ -347,19 +383,28 @@
     "stale": false,
     "messages": [
       {
+        "text": "No [L] between Lorimer St, Brooklyn and 8 Av, Manhattan",
+        "planned": true,
+        "title": "Part Suspended",
+        "updated_minutes": 6961,
+        "no_service": true
+      },
+      {
         "text": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
-        "planned": false
+        "planned": false,
+        "title": "Delays",
+        "updated_minutes": 3,
+        "no_service": false
       },
       {
         "text": "Downtown [N][R] trains are running with delays after we removed a train with a door problem from service at 57 St/7 Av.",
-        "planned": false
-      },
-      {
-        "text": "No [L] between Lorimer St, Brooklyn and 8 Av, Manhattan",
-        "planned": true
+        "planned": false,
+        "title": "Delays",
+        "updated_minutes": 10,
+        "no_service": false
       }
     ],
-    "message": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
+    "message": "No [L] between Lorimer St, Brooklyn and 8 Av, Manhattan",
     "groups": [],
     "station": "14 St-Union Sq",
     "direction": "",
@@ -421,19 +466,28 @@
     "stale": false,
     "messages": [
       {
+        "text": "No [L] between Lorimer St, Brooklyn and 8 Av, Manhattan",
+        "planned": true,
+        "title": "Part Suspended",
+        "updated_minutes": 6961,
+        "no_service": true
+      },
+      {
         "text": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
-        "planned": false
+        "planned": false,
+        "title": "Delays",
+        "updated_minutes": 3,
+        "no_service": false
       },
       {
         "text": "Downtown [N][R] trains are running with delays after we removed a train with a door problem from service at 57 St/7 Av.",
-        "planned": false
-      },
-      {
-        "text": "No [L] between Lorimer St, Brooklyn and 8 Av, Manhattan",
-        "planned": true
+        "planned": false,
+        "title": "Delays",
+        "updated_minutes": 10,
+        "no_service": false
       }
     ],
-    "message": "Downtown [N][R] trains are running with delays after we removed a train with a door problem from service at 57 St/7 Av.",
+    "message": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
     "groups": [],
     "station": "14 St-Union Sq",
     "direction": "",
@@ -495,19 +549,28 @@
     "stale": false,
     "messages": [
       {
+        "text": "No [L] between Lorimer St, Brooklyn and 8 Av, Manhattan",
+        "planned": true,
+        "title": "Part Suspended",
+        "updated_minutes": 6961,
+        "no_service": true
+      },
+      {
         "text": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
-        "planned": false
+        "planned": false,
+        "title": "Delays",
+        "updated_minutes": 3,
+        "no_service": false
       },
       {
         "text": "Downtown [N][R] trains are running with delays after we removed a train with a door problem from service at 57 St/7 Av.",
-        "planned": false
-      },
-      {
-        "text": "No [L] between Lorimer St, Brooklyn and 8 Av, Manhattan",
-        "planned": true
+        "planned": false,
+        "title": "Delays",
+        "updated_minutes": 10,
+        "no_service": false
       }
     ],
-    "message": "Downtown [N][R] trains are running with delays after we removed a train with a door problem from service at 57 St/7 Av.",
+    "message": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
     "groups": [],
     "station": "14 St-Union Sq",
     "direction": "",
@@ -569,19 +632,28 @@
     "stale": false,
     "messages": [
       {
+        "text": "No [L] between Lorimer St, Brooklyn and 8 Av, Manhattan",
+        "planned": true,
+        "title": "Part Suspended",
+        "updated_minutes": 6961,
+        "no_service": true
+      },
+      {
         "text": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
-        "planned": false
+        "planned": false,
+        "title": "Delays",
+        "updated_minutes": 3,
+        "no_service": false
       },
       {
         "text": "Downtown [N][R] trains are running with delays after we removed a train with a door problem from service at 57 St/7 Av.",
-        "planned": false
-      },
-      {
-        "text": "No [L] between Lorimer St, Brooklyn and 8 Av, Manhattan",
-        "planned": true
+        "planned": false,
+        "title": "Delays",
+        "updated_minutes": 10,
+        "no_service": false
       }
     ],
-    "message": "No [L] between Lorimer St, Brooklyn and 8 Av, Manhattan",
+    "message": "Downtown [N][R] trains are running with delays after we removed a train with a door problem from service at 57 St/7 Av.",
     "groups": [],
     "station": "14 St-Union Sq",
     "direction": "",
@@ -643,19 +715,28 @@
     "stale": false,
     "messages": [
       {
+        "text": "No [L] between Lorimer St, Brooklyn and 8 Av, Manhattan",
+        "planned": true,
+        "title": "Part Suspended",
+        "updated_minutes": 6961,
+        "no_service": true
+      },
+      {
         "text": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
-        "planned": false
+        "planned": false,
+        "title": "Delays",
+        "updated_minutes": 3,
+        "no_service": false
       },
       {
         "text": "Downtown [N][R] trains are running with delays after we removed a train with a door problem from service at 57 St/7 Av.",
-        "planned": false
-      },
-      {
-        "text": "No [L] between Lorimer St, Brooklyn and 8 Av, Manhattan",
-        "planned": true
+        "planned": false,
+        "title": "Delays",
+        "updated_minutes": 10,
+        "no_service": false
       }
     ],
-    "message": "No [L] between Lorimer St, Brooklyn and 8 Av, Manhattan",
+    "message": "Downtown [N][R] trains are running with delays after we removed a train with a door problem from service at 57 St/7 Av.",
     "groups": [],
     "station": "14 St-Union Sq",
     "direction": "",
@@ -728,16 +809,25 @@
     "stale": false,
     "messages": [
       {
+        "text": "No [L] between Lorimer St, Brooklyn and 8 Av, Manhattan",
+        "planned": true,
+        "title": "Part Suspended",
+        "updated_minutes": 6961,
+        "no_service": true
+      },
+      {
         "text": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
-        "planned": false
+        "planned": false,
+        "title": "Delays",
+        "updated_minutes": 4,
+        "no_service": false
       },
       {
         "text": "Downtown [N][R] trains are running with delays after we removed a train with a door problem from service at 57 St/7 Av.",
-        "planned": false
-      },
-      {
-        "text": "No [L] between Lorimer St, Brooklyn and 8 Av, Manhattan",
-        "planned": true
+        "planned": false,
+        "title": "Delays",
+        "updated_minutes": 10,
+        "no_service": false
       }
     ],
     "message": "",
@@ -813,16 +903,25 @@
     "stale": false,
     "messages": [
       {
+        "text": "No [L] between Lorimer St, Brooklyn and 8 Av, Manhattan",
+        "planned": true,
+        "title": "Part Suspended",
+        "updated_minutes": 6961,
+        "no_service": true
+      },
+      {
         "text": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
-        "planned": false
+        "planned": false,
+        "title": "Delays",
+        "updated_minutes": 4,
+        "no_service": false
       },
       {
         "text": "Downtown [N][R] trains are running with delays after we removed a train with a door problem from service at 57 St/7 Av.",
-        "planned": false
-      },
-      {
-        "text": "No [L] between Lorimer St, Brooklyn and 8 Av, Manhattan",
-        "planned": true
+        "planned": false,
+        "title": "Delays",
+        "updated_minutes": 11,
+        "no_service": false
       }
     ],
     "message": "",
@@ -898,16 +997,25 @@
     "stale": false,
     "messages": [
       {
+        "text": "No [L] between Lorimer St, Brooklyn and 8 Av, Manhattan",
+        "planned": true,
+        "title": "Part Suspended",
+        "updated_minutes": 6963,
+        "no_service": true
+      },
+      {
         "text": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
-        "planned": false
+        "planned": false,
+        "title": "Delays",
+        "updated_minutes": 5,
+        "no_service": false
       },
       {
         "text": "Downtown [N][R] trains are running with delays after we removed a train with a door problem from service at 57 St/7 Av.",
-        "planned": false
-      },
-      {
-        "text": "No [L] between Lorimer St, Brooklyn and 8 Av, Manhattan",
-        "planned": true
+        "planned": false,
+        "title": "Delays",
+        "updated_minutes": 12,
+        "no_service": false
       }
     ],
     "message": "",

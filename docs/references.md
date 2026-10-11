@@ -82,8 +82,9 @@ seconds of each other.
     bullets inline;
   - service not running: the same card takes over the whole screen, with a
     bold title ("No uptown [A][C] here") over the advice.
-  We do the first and not the second: the alerts feed doesn't mark which
-  alerts mean no service.
+  We do the first. For the second, the core marks which alerts mean no
+  service at the clock's stops (`no_service`), from the alert type in the
+  MTA's extension to the alerts feed, but nothing draws it yet.
 - Track-side arrows sit before the bullet on island platforms. Not shown, as
   above.
 
@@ -114,6 +115,37 @@ seconds of each other.
   "Coney Island") and add notes we can't derive: an airplane and "JFK" for
   trains serving the airport, and "via Court Square" for the F's weekday
   route since the F and M swapped in December 2025.
+
+## What the alerts feed says
+
+The alerts feed is GTFS-realtime with an extension of the MTA's own
+("Mercury") that the bindings don't know, so the core reads it from the
+unknown fields. As seen on 2026-10-11, in 194 alerts:
+
+- **Type and age.** Each alert has a type and the time it was last changed.
+  The types that day: `Delays`, `Expect Delays`, `Planned - Stops Skipped`,
+  `Planned - Part Suspended`, `Planned - Suspended`, `Planned - Express to
+  Local`, `Planned - Reroute`, `Reduced Service`, `Extra Service`, `Boarding
+  Change` and `Station Notice`. A message's `title` is the type without
+  `Planned - `.
+- **No service.** A suspension or skipped-stops alert names the stops it
+  covers, but those include the ends of a suspended stretch, where trains
+  still run one way, and some stops where trains still call. So a message is
+  only `no_service` when none of the route's trains are on their way as well.
+  `No Scheduled Service` is taken as a no-service type too; it wasn't in the
+  feed that day, and is a guess at how a route that isn't running is marked.
+- **Direction.** Alerts for particular stops give a direction. Alerts for a
+  whole route, mostly delays, don't: it is only in the text, as in "Downtown
+  [4][6] trains are running with delays" or "Woodlawn-bound [4] trains". The
+  core reads "uptown", "downtown", "northbound", "southbound" and the place
+  before "-bound", and looks places up in the stop's direction labels and the
+  route's scheduled terminals. A place in neither still shows both ways:
+  "Bronx-bound" for a D in Brooklyn, where the labels are "Manhattan" and
+  "Coney Island" and the D ends at Norwood-205 St. "Board from the
+  Manhattan-bound platform" says where to board, so it isn't a direction.
+- **Not used.** The extension also has what look like the other stations a
+  planned alert should be shown at, and how long before it starts to show it
+  (an hour). We show an alert only while it is active, at the stops it names.
 
 ## Station header (ours)
 
