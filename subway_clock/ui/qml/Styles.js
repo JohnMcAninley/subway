@@ -24,4 +24,17 @@ var colors = {
         messageBackground: "#ffd200",
         messageText: "#000000",
     },
+    // The LED signs on the numbered lines. Their dots can only be red, green or
+    // amber, so each route's bullet is the nearest of those to its colour.
+    led: {
+        background: "#17170d",
+        text: "#a8f000",
+        arriving: "#ff9a1f",
+        bullets: {
+            "1": "#ff2244", "2": "#ff2244", "3": "#ff2244",
+            "4": "#a8f000", "5": "#a8f000", "6": "#a8f000", "6X": "#a8f000", "G": "#a8f000",
+            "B": "#ff9a1f", "D": "#ff9a1f", "F": "#ff9a1f", "FX": "#ff9a1f", "M": "#ff9a1f",
+            "N": "#ff9a1f", "Q": "#ff9a1f", "R": "#ff9a1f", "W": "#ff9a1f", "J": "#ff9a1f", "Z": "#ff9a1f",
+        },
+    },
 }

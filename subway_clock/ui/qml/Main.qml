@@ -14,7 +14,8 @@ Item {
     Loader {
         id: style
         anchors.fill: parent
-        sourceComponent: root.clock.board.style !== "new" ? classicBoard
+        sourceComponent: root.clock.board.style === "classic" ? classicBoard
+            : root.clock.board.style === "led" ? ledBoard
             : root.height > root.width * 1.3 ? newPortraitBoard : newBoard
     }
 
@@ -26,6 +27,11 @@ Item {
     Component {
         id: newBoard
         NewBoard { board: root.clock.board; bulletsUrl: root.clock.bulletsUrl; staleMessage: root.stale }
+    }
+
+    Component {
+        id: ledBoard
+        LedBoard { board: root.clock.board; bulletsUrl: root.clock.bulletsUrl; staleMessage: root.stale }
     }
 
     Component {

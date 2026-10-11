@@ -63,6 +63,8 @@ left out uses its default, and the file is optional:
   time strip; `new` is the newer clocks with a card per train, headed by the platform's direction
   (e.g. "Uptown & The Bronx") over the destination. In portrait it becomes the screens in station
   entrances: the time, trains under a heading for each direction, and service alerts at the bottom.
+  `led` is the LED dot-matrix signs on the numbered lines: green text, an amber line for an
+  arriving train, and no alerts.
 - `max_trains`, `max_minutes`: show up to `max_trains` trains, and only those arriving within
   `max_minutes`. The board fits as many lines as the screen's shape allows (2 on a wide bar, 4 at
   16:9, up to 10 in portrait); the last line rotates through the trains that don't fit. A screen

@@ -7,7 +7,8 @@ from pathlib import Path
 # The looks of the MTA's platform clocks, each with its own layout:
 #   classic: the LCD clocks with a pale blue screen and a time and message strip
 #   new: the newer clocks with a card per train, direction labels and terminals
-STYLES = ("classic", "new")
+#   led: the LED dot-matrix signs on the numbered lines
+STYLES = ("classic", "new", "led")
 
 # Settings files from before styles called them themes.
 OLD_THEMES = {"light": "classic", "dark": "new"}

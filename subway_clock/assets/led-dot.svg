@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 10 10">
+  <!-- One cell of the LED matrix: black with a round hole for the dot -->
+  <path fill="#000" fill-rule="evenodd" d="M0 0H10V10H0Z M0.9 5a4.1 4.1 0 1 0 8.2 0a4.1 4.1 0 1 0 -8.2 0Z"/>
+</svg>
