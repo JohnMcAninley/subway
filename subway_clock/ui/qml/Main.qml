@@ -25,7 +25,7 @@ Item {
         id: classicBoard
         ClassicBoard {
             board: root.clock.board; bulletsUrl: root.clock.bulletsUrl; staleMessage: root.stale
-            startup: root.clock.startup
+            showStation: root.clock.showStation; startup: root.clock.startup
         }
     }
 
@@ -33,7 +33,7 @@ Item {
         id: newBoard
         NewBoard {
             board: root.clock.board; bulletsUrl: root.clock.bulletsUrl; staleMessage: root.stale
-            startup: root.clock.startup
+            showStation: root.clock.showStation; startup: root.clock.startup
         }
     }
 
@@ -41,7 +41,7 @@ Item {
         id: ledBoard
         LedBoard {
             board: root.clock.board; bulletsUrl: root.clock.bulletsUrl; staleMessage: root.stale
-            startup: root.clock.startup
+            showStation: root.clock.showStation; startup: root.clock.startup
         }
     }
 
@@ -49,7 +49,7 @@ Item {
         id: newPortraitBoard
         NewPortraitBoard {
             board: root.clock.board; bulletsUrl: root.clock.bulletsUrl; staleMessage: root.stale
-            startup: root.clock.startup
+            showStation: root.clock.showStation; startup: root.clock.startup
         }
     }
 

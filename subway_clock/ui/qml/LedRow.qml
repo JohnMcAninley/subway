@@ -8,9 +8,8 @@ Canvas {
     required property var train
     required property var colors
 
-    // An arriving train's whole line changes colour; its bullet keeps the route's.
+    // An arriving train's whole line changes colour, bullet and all.
     readonly property color textColor: train.arriving ? colors.arriving : colors.text
-    readonly property color bulletColor: colors.bullets[train.route] || colors.text
 
     readonly property int textY: 2  // the top of a capital; descenders reach the line's last row
     readonly property string number: train.number + "."
@@ -23,7 +22,7 @@ Canvas {
     readonly property string destination: LedFont.fit(train.destination, destinationWidth)
 
     // Everything the line shows; the board is republished more often than that changes.
-    readonly property string content: [number, train.bullet, destination, minutes, textColor, bulletColor].join("|")
+    readonly property string content: [number, train.bullet, destination, minutes, textColor].join("|")
     onContentChanged: requestPaint()
 
     smooth: false
@@ -40,7 +39,7 @@ Canvas {
         }
 
         draw(LedFont.runs(number), bulletX - 2 - LedFont.width(number), textY, textColor)
-        draw(LedFont.bulletRuns(train.bullet), bulletX, 0, bulletColor)
+        draw(LedFont.bulletRuns(train.bullet), bulletX, 0, textColor)
         draw(LedFont.runs(destination), destinationX, textY, textColor)
         draw(LedFont.runs(minutes), width - 1 - LedFont.width(minutes), textY, textColor)
     }

@@ -42,7 +42,47 @@
       }
     ],
     "message": "",
-    "groups": []
+    "groups": [],
+    "station": "14 St-Union Sq",
+    "direction": "",
+    "routes": [
+      {
+        "route": "4",
+        "bullet": "4"
+      },
+      {
+        "route": "5",
+        "bullet": "5"
+      },
+      {
+        "route": "6",
+        "bullet": "6"
+      },
+      {
+        "route": "6X",
+        "bullet": "6d"
+      },
+      {
+        "route": "N",
+        "bullet": "N"
+      },
+      {
+        "route": "Q",
+        "bullet": "Q"
+      },
+      {
+        "route": "R",
+        "bullet": "R"
+      },
+      {
+        "route": "W",
+        "bullet": "W"
+      },
+      {
+        "route": "L",
+        "bullet": "L"
+      }
+    ]
   },
   {
     "now": 1791732030,
@@ -87,7 +127,47 @@
       }
     ],
     "message": "",
-    "groups": []
+    "groups": [],
+    "station": "14 St-Union Sq",
+    "direction": "",
+    "routes": [
+      {
+        "route": "4",
+        "bullet": "4"
+      },
+      {
+        "route": "5",
+        "bullet": "5"
+      },
+      {
+        "route": "6",
+        "bullet": "6"
+      },
+      {
+        "route": "6X",
+        "bullet": "6d"
+      },
+      {
+        "route": "N",
+        "bullet": "N"
+      },
+      {
+        "route": "Q",
+        "bullet": "Q"
+      },
+      {
+        "route": "R",
+        "bullet": "R"
+      },
+      {
+        "route": "W",
+        "bullet": "W"
+      },
+      {
+        "route": "L",
+        "bullet": "L"
+      }
+    ]
   },
   {
     "now": 1791732035,
@@ -132,7 +212,47 @@
       }
     ],
     "message": "",
-    "groups": []
+    "groups": [],
+    "station": "14 St-Union Sq",
+    "direction": "",
+    "routes": [
+      {
+        "route": "4",
+        "bullet": "4"
+      },
+      {
+        "route": "5",
+        "bullet": "5"
+      },
+      {
+        "route": "6",
+        "bullet": "6"
+      },
+      {
+        "route": "6X",
+        "bullet": "6d"
+      },
+      {
+        "route": "N",
+        "bullet": "N"
+      },
+      {
+        "route": "Q",
+        "bullet": "Q"
+      },
+      {
+        "route": "R",
+        "bullet": "R"
+      },
+      {
+        "route": "W",
+        "bullet": "W"
+      },
+      {
+        "route": "L",
+        "bullet": "L"
+      }
+    ]
   },
   {
     "now": 1791732040,
@@ -166,7 +286,47 @@
       }
     ],
     "message": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
-    "groups": []
+    "groups": [],
+    "station": "14 St-Union Sq",
+    "direction": "",
+    "routes": [
+      {
+        "route": "4",
+        "bullet": "4"
+      },
+      {
+        "route": "5",
+        "bullet": "5"
+      },
+      {
+        "route": "6",
+        "bullet": "6"
+      },
+      {
+        "route": "6X",
+        "bullet": "6d"
+      },
+      {
+        "route": "N",
+        "bullet": "N"
+      },
+      {
+        "route": "Q",
+        "bullet": "Q"
+      },
+      {
+        "route": "R",
+        "bullet": "R"
+      },
+      {
+        "route": "W",
+        "bullet": "W"
+      },
+      {
+        "route": "L",
+        "bullet": "L"
+      }
+    ]
   },
   {
     "now": 1791732045,
@@ -200,7 +360,47 @@
       }
     ],
     "message": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
-    "groups": []
+    "groups": [],
+    "station": "14 St-Union Sq",
+    "direction": "",
+    "routes": [
+      {
+        "route": "4",
+        "bullet": "4"
+      },
+      {
+        "route": "5",
+        "bullet": "5"
+      },
+      {
+        "route": "6",
+        "bullet": "6"
+      },
+      {
+        "route": "6X",
+        "bullet": "6d"
+      },
+      {
+        "route": "N",
+        "bullet": "N"
+      },
+      {
+        "route": "Q",
+        "bullet": "Q"
+      },
+      {
+        "route": "R",
+        "bullet": "R"
+      },
+      {
+        "route": "W",
+        "bullet": "W"
+      },
+      {
+        "route": "L",
+        "bullet": "L"
+      }
+    ]
   },
   {
     "now": 1791732050,
@@ -234,7 +434,47 @@
       }
     ],
     "message": "Downtown [N][R] trains are running with delays after we removed a train with a door problem from service at 57 St/7 Av.",
-    "groups": []
+    "groups": [],
+    "station": "14 St-Union Sq",
+    "direction": "",
+    "routes": [
+      {
+        "route": "4",
+        "bullet": "4"
+      },
+      {
+        "route": "5",
+        "bullet": "5"
+      },
+      {
+        "route": "6",
+        "bullet": "6"
+      },
+      {
+        "route": "6X",
+        "bullet": "6d"
+      },
+      {
+        "route": "N",
+        "bullet": "N"
+      },
+      {
+        "route": "Q",
+        "bullet": "Q"
+      },
+      {
+        "route": "R",
+        "bullet": "R"
+      },
+      {
+        "route": "W",
+        "bullet": "W"
+      },
+      {
+        "route": "L",
+        "bullet": "L"
+      }
+    ]
   },
   {
     "now": 1791732055,
@@ -268,7 +508,47 @@
       }
     ],
     "message": "Downtown [N][R] trains are running with delays after we removed a train with a door problem from service at 57 St/7 Av.",
-    "groups": []
+    "groups": [],
+    "station": "14 St-Union Sq",
+    "direction": "",
+    "routes": [
+      {
+        "route": "4",
+        "bullet": "4"
+      },
+      {
+        "route": "5",
+        "bullet": "5"
+      },
+      {
+        "route": "6",
+        "bullet": "6"
+      },
+      {
+        "route": "6X",
+        "bullet": "6d"
+      },
+      {
+        "route": "N",
+        "bullet": "N"
+      },
+      {
+        "route": "Q",
+        "bullet": "Q"
+      },
+      {
+        "route": "R",
+        "bullet": "R"
+      },
+      {
+        "route": "W",
+        "bullet": "W"
+      },
+      {
+        "route": "L",
+        "bullet": "L"
+      }
+    ]
   },
   {
     "now": 1791732060,
@@ -302,7 +582,47 @@
       }
     ],
     "message": "No [L] between Lorimer St, Brooklyn and 8 Av, Manhattan",
-    "groups": []
+    "groups": [],
+    "station": "14 St-Union Sq",
+    "direction": "",
+    "routes": [
+      {
+        "route": "4",
+        "bullet": "4"
+      },
+      {
+        "route": "5",
+        "bullet": "5"
+      },
+      {
+        "route": "6",
+        "bullet": "6"
+      },
+      {
+        "route": "6X",
+        "bullet": "6d"
+      },
+      {
+        "route": "N",
+        "bullet": "N"
+      },
+      {
+        "route": "Q",
+        "bullet": "Q"
+      },
+      {
+        "route": "R",
+        "bullet": "R"
+      },
+      {
+        "route": "W",
+        "bullet": "W"
+      },
+      {
+        "route": "L",
+        "bullet": "L"
+      }
+    ]
   },
   {
     "now": 1791732065,
@@ -336,7 +656,47 @@
       }
     ],
     "message": "No [L] between Lorimer St, Brooklyn and 8 Av, Manhattan",
-    "groups": []
+    "groups": [],
+    "station": "14 St-Union Sq",
+    "direction": "",
+    "routes": [
+      {
+        "route": "4",
+        "bullet": "4"
+      },
+      {
+        "route": "5",
+        "bullet": "5"
+      },
+      {
+        "route": "6",
+        "bullet": "6"
+      },
+      {
+        "route": "6X",
+        "bullet": "6d"
+      },
+      {
+        "route": "N",
+        "bullet": "N"
+      },
+      {
+        "route": "Q",
+        "bullet": "Q"
+      },
+      {
+        "route": "R",
+        "bullet": "R"
+      },
+      {
+        "route": "W",
+        "bullet": "W"
+      },
+      {
+        "route": "L",
+        "bullet": "L"
+      }
+    ]
   },
   {
     "now": 1791732070,
@@ -381,7 +741,47 @@
       }
     ],
     "message": "",
-    "groups": []
+    "groups": [],
+    "station": "14 St-Union Sq",
+    "direction": "",
+    "routes": [
+      {
+        "route": "4",
+        "bullet": "4"
+      },
+      {
+        "route": "5",
+        "bullet": "5"
+      },
+      {
+        "route": "6",
+        "bullet": "6"
+      },
+      {
+        "route": "6X",
+        "bullet": "6d"
+      },
+      {
+        "route": "N",
+        "bullet": "N"
+      },
+      {
+        "route": "Q",
+        "bullet": "Q"
+      },
+      {
+        "route": "R",
+        "bullet": "R"
+      },
+      {
+        "route": "W",
+        "bullet": "W"
+      },
+      {
+        "route": "L",
+        "bullet": "L"
+      }
+    ]
   },
   {
     "now": 1791732075,
@@ -426,7 +826,47 @@
       }
     ],
     "message": "",
-    "groups": []
+    "groups": [],
+    "station": "14 St-Union Sq",
+    "direction": "",
+    "routes": [
+      {
+        "route": "4",
+        "bullet": "4"
+      },
+      {
+        "route": "5",
+        "bullet": "5"
+      },
+      {
+        "route": "6",
+        "bullet": "6"
+      },
+      {
+        "route": "6X",
+        "bullet": "6d"
+      },
+      {
+        "route": "N",
+        "bullet": "N"
+      },
+      {
+        "route": "Q",
+        "bullet": "Q"
+      },
+      {
+        "route": "R",
+        "bullet": "R"
+      },
+      {
+        "route": "W",
+        "bullet": "W"
+      },
+      {
+        "route": "L",
+        "bullet": "L"
+      }
+    ]
   },
   {
     "now": 1791732145,
@@ -471,6 +911,46 @@
       }
     ],
     "message": "",
-    "groups": []
+    "groups": [],
+    "station": "14 St-Union Sq",
+    "direction": "",
+    "routes": [
+      {
+        "route": "4",
+        "bullet": "4"
+      },
+      {
+        "route": "5",
+        "bullet": "5"
+      },
+      {
+        "route": "6",
+        "bullet": "6"
+      },
+      {
+        "route": "6X",
+        "bullet": "6d"
+      },
+      {
+        "route": "N",
+        "bullet": "N"
+      },
+      {
+        "route": "Q",
+        "bullet": "Q"
+      },
+      {
+        "route": "R",
+        "bullet": "R"
+      },
+      {
+        "route": "W",
+        "bullet": "W"
+      },
+      {
+        "route": "L",
+        "bullet": "L"
+      }
+    ]
   }
 ]

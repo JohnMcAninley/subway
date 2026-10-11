@@ -29,7 +29,39 @@
     "stale": false,
     "messages": [],
     "message": "",
-    "groups": []
+    "groups": [],
+    "station": "Jackson Hts-Roosevelt Av / 74 St-Broadway",
+    "direction": "",
+    "routes": [
+      {
+        "route": "E",
+        "bullet": "E"
+      },
+      {
+        "route": "F",
+        "bullet": "F"
+      },
+      {
+        "route": "FX",
+        "bullet": "Fd"
+      },
+      {
+        "route": "M",
+        "bullet": "M"
+      },
+      {
+        "route": "R",
+        "bullet": "R"
+      },
+      {
+        "route": "7",
+        "bullet": "7"
+      },
+      {
+        "route": "7X",
+        "bullet": "7d"
+      }
+    ]
   },
   {
     "now": 1791668842,
@@ -61,7 +93,39 @@
     "stale": false,
     "messages": [],
     "message": "",
-    "groups": []
+    "groups": [],
+    "station": "Jackson Hts-Roosevelt Av / 74 St-Broadway",
+    "direction": "",
+    "routes": [
+      {
+        "route": "E",
+        "bullet": "E"
+      },
+      {
+        "route": "F",
+        "bullet": "F"
+      },
+      {
+        "route": "FX",
+        "bullet": "Fd"
+      },
+      {
+        "route": "M",
+        "bullet": "M"
+      },
+      {
+        "route": "R",
+        "bullet": "R"
+      },
+      {
+        "route": "7",
+        "bullet": "7"
+      },
+      {
+        "route": "7X",
+        "bullet": "7d"
+      }
+    ]
   },
   {
     "now": 1791668847,
@@ -93,7 +157,39 @@
     "stale": false,
     "messages": [],
     "message": "",
-    "groups": []
+    "groups": [],
+    "station": "Jackson Hts-Roosevelt Av / 74 St-Broadway",
+    "direction": "",
+    "routes": [
+      {
+        "route": "E",
+        "bullet": "E"
+      },
+      {
+        "route": "F",
+        "bullet": "F"
+      },
+      {
+        "route": "FX",
+        "bullet": "Fd"
+      },
+      {
+        "route": "M",
+        "bullet": "M"
+      },
+      {
+        "route": "R",
+        "bullet": "R"
+      },
+      {
+        "route": "7",
+        "bullet": "7"
+      },
+      {
+        "route": "7X",
+        "bullet": "7d"
+      }
+    ]
   },
   {
     "now": 1791668852,
@@ -125,7 +221,39 @@
     "stale": false,
     "messages": [],
     "message": "",
-    "groups": []
+    "groups": [],
+    "station": "Jackson Hts-Roosevelt Av / 74 St-Broadway",
+    "direction": "",
+    "routes": [
+      {
+        "route": "E",
+        "bullet": "E"
+      },
+      {
+        "route": "F",
+        "bullet": "F"
+      },
+      {
+        "route": "FX",
+        "bullet": "Fd"
+      },
+      {
+        "route": "M",
+        "bullet": "M"
+      },
+      {
+        "route": "R",
+        "bullet": "R"
+      },
+      {
+        "route": "7",
+        "bullet": "7"
+      },
+      {
+        "route": "7X",
+        "bullet": "7d"
+      }
+    ]
   },
   {
     "now": 1791668857,
@@ -157,7 +285,39 @@
     "stale": false,
     "messages": [],
     "message": "",
-    "groups": []
+    "groups": [],
+    "station": "Jackson Hts-Roosevelt Av / 74 St-Broadway",
+    "direction": "",
+    "routes": [
+      {
+        "route": "E",
+        "bullet": "E"
+      },
+      {
+        "route": "F",
+        "bullet": "F"
+      },
+      {
+        "route": "FX",
+        "bullet": "Fd"
+      },
+      {
+        "route": "M",
+        "bullet": "M"
+      },
+      {
+        "route": "R",
+        "bullet": "R"
+      },
+      {
+        "route": "7",
+        "bullet": "7"
+      },
+      {
+        "route": "7X",
+        "bullet": "7d"
+      }
+    ]
   },
   {
     "now": 1791668897,
@@ -189,7 +349,39 @@
     "stale": false,
     "messages": [],
     "message": "",
-    "groups": []
+    "groups": [],
+    "station": "Jackson Hts-Roosevelt Av / 74 St-Broadway",
+    "direction": "",
+    "routes": [
+      {
+        "route": "E",
+        "bullet": "E"
+      },
+      {
+        "route": "F",
+        "bullet": "F"
+      },
+      {
+        "route": "FX",
+        "bullet": "Fd"
+      },
+      {
+        "route": "M",
+        "bullet": "M"
+      },
+      {
+        "route": "R",
+        "bullet": "R"
+      },
+      {
+        "route": "7",
+        "bullet": "7"
+      },
+      {
+        "route": "7X",
+        "bullet": "7d"
+      }
+    ]
   },
   {
     "now": 1791669077,
@@ -221,7 +413,39 @@
     "stale": true,
     "messages": [],
     "message": "",
-    "groups": []
+    "groups": [],
+    "station": "Jackson Hts-Roosevelt Av / 74 St-Broadway",
+    "direction": "",
+    "routes": [
+      {
+        "route": "E",
+        "bullet": "E"
+      },
+      {
+        "route": "F",
+        "bullet": "F"
+      },
+      {
+        "route": "FX",
+        "bullet": "Fd"
+      },
+      {
+        "route": "M",
+        "bullet": "M"
+      },
+      {
+        "route": "R",
+        "bullet": "R"
+      },
+      {
+        "route": "7",
+        "bullet": "7"
+      },
+      {
+        "route": "7X",
+        "bullet": "7d"
+      }
+    ]
   },
   {
     "now": 1791668897,
@@ -275,7 +499,39 @@
     "stale": false,
     "messages": [],
     "message": "",
-    "groups": []
+    "groups": [],
+    "station": "Jackson Hts-Roosevelt Av / 74 St-Broadway",
+    "direction": "",
+    "routes": [
+      {
+        "route": "E",
+        "bullet": "E"
+      },
+      {
+        "route": "F",
+        "bullet": "F"
+      },
+      {
+        "route": "FX",
+        "bullet": "Fd"
+      },
+      {
+        "route": "M",
+        "bullet": "M"
+      },
+      {
+        "route": "R",
+        "bullet": "R"
+      },
+      {
+        "route": "7",
+        "bullet": "7"
+      },
+      {
+        "route": "7X",
+        "bullet": "7d"
+      }
+    ]
   },
   {
     "now": 1791668902,
@@ -329,7 +585,39 @@
     "stale": false,
     "messages": [],
     "message": "",
-    "groups": []
+    "groups": [],
+    "station": "Jackson Hts-Roosevelt Av / 74 St-Broadway",
+    "direction": "",
+    "routes": [
+      {
+        "route": "E",
+        "bullet": "E"
+      },
+      {
+        "route": "F",
+        "bullet": "F"
+      },
+      {
+        "route": "FX",
+        "bullet": "Fd"
+      },
+      {
+        "route": "M",
+        "bullet": "M"
+      },
+      {
+        "route": "R",
+        "bullet": "R"
+      },
+      {
+        "route": "7",
+        "bullet": "7"
+      },
+      {
+        "route": "7X",
+        "bullet": "7d"
+      }
+    ]
   },
   {
     "now": 1791668907,
@@ -383,7 +671,39 @@
     "stale": false,
     "messages": [],
     "message": "",
-    "groups": []
+    "groups": [],
+    "station": "Jackson Hts-Roosevelt Av / 74 St-Broadway",
+    "direction": "",
+    "routes": [
+      {
+        "route": "E",
+        "bullet": "E"
+      },
+      {
+        "route": "F",
+        "bullet": "F"
+      },
+      {
+        "route": "FX",
+        "bullet": "Fd"
+      },
+      {
+        "route": "M",
+        "bullet": "M"
+      },
+      {
+        "route": "R",
+        "bullet": "R"
+      },
+      {
+        "route": "7",
+        "bullet": "7"
+      },
+      {
+        "route": "7X",
+        "bullet": "7d"
+      }
+    ]
   },
   {
     "now": 1791668912,
@@ -437,7 +757,39 @@
     "stale": false,
     "messages": [],
     "message": "",
-    "groups": []
+    "groups": [],
+    "station": "Jackson Hts-Roosevelt Av / 74 St-Broadway",
+    "direction": "",
+    "routes": [
+      {
+        "route": "E",
+        "bullet": "E"
+      },
+      {
+        "route": "F",
+        "bullet": "F"
+      },
+      {
+        "route": "FX",
+        "bullet": "Fd"
+      },
+      {
+        "route": "M",
+        "bullet": "M"
+      },
+      {
+        "route": "R",
+        "bullet": "R"
+      },
+      {
+        "route": "7",
+        "bullet": "7"
+      },
+      {
+        "route": "7X",
+        "bullet": "7d"
+      }
+    ]
   },
   {
     "now": 1791668917,
@@ -524,7 +876,39 @@
     "stale": false,
     "messages": [],
     "message": "",
-    "groups": []
+    "groups": [],
+    "station": "Jackson Hts-Roosevelt Av / 74 St-Broadway",
+    "direction": "",
+    "routes": [
+      {
+        "route": "E",
+        "bullet": "E"
+      },
+      {
+        "route": "F",
+        "bullet": "F"
+      },
+      {
+        "route": "FX",
+        "bullet": "Fd"
+      },
+      {
+        "route": "M",
+        "bullet": "M"
+      },
+      {
+        "route": "R",
+        "bullet": "R"
+      },
+      {
+        "route": "7",
+        "bullet": "7"
+      },
+      {
+        "route": "7X",
+        "bullet": "7d"
+      }
+    ]
   },
   {
     "now": 1791668922,
@@ -611,7 +995,39 @@
     "stale": false,
     "messages": [],
     "message": "",
-    "groups": []
+    "groups": [],
+    "station": "Jackson Hts-Roosevelt Av / 74 St-Broadway",
+    "direction": "",
+    "routes": [
+      {
+        "route": "E",
+        "bullet": "E"
+      },
+      {
+        "route": "F",
+        "bullet": "F"
+      },
+      {
+        "route": "FX",
+        "bullet": "Fd"
+      },
+      {
+        "route": "M",
+        "bullet": "M"
+      },
+      {
+        "route": "R",
+        "bullet": "R"
+      },
+      {
+        "route": "7",
+        "bullet": "7"
+      },
+      {
+        "route": "7X",
+        "bullet": "7d"
+      }
+    ]
   },
   {
     "now": 1791668927,
@@ -724,6 +1140,38 @@
             "arriving": false
           }
         ]
+      }
+    ],
+    "station": "Jackson Hts-Roosevelt Av / 74 St-Broadway",
+    "direction": "",
+    "routes": [
+      {
+        "route": "E",
+        "bullet": "E"
+      },
+      {
+        "route": "F",
+        "bullet": "F"
+      },
+      {
+        "route": "FX",
+        "bullet": "Fd"
+      },
+      {
+        "route": "M",
+        "bullet": "M"
+      },
+      {
+        "route": "R",
+        "bullet": "R"
+      },
+      {
+        "route": "7",
+        "bullet": "7"
+      },
+      {
+        "route": "7X",
+        "bullet": "7d"
       }
     ]
   },
@@ -860,6 +1308,38 @@
             "arriving": false
           }
         ]
+      }
+    ],
+    "station": "Jackson Hts-Roosevelt Av / 74 St-Broadway",
+    "direction": "",
+    "routes": [
+      {
+        "route": "E",
+        "bullet": "E"
+      },
+      {
+        "route": "F",
+        "bullet": "F"
+      },
+      {
+        "route": "FX",
+        "bullet": "Fd"
+      },
+      {
+        "route": "M",
+        "bullet": "M"
+      },
+      {
+        "route": "R",
+        "bullet": "R"
+      },
+      {
+        "route": "7",
+        "bullet": "7"
+      },
+      {
+        "route": "7X",
+        "bullet": "7d"
       }
     ]
   }

@@ -39,6 +39,7 @@ def main():
     parser.add_argument("case", type=Path, help="a directory under tests/golden")
     parser.add_argument("output", help="the PNG to write")
     parser.add_argument("--style", choices=STYLES, help="draw this style instead of the case's")
+    parser.add_argument("--station", action="store_true", help="head the screen with the station (show_station)")
     parser.add_argument("--size", type=size, default=QSize(1920, 480), metavar="WIDTHxHEIGHT")
     parser.add_argument("--offset", type=int, default=10, help="seconds after the case's first step (default 10)")
     parser.add_argument("--rotate", type=int, default=0, help="rotations of the last line first (default 0)")
@@ -60,7 +61,8 @@ def main():
         feed.ParseFromString((args.case / "feeds" / f"{url.rsplit('%2F', 1)[1]}.pb").read_bytes())
         return feed
 
-    settings = Settings(**{**case["settings"], **({"style": args.style} if args.style else {})})
+    settings = Settings(**{**case["settings"], **({"style": args.style} if args.style else {}),
+                           "show_station": args.station})
     static = StaticTables(**json.loads((args.case / "static.json").read_text(encoding="utf-8")))
     clock = Clock(settings, static, fetch_feed=fetch_feed)
     starting = args.loading is not None or args.no_connection or args.loading_trains

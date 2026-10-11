@@ -29,7 +29,27 @@
     "stale": false,
     "messages": [],
     "message": "",
-    "groups": []
+    "groups": [],
+    "station": "Brooklyn Bridge-City Hall",
+    "direction": "Uptown & The Bronx",
+    "routes": [
+      {
+        "route": "4",
+        "bullet": "4"
+      },
+      {
+        "route": "5",
+        "bullet": "5"
+      },
+      {
+        "route": "6",
+        "bullet": "6"
+      },
+      {
+        "route": "6X",
+        "bullet": "6d"
+      }
+    ]
   },
   {
     "now": 1791668842,
@@ -61,7 +81,27 @@
     "stale": false,
     "messages": [],
     "message": "",
-    "groups": []
+    "groups": [],
+    "station": "Brooklyn Bridge-City Hall",
+    "direction": "Uptown & The Bronx",
+    "routes": [
+      {
+        "route": "4",
+        "bullet": "4"
+      },
+      {
+        "route": "5",
+        "bullet": "5"
+      },
+      {
+        "route": "6",
+        "bullet": "6"
+      },
+      {
+        "route": "6X",
+        "bullet": "6d"
+      }
+    ]
   },
   {
     "now": 1791668847,
@@ -93,7 +133,27 @@
     "stale": false,
     "messages": [],
     "message": "",
-    "groups": []
+    "groups": [],
+    "station": "Brooklyn Bridge-City Hall",
+    "direction": "Uptown & The Bronx",
+    "routes": [
+      {
+        "route": "4",
+        "bullet": "4"
+      },
+      {
+        "route": "5",
+        "bullet": "5"
+      },
+      {
+        "route": "6",
+        "bullet": "6"
+      },
+      {
+        "route": "6X",
+        "bullet": "6d"
+      }
+    ]
   },
   {
     "now": 1791668852,
@@ -125,7 +185,27 @@
     "stale": false,
     "messages": [],
     "message": "",
-    "groups": []
+    "groups": [],
+    "station": "Brooklyn Bridge-City Hall",
+    "direction": "Uptown & The Bronx",
+    "routes": [
+      {
+        "route": "4",
+        "bullet": "4"
+      },
+      {
+        "route": "5",
+        "bullet": "5"
+      },
+      {
+        "route": "6",
+        "bullet": "6"
+      },
+      {
+        "route": "6X",
+        "bullet": "6d"
+      }
+    ]
   },
   {
     "now": 1791668857,
@@ -157,7 +237,27 @@
     "stale": false,
     "messages": [],
     "message": "",
-    "groups": []
+    "groups": [],
+    "station": "Brooklyn Bridge-City Hall",
+    "direction": "Uptown & The Bronx",
+    "routes": [
+      {
+        "route": "4",
+        "bullet": "4"
+      },
+      {
+        "route": "5",
+        "bullet": "5"
+      },
+      {
+        "route": "6",
+        "bullet": "6"
+      },
+      {
+        "route": "6X",
+        "bullet": "6d"
+      }
+    ]
   },
   {
     "now": 1791668897,
@@ -189,7 +289,27 @@
     "stale": false,
     "messages": [],
     "message": "",
-    "groups": []
+    "groups": [],
+    "station": "Brooklyn Bridge-City Hall",
+    "direction": "Uptown & The Bronx",
+    "routes": [
+      {
+        "route": "4",
+        "bullet": "4"
+      },
+      {
+        "route": "5",
+        "bullet": "5"
+      },
+      {
+        "route": "6",
+        "bullet": "6"
+      },
+      {
+        "route": "6X",
+        "bullet": "6d"
+      }
+    ]
   },
   {
     "now": 1791669077,
@@ -221,6 +341,26 @@
     "stale": true,
     "messages": [],
     "message": "",
-    "groups": []
+    "groups": [],
+    "station": "Brooklyn Bridge-City Hall",
+    "direction": "Uptown & The Bronx",
+    "routes": [
+      {
+        "route": "4",
+        "bullet": "4"
+      },
+      {
+        "route": "5",
+        "bullet": "5"
+      },
+      {
+        "route": "6",
+        "bullet": "6"
+      },
+      {
+        "route": "6X",
+        "bullet": "6d"
+      }
+    ]
   }
 ]

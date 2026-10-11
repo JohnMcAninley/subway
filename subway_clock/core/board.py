@@ -32,6 +32,12 @@ class Group:
 
 
 @dataclass(frozen=True)
+class Route:
+    route: str  # GTFS route_id, e.g. "6X"
+    bullet: str  # bullet asset id, e.g. "6d"
+
+
+@dataclass(frozen=True)
 class Board:
     style: str
     rows: tuple[Row, ...]  # top to bottom
@@ -41,6 +47,13 @@ class Board:
     message: str = ""
     # On a grouped board showing more than one direction: the same rows, split by direction.
     groups: tuple[Group, ...] = ()
+    # Where the clock is, for screens that say so, as the sign over a station entrance does:
+    # the names of the chosen stops' stations ("14 St-Union Sq"; " / " between them if they
+    # differ), the routes scheduled to stop there, and the direction label the stops share
+    # ("Downtown & Brooklyn"), or "" when they cover more than one.
+    station: str = ""
+    direction: str = ""
+    routes: tuple[Route, ...] = ()
 
 
 # Route IDs whose bullet isn't named after the route

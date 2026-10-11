@@ -29,7 +29,19 @@
     "stale": false,
     "messages": [],
     "message": "",
-    "groups": []
+    "groups": [],
+    "station": "Broad Channel",
+    "direction": "",
+    "routes": [
+      {
+        "route": "A",
+        "bullet": "A"
+      },
+      {
+        "route": "H",
+        "bullet": "SR"
+      }
+    ]
   },
   {
     "now": 1791668842,
@@ -61,7 +73,19 @@
     "stale": false,
     "messages": [],
     "message": "",
-    "groups": []
+    "groups": [],
+    "station": "Broad Channel",
+    "direction": "",
+    "routes": [
+      {
+        "route": "A",
+        "bullet": "A"
+      },
+      {
+        "route": "H",
+        "bullet": "SR"
+      }
+    ]
   },
   {
     "now": 1791668847,
@@ -93,7 +117,19 @@
     "stale": false,
     "messages": [],
     "message": "",
-    "groups": []
+    "groups": [],
+    "station": "Broad Channel",
+    "direction": "",
+    "routes": [
+      {
+        "route": "A",
+        "bullet": "A"
+      },
+      {
+        "route": "H",
+        "bullet": "SR"
+      }
+    ]
   },
   {
     "now": 1791668852,
@@ -125,7 +161,19 @@
     "stale": false,
     "messages": [],
     "message": "",
-    "groups": []
+    "groups": [],
+    "station": "Broad Channel",
+    "direction": "",
+    "routes": [
+      {
+        "route": "A",
+        "bullet": "A"
+      },
+      {
+        "route": "H",
+        "bullet": "SR"
+      }
+    ]
   },
   {
     "now": 1791668857,
@@ -157,7 +205,19 @@
     "stale": false,
     "messages": [],
     "message": "",
-    "groups": []
+    "groups": [],
+    "station": "Broad Channel",
+    "direction": "",
+    "routes": [
+      {
+        "route": "A",
+        "bullet": "A"
+      },
+      {
+        "route": "H",
+        "bullet": "SR"
+      }
+    ]
   },
   {
     "now": 1791668897,
@@ -189,7 +249,19 @@
     "stale": false,
     "messages": [],
     "message": "",
-    "groups": []
+    "groups": [],
+    "station": "Broad Channel",
+    "direction": "",
+    "routes": [
+      {
+        "route": "A",
+        "bullet": "A"
+      },
+      {
+        "route": "H",
+        "bullet": "SR"
+      }
+    ]
   },
   {
     "now": 1791669077,
@@ -221,6 +293,18 @@
     "stale": true,
     "messages": [],
     "message": "",
-    "groups": []
+    "groups": [],
+    "station": "Broad Channel",
+    "direction": "",
+    "routes": [
+      {
+        "route": "A",
+        "bullet": "A"
+      },
+      {
+        "route": "H",
+        "bullet": "SR"
+      }
+    ]
   }
 ]

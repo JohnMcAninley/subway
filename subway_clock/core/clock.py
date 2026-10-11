@@ -7,7 +7,7 @@ from dataclasses import dataclass
 import requests
 from google.protobuf.message import DecodeError
 
-from .board import Board, Group, Message, Row, bullet_id
+from .board import Board, Group, Message, Route, Row, bullet_id
 from .feeds import ALERTS_URL, ALL_FEED_URLS, feed_urls, fetch_feed, get_alerts, get_predictions
 from .gtfs import destination, terminal
 from .headline import headline
@@ -252,7 +252,7 @@ class Clock:
 
         rows = tuple(self._row(predictions[i], i + 1, now) for i in indexes)
         return Board(style=self.settings.style, rows=rows, stale=self.stale(now),
-                     messages=self.messages(now), message=message)
+                     messages=self.messages(now), message=message, **self._station())
 
     def _grouped_board(self, now):
         """Every line shows a train; with more than one direction, each gets an equal share of the lines."""
@@ -273,7 +273,20 @@ class Clock:
                 for g, heading in enumerate(headings))
             rows = tuple(row for group in groups for row in group.rows)
         return Board(style=self.settings.style, rows=rows, stale=self.stale(now),
-                     messages=self.messages(now), groups=groups)
+                     messages=self.messages(now), groups=groups, **self._station())
+
+    def _station(self):
+        """The Board's station, direction and routes: where the chosen stops are and what stops there."""
+        static = self.static
+        stops = self.settings.stops
+        names = dict.fromkeys(static.stop_names[stop] for stop in stops if stop in static.stop_names)
+        # A parent stop is both directions, so there is no one label for it.
+        directional = all(static.stop_parents.get(stop, stop) != stop for stop in stops)
+        labels = {static.direction_label(stop) for stop in stops} if directional else set()
+        # Stop by stop, as the bullets on an entrance's sign are grouped by line
+        routes = dict.fromkeys(route for stop in stops for route in static.routes_for([stop]))
+        return {"station": " / ".join(names), "direction": labels.pop() if len(labels) == 1 else "",
+                "routes": tuple(Route(route, bullet_id(route)) for route in routes)}
 
     def _row(self, pred, number, now):
         seconds = pred.time - now

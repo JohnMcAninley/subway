@@ -40,6 +40,10 @@ class Settings:
     fetch_all_feeds: bool = True
     # Show the MTA's service alerts for the stops and their routes (another 500 KB every 2 minutes).
     show_alerts: bool = True
+    # Head the screen as the sign over a station entrance does: the station's name, the
+    # bullets of the routes that stop there, and the direction if the stops share one.
+    # A platform clock doesn't need to say where it is; one at home does.
+    show_station: bool = False
     # An arriving train stays on the board until the feed stops listing it at
     # the stop, which is the nearest thing there is to "it has left", or until
     # this long after its arrival time if that comes first. The default only

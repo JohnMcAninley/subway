@@ -1,5 +1,7 @@
 {
-  "stop_names": {},
+  "stop_names": {
+    "D35S": "Kings Hwy"
+  },
   "stop_parents": {
     "D35S": "D35"
   },

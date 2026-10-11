@@ -210,7 +210,7 @@ def capture(names):
         # Only the static tables the case can look up.
         parents = {s: static.stop_parents[s] for s in stops | trip_stops if s in static.stop_parents}
         write_json(case_dir / "static.json", {
-            "stop_names": {s: static.stop_names[s] for s in sorted(trip_stops) if s in static.stop_names},
+            "stop_names": {s: static.stop_names[s] for s in sorted(stops | trip_stops) if s in static.stop_names},
             "stop_parents": dict(sorted(parents.items())),
             "stop_routes": {p: static.stop_routes[p] for p in sorted({static.stop_parents.get(s, s) for s in stops})
                             if p in static.stop_routes},

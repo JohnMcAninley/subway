@@ -115,6 +115,17 @@ seconds of each other.
   trains serving the airport, and "via Court Square" for the F's weekday
   route since the F and M swapped in December 2025.
 
+## Station header (ours)
+
+No platform clock says which station it is in; the signs do that. With
+`show_station` each style gets a header of our own, with what the black sign
+over a station entrance has: the station's name in white, the bullets of the
+routes that stop there, and the direction when the entrance serves only one
+("Downtown & Brooklyn"). It is made from what each style already has: the
+classic strip's black and white, the new style's bold headline and grey
+number, and the LED sign's green dots. The entrance
+signs' details are from memory, not from a source checked for this.
+
 ## LED style (numbered lines)
 
 - A matrix of dots that can each be red, green or amber. A platform sign has
@@ -125,7 +136,9 @@ seconds of each other.
   to those measurements, not copied dot for dot: there is no close-up photo
   yet.
 - Text is green. The bullet is a filled disc (a diamond for express) with
-  the route unlit inside it: red for 1, 2 and 3, green for 4, 5 and 6.
+  the route unlit inside it. The bullet is green like the text, whatever the
+  route's colour, and turns with the rest of the line for an arriving train
+  (John, 2026-10-11; these notes used to say red for 1, 2 and 3).
 - **Arriving train**: `0min` and the whole line changes colour, to amber at
   Times Sq and to red at Nevins St. We use amber.
 - Line 2 rotates as on the classic clocks (photos show it numbered `3.`).

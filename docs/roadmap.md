@@ -55,7 +55,7 @@ Sizes are rough: S is an hour or two, M a day, L several days.
 | A2 | **Headline override table** | M | A hand-made table for what the borough rule gets wrong or can't know: the F at 75 Av and the 2 at Franklin Av ("Manhattan", not "Manhattan & ..."), short terminal names ("Coney Island", "Whitehall St"), the JFK plane, "via Court Square", and the H train ending at Broad Channel. Needs photos (P1) for the uncertain cases. |
 | A3 | **Alerts, second pass** | M | Read the alert type so "no service" alerts can take the whole screen in the `new` style; pass the alert's title ("Delays", "Planned work") and age to the board; stop route-wide alerts for one direction showing on clocks for the other (the direction is only in the text). |
 | A4 | **Calibrate `max_minutes`** | S | Compare against real clocks: how far ahead do they list trains? Needs observation (P1). |
-| A5 | **Station name on the board** | S | Add the station's name (and the direction label when one direction is shown) to `Board`, for the home views in D. |
+| A5 | **Station name on the board** | done | `Board.station` is the chosen stops' station names, each once, with " / " between different ones; `Board.direction` is the direction label when every stop is one direction and they share it, otherwise ""; `Board.routes` is the routes scheduled at the stops, with their bullets (from the schedules, which include late-night service and the coming week's planned work, so 28 St lists the 4 beside the 6). The rule is under "The station" in `tests/golden/README.md`. At Union Sq downtown the direction is empty, because the L's platform is labelled "Brooklyn" and the others "Downtown & Brooklyn"; say if it should pick one (the commonest, or the first stop's) instead. |
 
 ### B. Starting up and failing well
 
@@ -84,11 +84,10 @@ platform the screen doesn't need to say where it is; at home it does.
 
 | ID | Package | Size | Notes |
 |---|---|---|---|
-| D1 | **Station header** | M | An option, for each existing style, to show the station's name and direction (e.g. "Union Sq – Downtown") in that style's own typography. After A5. The simplest version of a home view, and probably the right first step. |
+| D1 | **Station header** | done | `show_station` in the settings (off by default), after the signs over station entrances: the name, the routes' bullets, and the direction. `classic`: a black strip across the top, the name and bullets at the left and the direction at the right. `new`: a line above the cards, the name in bold, the bullets, and the direction in grey; in portrait the name goes beside the time, with the bullets and the direction under it. `led`: a line of dots at the top, with the name abbreviated if that fits the bullets beside it, and the direction at the right when there is room; a station with too many routes for that (Union Sq) gets a second line for them on a screen with room for four lines, and no bullets on a two-line bar. The lines below give up the room, so nothing changes with it off. `scripts/capture.py --station` draws it. |
 | D2 | **A home style of its own** | M | To be designed once D1 is in use. Ideas: a station-sign header in the black-band Helvetica style with the route bullets; several stations on one screen, each under its own heading (the grouped board already does this by direction); "leave by" times that allow for the walk to the station. |
 
-Open question for John: which of these matter. D1 is cheap and can go ahead;
-D2 wants a sketch or a description first.
+Open question for John: D2 wants a sketch or a description first.
 
 ### E. Settings without editing JSON
 
@@ -140,7 +139,7 @@ it and a product, as read on 2026-10-11; none of it is legal advice.
 
 ## Suggested order
 
-1. In parallel: A5 then D1 (home header). (B1, B2, C1 and E1 are done.)
+1. Done: A5 and D1 (the home header), B1 and B2, C1, and E1.
 2. A2 and A4 as photos come in. A3, then C2 and C3.
 3. E3, then E2.
 4. S1 early if the clock is to be sold: the answer decides whether there is a

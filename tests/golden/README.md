@@ -51,7 +51,8 @@ anything left out. `now` is POSIX seconds. Steps run in order:
 
 Only the entries the case can look up:
 
-- `stop_names`: stop ID (parent or directional) to name
+- `stop_names`: stop ID (parent or directional) to name, for the settings
+  stops and the stops of the captured trips
 - `stop_parents`: stop ID to parent stop ID
 - `stop_routes`: parent stop ID to the sorted routes scheduled there
 - `headsigns`: realtime trip ID to scheduled headsign
@@ -81,7 +82,10 @@ One entry per `board` step:
   "stale": false,
   "messages": [{"text": "Downtown [4][6] trains are running with delays after ...", "planned": false}],
   "message": "",
-  "groups": []
+  "groups": [],
+  "station": "28 St",
+  "direction": "Downtown",
+  "routes": [{"route": "6", "bullet": "6"}, {"route": "6X", "bullet": "6d"}]
 }
 ```
 
@@ -198,6 +202,25 @@ advances it one place. While it is at a message, `message` is its text and
 the last line has no row; otherwise `message` is `""`. If its position is past
 the end of that list (the list got shorter), it shows the first entry. In
 other styles `message` is always `""`.
+
+**The station**
+
+For screens that say where they are, as the sign over a station entrance
+does. All three come from the settings and the static tables alone, so they
+are the same on every board of a case:
+- `station` is the settings stops' names in `stop_names`, in order, with
+  repeats dropped after the first and stops without a name left out, joined
+  by ` / `: `14 St-Union Sq`, or `Jackson Hts-Roosevelt Av / 74 St-Broadway`.
+- `direction` is the stops' direction label (as for a row's `direction`) if
+  every settings stop is directional, which is to say its parent in
+  `stop_parents` is another stop, and they all have the same label.
+  Otherwise it is `""`: for a parent stop, which is both directions, and for
+  platforms whose labels differ (at 14 St-Union Sq the southbound L is
+  `Brooklyn` and the rest are `Downtown & Brooklyn`).
+- `routes` is the routes scheduled at the stops: for each settings stop in
+  order, `stop_routes` for its parent (already sorted), with repeats dropped
+  after the first. Each has its `bullet`, as for a row. Trains rerouted onto
+  the stops without being scheduled there don't add to it.
 
 **Failures and staleness**
 - A feed that fails keeps its trains from its last successful fetch, and

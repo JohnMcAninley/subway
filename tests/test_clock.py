@@ -140,6 +140,45 @@ def test_missing_direction_label_is_empty():
     assert clock.board(now=NOW).rows[0].direction == ""
 
 
+def station(stops, names, direction_labels=None):
+    static = FakeStatic({stop[:3]: ["6"] for stop in stops}, stop_names=names, direction_labels=direction_labels)
+    board = make_clock(static=static, stops=stops).board(now=NOW)
+    return board.station, board.direction
+
+
+def test_station_routes_are_those_scheduled_at_the_stops_in_order():
+    static = FakeStatic({"R20": ["N", "Q"], "635": ["4", "6", "6X"], "L03": ["L"], "R18": ["N"]})
+    board = make_clock(static=static, stops=["R20S", "635S", "L03S", "R18S"]).board(now=NOW)
+    assert [(r.route, r.bullet) for r in board.routes] == [
+        ("N", "N"), ("Q", "Q"), ("4", "4"), ("6", "6"), ("6X", "6d"), ("L", "L")]
+
+
+def test_station_and_direction_for_one_platform():
+    labels = {"633": {"N": "Uptown", "S": "Downtown"}}
+    assert station(["633S"], {"633S": "28 St"}, labels) == ("28 St", "Downtown")
+
+
+def test_station_has_no_direction_for_a_parent_stop():
+    labels = {"633": {"N": "Uptown", "S": "Downtown"}}
+    assert station(["633"], {"633": "28 St"}, labels) == ("28 St", "")
+
+
+def test_station_names_are_listed_once_each():
+    names = {"635S": "14 St-Union Sq", "R20S": "14 St-Union Sq", "R18S": "28 St"}
+    labels = {stop: {"S": "Downtown & Brooklyn"} for stop in ("635", "R20", "R18")}
+    assert station(["635S", "R20S", "R18S"], names, labels) == ("14 St-Union Sq / 28 St", "Downtown & Brooklyn")
+
+
+def test_station_has_no_direction_when_the_labels_differ():
+    names = {"635S": "14 St-Union Sq", "L03S": "14 St-Union Sq"}
+    labels = {"635": {"S": "Downtown & Brooklyn"}, "L03": {"S": "Brooklyn"}}
+    assert station(["635S", "L03S"], names, labels) == ("14 St-Union Sq", "")
+
+
+def test_station_without_a_name_or_label_is_empty():
+    assert station(["633S"], {}) == ("", "")
+
+
 def test_arriving_under_one_minute():
     clock = make_clock(six("a", 0.5), six("b", 1))
     assert [r.arriving for r in clock.board(now=NOW).rows] == [True, False]

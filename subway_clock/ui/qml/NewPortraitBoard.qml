@@ -4,13 +4,16 @@ import "Styles.js" as Styles
 
 // The portrait screens in station entrances and mezzanines: the time, a card
 // per train (under a heading per direction when there is more than one), and
-// the service alerts at the bottom.
+// the service alerts at the bottom. With showStation, the station's name
+// goes beside the time, where the real screens have the MTA's logo, with its
+// routes' bullets and the direction under it, as on the sign over an entrance.
 Rectangle {
     id: root
 
     required property var board
     required property url bulletsUrl
     required property string staleMessage
+    required property bool showStation
     required property var startup
 
     readonly property var colors: Styles.colors.new
@@ -20,7 +23,7 @@ Rectangle {
     readonly property bool grouped: true
     readonly property real rowHeight: unit * 165
     readonly property int lines: width > 0 && height > 0
-        ? Math.max(2, Math.min(8, Math.floor((height * 0.52 - header.height) / rowHeight))) : 4
+        ? Math.max(2, Math.min(8, Math.floor((height * 0.52 - (header.height + entrance.height)) / rowHeight))) : 4
 
     // The trains, with a heading before those of each direction
     readonly property var entries: board.groups.length
@@ -38,7 +41,25 @@ Rectangle {
         width: parent.width
         height: root.unit * 105
 
+        Text {
+            visible: root.showStation
+            anchors.left: parent.left
+            anchors.leftMargin: root.unit * 28
+            anchors.right: clockTime.left
+            anchors.rightMargin: root.unit * 40
+            anchors.verticalCenter: parent.verticalCenter
+            text: root.board.station
+            elide: Text.ElideRight
+            fontSizeMode: Text.HorizontalFit
+            minimumPixelSize: root.unit * 32
+            font.family: "Roboto"
+            font.weight: Font.Bold
+            font.pixelSize: root.unit * 46
+            color: root.colors.text
+        }
+
         Row {
+            id: clockTime
             anchors.right: parent.right
             anchors.rightMargin: root.unit * 28
             anchors.verticalCenter: parent.verticalCenter
@@ -71,9 +92,44 @@ Rectangle {
         }
     }
 
+    // The station's routes, and the direction when the screen shows only one
+    Row {
+        id: entrance
+        visible: root.showStation && root.board.routes.length > 0
+        anchors.top: header.bottom
+        x: root.unit * 28
+        height: visible ? root.unit * 76 : 0
+        spacing: root.unit * 8
+
+        Repeater {
+            model: root.board.routes
+
+            Image {
+                required property var modelData
+
+                width: root.unit * 58
+                height: width
+                sourceSize: Qt.size(width, height)
+                source: root.bulletsUrl + "NYCS-bull-trans-" + modelData.bullet + ".svg"
+            }
+        }
+
+        Item { width: root.unit * 14; height: 1 }
+
+        Text {
+            height: root.unit * 58
+            verticalAlignment: Text.AlignVCenter
+            text: root.board.direction
+            font.family: "Roboto"
+            font.weight: Font.Bold
+            font.pixelSize: root.unit * 36
+            color: root.colors.text
+        }
+    }
+
     Column {
         id: trains
-        anchors.top: header.bottom
+        anchors.top: entrance.bottom
         width: parent.width
 
         Repeater {
@@ -116,7 +172,7 @@ Rectangle {
     // Before there are trains to show: what the clock is doing, on a card where the first would be
     Loader {
         active: root.startup.state !== "ready"
-        anchors.top: header.bottom
+        anchors.top: entrance.bottom
         width: root.width
         height: root.rowHeight
         sourceComponent: NewStartup { startup: root.startup; colors: root.colors; numbered: false }
@@ -144,7 +200,7 @@ Rectangle {
         Repeater {
             // As many as fit below the trains, at about 230 units each
             model: root.alerts.slice(0, Math.max(1, Math.floor(
-                (root.height - header.height - trains.height - root.unit * 200) / (root.unit * 230))))
+                (root.height - (header.height + entrance.height) - trains.height - root.unit * 200) / (root.unit * 230))))
 
             Column {
                 id: alert

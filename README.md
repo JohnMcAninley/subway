@@ -81,6 +81,7 @@ left out uses its default, and the file is optional:
     "rotation": "auto",
     "fetch_all_feeds": true,
     "show_alerts": true,
+    "show_station": false,
     "departed_seconds": 300,
     "refresh_seconds": 10,
     "rotation_seconds": 5,
@@ -123,6 +124,15 @@ left out uses its default, and the file is optional:
 - `show_alerts`: show the MTA's service alerts for your stops and their routes. The classic style
   scrolls them along the bottom strip; the new style shows them in turn with the trains on the
   last line.
+- `show_station`: head the screen as the sign over a station entrance does, for a clock that
+  isn't in the station: the station's name, the bullets of the routes scheduled to stop at your
+  stops, and the direction ("Downtown") when every stop listed is one direction and they share a
+  label. Stations with different names are all named ("Jackson Hts-Roosevelt Av / 74 St-Broadway").
+  The real clocks have no such thing, so each style does it in its own manner: a black strip
+  across the top in `classic`, a line above the cards in `new` (in portrait, the name beside the
+  time and the bullets under it), and dots in `led`. The LED sign is narrow: it abbreviates the
+  name to fit the bullets beside it, gives them a second line on a screen with room for four, and
+  otherwise leaves them out.
 - `data_dir`: static GTFS cache. Relative paths are relative to the settings file.
 
 ## Development
@@ -135,8 +145,8 @@ pytest
 PySide6 is pinned to 6.8.2.1 to match the version Debian (and so Raspberry Pi
 OS) packages.
 
-`scripts/capture.py` draws a golden case to a PNG, in any style and size,
-without the live feeds, and with `--loading 42`,
+`scripts/capture.py` draws a golden case to a PNG, in any style and size
+(and with `--station`, the station header), without the live feeds, and with `--loading 42`,
 `--no-connection` or `--loading-trains` what a start shows before it has trains; the pictures above were made with it. Qt only prints
 QML warnings to the terminal with `QT_FORCE_STDERR_LOGGING=1` set.
 

@@ -162,6 +162,10 @@ class Display(QObject):
             self.clock.grouped = grouped
             self.publish()
 
+    @Property(bool, constant=True)
+    def showStation(self):
+        return self.clock.settings.show_station
+
     @Property(str, constant=True)
     def bulletsUrl(self):
         return QUrl.fromLocalFile(str(ASSETS_DIR / "bullets") + "/").toString()
@@ -193,6 +197,7 @@ class Display(QObject):
         # PySide passes lists to QML as arrays, but not tuples
         values["rows"] = list(values["rows"])
         values["messages"] = list(values["messages"])
+        values["routes"] = list(values["routes"])
         values["groups"] = [{**group, "rows": list(group["rows"])} for group in values["groups"]]
         return values
 
