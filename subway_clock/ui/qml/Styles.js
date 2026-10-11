@@ -13,15 +13,19 @@ var colors = {
         statusAccent: "#2d6f80",
         statusText: "#ffffff",
     },
-    // The newer clocks with a card per train. An arriving train's card is inverted.
+    // The newer clocks with a card per train, from the MTA's design. An arriving
+    // train's card is inverted, as in photos.
     new: {
-        background: "#060b17",
-        number: "#ffffff",
-        card: "#1d3f86",
+        background: "#000000",
+        number: "#c8c8cc",
+        card: "#2d2d33",
         text: "#ffffff",
         arrivingCard: "#e8eff8",
-        arrivingText: "#10245a",
-        messageBackground: "#ffd200",
+        arrivingText: "#14161c",
+        alertBar: "#fcd116",
+        alertCard: "#ffffff",
+        alertText: "#000000",
+        messageBackground: "#fcd116",
         messageText: "#000000",
     },
     // The LED signs on the numbered lines. Their dots can only be red, green or

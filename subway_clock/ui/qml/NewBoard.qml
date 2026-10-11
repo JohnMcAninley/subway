@@ -2,8 +2,9 @@ import QtQuick
 import "Messages.js" as Messages
 import "Styles.js" as Styles
 
-// The newer clocks: a numbered card per train on a dark screen. Service alerts
-// take turns with the trains on the last line.
+// The newer clocks: a numbered card per train on a black screen. Service alerts
+// take turns with the trains on the last line. The MTA's design is 1920x480
+// with two lines.
 Rectangle {
     id: root
 
@@ -23,49 +24,66 @@ Rectangle {
 
     color: colors.background
 
+    // One delegate per line, kept as trains come and go, so the last line can animate its rotation
     Repeater {
-        model: root.board.rows
+        model: root.lines
 
-        NewRow {
-            required property var modelData
+        Loader {
+            id: line
+
             required property int index
+            readonly property var train: root.board.rows[index]
 
             y: index * root.rowHeight
             width: root.width
             height: root.rowHeight
-            train: modelData
-            colors: root.colors
-            bulletsUrl: root.bulletsUrl
+            active: !!train
+            sourceComponent: NewRow {
+                train: line.train
+                colors: root.colors
+                bulletsUrl: root.bulletsUrl
+                animated: root.lines > 1 && line.index === root.lines - 1
+            }
         }
     }
 
-    // A service alert in place of the last line
-    Rectangle {
-        id: alert
+    // A service alert in place of the last line: a white card with a yellow bar where the number was
+    Item {
         visible: root.board.message !== ""
-        x: root.rowHeight * 0.4
-        y: (root.lines - 1) * root.rowHeight + root.rowHeight * 0.08
-        width: root.width - x - root.rowHeight * 0.1
-        height: root.rowHeight * 0.84
-        radius: root.rowHeight * 0.05
-        color: root.colors.card
+        y: (root.lines - 1) * root.rowHeight + root.rowHeight * 0.04
+        width: root.width
+        height: root.rowHeight * 0.92
 
-        Text {
-            anchors.fill: parent
-            anchors.leftMargin: root.rowHeight * 0.14
-            anchors.rightMargin: root.rowHeight * 0.14
-            anchors.topMargin: root.rowHeight * 0.06
-            anchors.bottomMargin: root.rowHeight * 0.06
-            verticalAlignment: Text.AlignVCenter
-            textFormat: Text.StyledText
-            text: Messages.styled(root.board.message, root.bulletsUrl, Math.round(font.pixelSize * 1.05))
-            wrapMode: Text.WordWrap
-            elide: Text.ElideRight
-            maximumLineCount: 3
-            font.family: "Roboto"
-            font.weight: Font.Medium
-            font.pixelSize: root.rowHeight * 0.17
-            color: root.colors.text
+        Rectangle {
+            width: root.rowHeight * 0.5
+            height: parent.height
+            radius: root.rowHeight * 0.06
+            color: root.colors.alertBar
+        }
+
+        Rectangle {
+            x: root.rowHeight * 0.4
+            width: parent.width - x
+            height: parent.height
+            radius: root.rowHeight * 0.06
+            color: root.colors.alertCard
+
+            Text {
+                anchors.fill: parent
+                anchors.leftMargin: root.rowHeight * 0.18
+                anchors.rightMargin: root.rowHeight * 0.18
+                verticalAlignment: Text.AlignVCenter
+                textFormat: Text.StyledText
+                text: Messages.styled(root.board.message, root.bulletsUrl, Math.round(font.pixelSize * 0.95))
+                wrapMode: Text.WordWrap
+                elide: Text.ElideRight
+                // Two lines at the design's size, or three smaller ones for a long alert
+                readonly property bool lengthy: root.board.message.length > 70
+                maximumLineCount: lengthy ? 3 : 2
+                font.family: "Roboto"
+                font.pixelSize: root.rowHeight * (lengthy ? 0.23 : 0.32)
+                color: root.colors.alertText
+            }
         }
     }
 

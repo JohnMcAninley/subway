@@ -1,105 +1,145 @@
 import QtQuick
 
 // One line of the newer clocks: the number, then a card with the bullet, the
-// direction over the destination, and the minutes over "MIN".
+// headline over its detail, and the minutes over "MIN". Proportions follow
+// the MTA's 1920x480 design, where a line is 240 high.
 Item {
     id: row
 
     required property var train
     required property var colors
     required property url bulletsUrl
-    property bool numbered: true  // the train's number to the left of the card
+    property bool numbered: true  // the train's number to the left of the card, as on the platform clocks
+    property bool animated: false  // show a change of train as the line rotating
 
-    readonly property color textColor: train.arriving ? colors.arrivingText : colors.text
-    // The direction label is the headline when there is one, as on the real clocks.
-    readonly property string headline: train.direction || train.destination
-    readonly property string subtitle: train.direction ? train.destination : ""
+    // What is drawn. It trails `train` during the rotation animation.
+    property var shown: train
+    readonly property color textColor: shown.arriving ? colors.arrivingText : colors.text
     readonly property real unit: height  // sizes below are fractions of the line height
 
-    Text {
+    onTrainChanged: {
+        const same = train.number === shown.number && train.route === shown.route
+            && train.destination === shown.destination
+        if (animated && !same)
+            rotation.restart()
+        else if (!rotation.running)
+            shown = train
+    }
+
+    // The old train dims and its number rolls away upwards; the new one arrives from below.
+    SequentialAnimation {
+        id: rotation
+
+        ParallelAnimation {
+            NumberAnimation { target: content; property: "opacity"; to: 0.25; duration: 220; easing.type: Easing.InQuad }
+            NumberAnimation { target: number; property: "offset"; to: -1; duration: 220; easing.type: Easing.InQuad }
+        }
+        ScriptAction { script: { row.shown = row.train; number.offset = 1 } }
+        ParallelAnimation {
+            NumberAnimation { target: content; property: "opacity"; to: 1; duration: 220; easing.type: Easing.OutQuad }
+            NumberAnimation { target: number; property: "offset"; to: 0; duration: 220; easing.type: Easing.OutQuad }
+        }
+    }
+
+    Item {
         visible: row.numbered
-        anchors.horizontalCenter: parent.left
-        anchors.horizontalCenterOffset: row.unit * 0.2
-        anchors.verticalCenter: parent.verticalCenter
-        text: row.train.number
-        font.family: "Roboto"
-        font.weight: Font.Bold
-        font.pixelSize: row.unit * 0.3
-        color: row.colors.number
+        width: row.unit * 0.4
+        height: parent.height
+        clip: true
+
+        Text {
+            id: number
+
+            property real offset: 0  // -1 is a line up, 1 a line down
+
+            anchors.horizontalCenter: parent.horizontalCenter
+            y: (parent.height - height) / 2 + offset * parent.height * 0.6
+            text: row.shown.number
+            font.family: "Roboto"
+            font.weight: Font.Bold
+            font.pixelSize: row.unit * 0.36
+            color: row.colors.number
+        }
     }
 
     Rectangle {
         id: card
-        x: row.unit * (row.numbered ? 0.4 : 0.15)
-        width: parent.width - x - row.unit * (row.numbered ? 0.1 : 0.15)
-        height: row.unit * 0.84
+        x: row.unit * (row.numbered ? 0.4 : 0.12)
+        width: parent.width - x - (row.numbered ? 0 : row.unit * 0.12)
+        height: row.unit * 0.92
         anchors.verticalCenter: parent.verticalCenter
-        radius: row.unit * 0.05
-        color: row.train.arriving ? row.colors.arrivingCard : row.colors.card
+        color: row.shown.arriving ? row.colors.arrivingCard : row.colors.card
 
-        Image {
-            id: bullet
-            anchors.left: parent.left
-            anchors.leftMargin: row.unit * 0.12
-            anchors.verticalCenter: parent.verticalCenter
-            width: row.unit * 0.48
-            height: width
-            sourceSize: Qt.size(width, height)
-            source: row.bulletsUrl + "NYCS-bull-trans-" + row.train.bullet + ".svg"
-        }
+        Item {
+            id: content
+            anchors.fill: parent
 
-        Column {
-            anchors.left: bullet.right
-            anchors.leftMargin: row.unit * 0.14
-            anchors.right: minutes.left
-            anchors.rightMargin: row.unit * 0.1
-            anchors.verticalCenter: parent.verticalCenter
-
-            Text {
-                width: parent.width
-                text: row.headline
-                elide: Text.ElideRight
-                font.family: "Roboto"
-                font.weight: Font.Bold
-                font.pixelSize: row.unit * 0.3
-                color: row.textColor
+            Image {
+                id: bullet
+                anchors.left: parent.left
+                anchors.leftMargin: row.unit * 0.125
+                anchors.verticalCenter: parent.verticalCenter
+                width: row.unit * 0.66
+                height: width
+                sourceSize: Qt.size(width, height)
+                source: row.bulletsUrl + "NYCS-bull-trans-" + row.shown.bullet + ".svg"
             }
 
-            Text {
-                width: parent.width
-                visible: text !== ""
-                text: row.subtitle
-                elide: Text.ElideRight
-                font.family: "Roboto"
-                font.weight: Font.Medium
-                font.pixelSize: row.unit * 0.17
-                color: row.textColor
+            Column {
+                anchors.left: bullet.right
+                anchors.leftMargin: row.unit * 0.1
+                anchors.right: minutes.left
+                anchors.rightMargin: row.unit * 0.1
+                anchors.verticalCenter: parent.verticalCenter
+                spacing: -row.unit * 0.04
+
+                Text {
+                    width: parent.width
+                    text: row.shown.headline
+                    elide: Text.ElideRight
+                    font.family: "Roboto"
+                    font.weight: Font.Bold
+                    font.pixelSize: row.unit * 0.4
+                    color: row.textColor
+                }
+
+                Text {
+                    width: parent.width
+                    visible: text !== ""
+                    text: row.shown.detail
+                    elide: Text.ElideRight
+                    font.family: "Roboto"
+                    font.pixelSize: row.unit * 0.22
+                    color: row.textColor
+                }
             }
-        }
 
-        Column {
-            id: minutes
-            anchors.right: parent.right
-            anchors.rightMargin: row.unit * 0.14
-            anchors.verticalCenter: parent.verticalCenter
-            spacing: -row.unit * 0.04
+            Column {
+                id: minutes
+                anchors.right: parent.right
+                anchors.rightMargin: row.unit * 0.24
+                anchors.verticalCenter: parent.verticalCenter
+                spacing: -row.unit * 0.07
 
-            Text {
-                anchors.horizontalCenter: parent.horizontalCenter
-                text: row.train.minutes
-                font.family: "Roboto"
-                font.weight: Font.Bold
-                font.pixelSize: row.unit * 0.42
-                color: row.textColor
-            }
+                Text {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    text: row.shown.minutes
+                    font.family: "Roboto"
+                    font.weight: Font.Bold
+                    font.pixelSize: row.unit * 0.6
+                    color: row.textColor
+                }
 
-            Text {
-                anchors.horizontalCenter: parent.horizontalCenter
-                text: "MIN"
-                font.family: "Roboto"
-                font.weight: Font.Bold
-                font.pixelSize: row.unit * 0.1
-                color: row.textColor
+                Text {
+                    anchors.horizontalCenter: parent.horizontalCenter
+                    text: "MIN"
+                    font.family: "Roboto"
+                    font.weight: Font.Bold
+                    font.letterSpacing: row.unit * 0.012
+                    font.pixelSize: row.unit * 0.11
+                    color: row.textColor
+                    opacity: 0.75
+                }
             }
         }
     }

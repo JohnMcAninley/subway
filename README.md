@@ -60,8 +60,8 @@ left out uses its default, and the file is optional:
   direction; a parent ID like `633` is both. List several for a whole station complex or nearby
   stations, e.g. Union Sq southbound is `["635S", "R20S", "L03S"]`.
 - `style`: which MTA clock to look like. `classic` is the LCD clocks with a pale blue screen and a
-  time strip; `new` is the newer clocks with a card per train, headed by the platform's direction
-  (e.g. "Uptown & The Bronx") over the destination. In portrait it becomes the screens in station
+  time strip; `new` is the newer clocks with a card per train, headed by its direction
+  (e.g. "Downtown & Brooklyn") over the destination. In portrait it becomes the screens in station
   entrances: the time, trains under a heading for each direction, and service alerts at the bottom.
   `led` is the LED dot-matrix signs on the numbered lines: green text, an amber line for an
   arriving train, and no alerts.
@@ -91,6 +91,8 @@ left out uses its default, and the file is optional:
 ## Design
 
 See [docs/design.md](docs/design.md) for display modes, display logic, and themes (now styles).
+[docs/references.md](docs/references.md) records how the real clocks look and behave, and where
+each fact comes from.
 
 ## Data sources
 
