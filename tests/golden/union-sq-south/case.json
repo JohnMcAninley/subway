@@ -6,7 +6,8 @@
       "635S",
       "R20S",
       "L03S"
-    ]
+    ],
+    "show_alerts": false
   },
   "steps": [
     {

@@ -12,7 +12,7 @@ the other files.
 <case>/
   case.json      description, settings, and the steps to run
   static.json    static GTFS tables for this case
-  feeds/*.pb     captured GTFS-realtime feeds (protobuf), one per MTA feed
+  feeds/*.pb     captured GTFS-realtime feeds (protobuf), one per MTA feed, and the alerts feed
   expected.json  the board at each "board" step
 ```
 
@@ -38,7 +38,9 @@ anything left out. `now` is POSIX seconds. Steps run in order:
 - `refresh`: fetch and apply the feeds the settings call for. A feed's data is
   `feeds/<name>.pb`, where the name is the end of its URL (`gtfs`, `gtfs-ace`,
   `gtfs-bdfm`, `gtfs-g`, `gtfs-jz`, `gtfs-l`, `gtfs-nqrw`, `gtfs-si`). Feeds
-  listed in `fail` fail to fetch for this step.
+  listed in `fail` fail to fetch for this step. If `show_alerts` is on, the
+  alerts feed (`feeds/subway-alerts.pb`) is fetched too, unless it was last
+  fetched successfully less than 120 seconds before `now`.
 - `lines`: set how many lines the board has (`"lines": 4`). Cases start with 2.
 - `rotate`: advance the last line.
 - `board`: record the board at `now`.
@@ -56,8 +58,9 @@ Only the entries the case can look up:
 
 ### feeds/*.pb
 
-Real feeds trimmed to the trips that stop at the case's stops. Headers and
-the MTA's NYCT extension fields are kept as captured.
+Real feeds trimmed to the trips that stop at the case's stops, and the alerts
+for those stops or for whole routes there. Headers and the MTA's extension
+fields are kept as captured.
 
 ### expected.json
 
@@ -71,7 +74,9 @@ One entry per `board` step:
     {"number": 1, "route": "6", "bullet": "6", "destination": "Brooklyn Bridge-City Hall",
      "direction": "Downtown", "minutes": 0, "arriving": true}
   ],
-  "stale": false
+  "stale": false,
+  "messages": ["Downtown [4][6] trains are running with delays after ..."],
+  "message": ""
 }
 ```
 
@@ -116,8 +121,40 @@ With `lines` = L and n trains shown:
   arriving, line L shows train L and `rotate` does nothing.
 - With L = 1, the board shows train 1 only, and `rotate` does nothing.
 
+**Alerts**
+
+`messages` is empty if `show_alerts` is off. Otherwise, from the alerts feed
+as last fetched:
+- An alert's text is its `header_text` translation with language `en`, with
+  each run of whitespace replaced by one space. Alerts without one are ignored.
+- An alert is active if it has no `active_period`, or `start <= now` and
+  (`end` is 0 or missing, or `now < end`) for one of them.
+- Call the settings stops' (parent, direction) pairs the shown platforms: a
+  directional stop is one pair, a parent stop is both `N` and `S`. An alert's
+  `informed_entity` covers directions `N` for `direction_id` 0, `S` for 1,
+  and both if it has none. An alert is relevant if any `informed_entity`:
+  - has a `stop_id` whose parent is a shown platform's parent in a direction
+    it covers; or
+  - has no `stop_id`, covers the direction of some shown platform, and its
+    `route_id` is in `stop_routes` for the stops' parents or is the route of
+    a train on the board's kept list (see "Which trains").
+- `messages` is the text of the active, relevant alerts: those whose ID
+  starts with `lmm:alert:` (happening now) first, then the rest (planned
+  work), each in feed order; with repeated texts dropped after the first; and
+  cut to the first 5.
+
+In the `new` style, alerts take turns with the trains on the last line. Unless
+L = 1 or train L is arriving, the last line goes through trains L to n (or
+just train L if there are no more than L trains; or no train if there are
+fewer than L), then each message twice, and back to the start; each `rotate`
+advances it one place. While it is at a message, `message` is that text and
+the last line has no row; otherwise `message` is `""`. If its position is past
+the end of that list (the list got shorter), it shows the first entry. In
+other styles `message` is always `""`.
+
 **Failures and staleness**
-- A feed that fails keeps its trains from its last successful fetch.
+- A feed that fails keeps its trains from its last successful fetch, and
+  the alerts feed its alerts. The alerts feed never makes the board stale.
 - The board is `stale` if any feed for the stops' scheduled routes has never
   been fetched, or was last fetched more than `3 * refresh_seconds` before
   `now`.

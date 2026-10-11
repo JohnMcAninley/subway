@@ -1,4 +1,4 @@
-"""MTA GTFS-realtime feeds: which feed carries which route, and reading trip updates from them."""
+"""MTA GTFS-realtime feeds: which feed carries which route, and reading trip updates and alerts from them."""
 import json
 from dataclasses import dataclass
 from pathlib import Path
@@ -11,6 +11,7 @@ with open(Path(__file__).with_name("feeds.json"), encoding="utf-8") as f:
 
 ROUTE_FEEDS = {route: _FEEDS["base"] + suffix for suffix, routes in _FEEDS["feeds"].items() for route in routes}
 ALL_FEED_URLS = sorted(set(ROUTE_FEEDS.values()))
+ALERTS_URL = _FEEDS["alerts"]  # service alerts for every route, in one feed
 
 
 def feed_urls(routes):
@@ -55,3 +56,37 @@ def get_predictions(feed, stops):
                     predictions.append(Prediction(trip.trip.trip_id, trip.trip.route_id, stop_id, arrives, trip_stops))
 
     return predictions
+
+
+@dataclass(frozen=True)
+class Alert:
+    id: str
+    text: str  # one line; routes are written in brackets, like "[4]"
+    periods: tuple[tuple[int, int], ...]  # (start, end) POSIX times it is active; end 0 means no end
+    # What it affects: (route_id, parent stop ID, "N" or "S"), each "" if not given
+    affects: tuple[tuple[str, str, str], ...]
+
+    def active(self, now):
+        return not self.periods or any(start <= now and (not end or now < end) for start, end in self.periods)
+
+    @property
+    def planned(self):
+        """Planned work, as opposed to something happening now like delays."""
+        return not self.id.startswith("lmm:alert:")
+
+
+def get_alerts(feed):
+    """Every alert in the alerts feed that has English text."""
+    alerts = []
+    for entity in feed.entity:
+        if not entity.HasField("alert"):
+            continue
+        alert = entity.alert
+        text = next((t.text for t in alert.header_text.translation if t.language == "en"), "")
+        text = " ".join(text.split())
+        if not text:
+            continue
+        affects = tuple((e.route_id, e.stop_id, ("N", "S")[e.direction_id] if e.HasField("direction_id") else "")
+                        for e in alert.informed_entity)
+        alerts.append(Alert(entity.id, text, tuple((p.start, p.end) for p in alert.active_period), affects))
+    return alerts

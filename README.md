@@ -49,6 +49,7 @@ left out uses its default, and the file is optional:
     "max_trains": 5,
     "max_minutes": 30,
     "fetch_all_feeds": true,
+    "show_alerts": true,
     "refresh_seconds": 30,
     "rotation_seconds": 5,
     "data_dir": "data"
@@ -68,6 +69,9 @@ left out uses its default, and the file is optional:
 - `fetch_all_feeds`: fetch every realtime feed (about 430 KB per refresh) so rerouted trains always
   appear, including unplanned reroutes. Set to `false` to fetch only the feeds for routes
   scheduled at your stops, including the next week of planned work.
+- `show_alerts`: show the MTA's service alerts for your stops and their routes. The classic style
+  scrolls them along the bottom strip; the new style shows them in turn with the trains on the
+  last line.
 - `data_dir`: static GTFS cache. Relative paths are relative to the settings file.
 
 ## Layout
@@ -88,6 +92,7 @@ See [docs/design.md](docs/design.md) for display modes, display logic, and theme
 ## Data sources
 
 - Realtime: `https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs*` (no API key required)
+- Alerts: `https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/camsys%2Fsubway-alerts`
 - Static: `https://rrgtfsfeeds.s3.amazonaws.com/gtfs_subway.zip` and `gtfs_supplemented.zip`
 - Direction labels: the [MTA Subway Stations](https://data.ny.gov/Transportation/MTA-Subway-Stations/39hk-dx4f)
   dataset on data.ny.gov

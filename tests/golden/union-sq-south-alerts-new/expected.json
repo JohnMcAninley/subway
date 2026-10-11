@@ -1,0 +1,320 @@
+[
+  {
+    "now": 1791732025,
+    "style": "new",
+    "rows": [
+      {
+        "number": 1,
+        "route": "R",
+        "bullet": "R",
+        "destination": "Bay Ridge-95 St",
+        "direction": "Downtown",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
+        "route": "6",
+        "bullet": "6",
+        "destination": "Brooklyn Bridge-City Hall",
+        "direction": "Downtown",
+        "minutes": 3,
+        "arriving": false
+      }
+    ],
+    "stale": false,
+    "messages": [
+      "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
+      "Downtown [N][R] trains are running with delays after we removed a train with a door problem from service at 57 St/7 Av.",
+      "No [L] between Lorimer St, Brooklyn and 8 Av, Manhattan"
+    ],
+    "message": ""
+  },
+  {
+    "now": 1791732030,
+    "style": "new",
+    "rows": [
+      {
+        "number": 1,
+        "route": "R",
+        "bullet": "R",
+        "destination": "Bay Ridge-95 St",
+        "direction": "Downtown",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 3,
+        "route": "Q",
+        "bullet": "Q",
+        "destination": "Prospect Park",
+        "direction": "Downtown",
+        "minutes": 5,
+        "arriving": false
+      }
+    ],
+    "stale": false,
+    "messages": [
+      "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
+      "Downtown [N][R] trains are running with delays after we removed a train with a door problem from service at 57 St/7 Av.",
+      "No [L] between Lorimer St, Brooklyn and 8 Av, Manhattan"
+    ],
+    "message": ""
+  },
+  {
+    "now": 1791732035,
+    "style": "new",
+    "rows": [
+      {
+        "number": 1,
+        "route": "R",
+        "bullet": "R",
+        "destination": "Bay Ridge-95 St",
+        "direction": "Downtown",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 4,
+        "route": "N",
+        "bullet": "N",
+        "destination": "Coney Island-Stillwell Av",
+        "direction": "Downtown",
+        "minutes": 6,
+        "arriving": false
+      }
+    ],
+    "stale": false,
+    "messages": [
+      "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
+      "Downtown [N][R] trains are running with delays after we removed a train with a door problem from service at 57 St/7 Av.",
+      "No [L] between Lorimer St, Brooklyn and 8 Av, Manhattan"
+    ],
+    "message": ""
+  },
+  {
+    "now": 1791732040,
+    "style": "new",
+    "rows": [
+      {
+        "number": 1,
+        "route": "R",
+        "bullet": "R",
+        "destination": "Bay Ridge-95 St",
+        "direction": "Downtown",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 5,
+        "route": "R",
+        "bullet": "R",
+        "destination": "Bay Ridge-95 St",
+        "direction": "Downtown",
+        "minutes": 10,
+        "arriving": false
+      }
+    ],
+    "stale": false,
+    "messages": [
+      "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
+      "Downtown [N][R] trains are running with delays after we removed a train with a door problem from service at 57 St/7 Av.",
+      "No [L] between Lorimer St, Brooklyn and 8 Av, Manhattan"
+    ],
+    "message": ""
+  },
+  {
+    "now": 1791732045,
+    "style": "new",
+    "rows": [
+      {
+        "number": 1,
+        "route": "R",
+        "bullet": "R",
+        "destination": "Bay Ridge-95 St",
+        "direction": "Downtown",
+        "minutes": 0,
+        "arriving": true
+      }
+    ],
+    "stale": false,
+    "messages": [
+      "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
+      "Downtown [N][R] trains are running with delays after we removed a train with a door problem from service at 57 St/7 Av.",
+      "No [L] between Lorimer St, Brooklyn and 8 Av, Manhattan"
+    ],
+    "message": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos."
+  },
+  {
+    "now": 1791732050,
+    "style": "new",
+    "rows": [
+      {
+        "number": 1,
+        "route": "R",
+        "bullet": "R",
+        "destination": "Bay Ridge-95 St",
+        "direction": "Downtown",
+        "minutes": 0,
+        "arriving": true
+      }
+    ],
+    "stale": false,
+    "messages": [
+      "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
+      "Downtown [N][R] trains are running with delays after we removed a train with a door problem from service at 57 St/7 Av.",
+      "No [L] between Lorimer St, Brooklyn and 8 Av, Manhattan"
+    ],
+    "message": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos."
+  },
+  {
+    "now": 1791732055,
+    "style": "new",
+    "rows": [
+      {
+        "number": 1,
+        "route": "R",
+        "bullet": "R",
+        "destination": "Bay Ridge-95 St",
+        "direction": "Downtown",
+        "minutes": 0,
+        "arriving": true
+      }
+    ],
+    "stale": false,
+    "messages": [
+      "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
+      "Downtown [N][R] trains are running with delays after we removed a train with a door problem from service at 57 St/7 Av.",
+      "No [L] between Lorimer St, Brooklyn and 8 Av, Manhattan"
+    ],
+    "message": "Downtown [N][R] trains are running with delays after we removed a train with a door problem from service at 57 St/7 Av."
+  },
+  {
+    "now": 1791732060,
+    "style": "new",
+    "rows": [
+      {
+        "number": 1,
+        "route": "R",
+        "bullet": "R",
+        "destination": "Bay Ridge-95 St",
+        "direction": "Downtown",
+        "minutes": 0,
+        "arriving": true
+      }
+    ],
+    "stale": false,
+    "messages": [
+      "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
+      "Downtown [N][R] trains are running with delays after we removed a train with a door problem from service at 57 St/7 Av.",
+      "No [L] between Lorimer St, Brooklyn and 8 Av, Manhattan"
+    ],
+    "message": "Downtown [N][R] trains are running with delays after we removed a train with a door problem from service at 57 St/7 Av."
+  },
+  {
+    "now": 1791732065,
+    "style": "new",
+    "rows": [
+      {
+        "number": 1,
+        "route": "R",
+        "bullet": "R",
+        "destination": "Bay Ridge-95 St",
+        "direction": "Downtown",
+        "minutes": 0,
+        "arriving": true
+      }
+    ],
+    "stale": false,
+    "messages": [
+      "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
+      "Downtown [N][R] trains are running with delays after we removed a train with a door problem from service at 57 St/7 Av.",
+      "No [L] between Lorimer St, Brooklyn and 8 Av, Manhattan"
+    ],
+    "message": "No [L] between Lorimer St, Brooklyn and 8 Av, Manhattan"
+  },
+  {
+    "now": 1791732070,
+    "style": "new",
+    "rows": [
+      {
+        "number": 1,
+        "route": "R",
+        "bullet": "R",
+        "destination": "Bay Ridge-95 St",
+        "direction": "Downtown",
+        "minutes": 0,
+        "arriving": true
+      }
+    ],
+    "stale": false,
+    "messages": [
+      "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
+      "Downtown [N][R] trains are running with delays after we removed a train with a door problem from service at 57 St/7 Av.",
+      "No [L] between Lorimer St, Brooklyn and 8 Av, Manhattan"
+    ],
+    "message": "No [L] between Lorimer St, Brooklyn and 8 Av, Manhattan"
+  },
+  {
+    "now": 1791732075,
+    "style": "new",
+    "rows": [
+      {
+        "number": 1,
+        "route": "R",
+        "bullet": "R",
+        "destination": "Bay Ridge-95 St",
+        "direction": "Downtown",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
+        "route": "6",
+        "bullet": "6",
+        "destination": "Brooklyn Bridge-City Hall",
+        "direction": "Downtown",
+        "minutes": 2,
+        "arriving": false
+      }
+    ],
+    "stale": false,
+    "messages": [
+      "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
+      "Downtown [N][R] trains are running with delays after we removed a train with a door problem from service at 57 St/7 Av.",
+      "No [L] between Lorimer St, Brooklyn and 8 Av, Manhattan"
+    ],
+    "message": ""
+  },
+  {
+    "now": 1791732145,
+    "style": "new",
+    "rows": [
+      {
+        "number": 1,
+        "route": "R",
+        "bullet": "R",
+        "destination": "Bay Ridge-95 St",
+        "direction": "Downtown",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
+        "route": "6",
+        "bullet": "6",
+        "destination": "Brooklyn Bridge-City Hall",
+        "direction": "Downtown",
+        "minutes": 1,
+        "arriving": false
+      }
+    ],
+    "stale": false,
+    "messages": [
+      "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
+      "Downtown [N][R] trains are running with delays after we removed a train with a door problem from service at 57 St/7 Av.",
+      "No [L] between Lorimer St, Brooklyn and 8 Av, Manhattan"
+    ],
+    "message": ""
+  }
+]

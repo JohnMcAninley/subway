@@ -4,7 +4,8 @@
   "settings": {
     "stops": [
       "H04"
-    ]
+    ],
+    "show_alerts": false
   },
   "steps": [
     {

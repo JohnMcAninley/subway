@@ -5,7 +5,8 @@
     "stops": [
       "G14",
       "710"
-    ]
+    ],
+    "show_alerts": false
   },
   "steps": [
     {

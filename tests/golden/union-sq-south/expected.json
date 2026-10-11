@@ -22,7 +22,9 @@
         "arriving": false
       }
     ],
-    "stale": false
+    "stale": false,
+    "messages": [],
+    "message": ""
   },
   {
     "now": 1791668842,
@@ -47,7 +49,9 @@
         "arriving": false
       }
     ],
-    "stale": false
+    "stale": false,
+    "messages": [],
+    "message": ""
   },
   {
     "now": 1791668847,
@@ -72,7 +76,9 @@
         "arriving": false
       }
     ],
-    "stale": false
+    "stale": false,
+    "messages": [],
+    "message": ""
   },
   {
     "now": 1791668852,
@@ -97,7 +103,9 @@
         "arriving": false
       }
     ],
-    "stale": false
+    "stale": false,
+    "messages": [],
+    "message": ""
   },
   {
     "now": 1791668857,
@@ -122,7 +130,9 @@
         "arriving": false
       }
     ],
-    "stale": false
+    "stale": false,
+    "messages": [],
+    "message": ""
   },
   {
     "now": 1791668897,
@@ -147,7 +157,9 @@
         "arriving": false
       }
     ],
-    "stale": false
+    "stale": false,
+    "messages": [],
+    "message": ""
   },
   {
     "now": 1791669077,
@@ -172,7 +184,9 @@
         "arriving": true
       }
     ],
-    "stale": true
+    "stale": true,
+    "messages": [],
+    "message": ""
   },
   {
     "now": 1791669137,
@@ -197,7 +211,9 @@
         "arriving": true
       }
     ],
-    "stale": false
+    "stale": false,
+    "messages": [],
+    "message": ""
   },
   {
     "now": 1791669167,
@@ -222,7 +238,9 @@
         "arriving": true
       }
     ],
-    "stale": false
+    "stale": false,
+    "messages": [],
+    "message": ""
   },
   {
     "now": 1791669257,
@@ -247,6 +265,8 @@
         "arriving": true
       }
     ],
-    "stale": true
+    "stale": true,
+    "messages": [],
+    "message": ""
   }
 ]

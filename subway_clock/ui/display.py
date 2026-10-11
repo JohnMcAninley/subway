@@ -113,7 +113,9 @@ class Display(QObject):
     @staticmethod
     def _to_qml(board):
         values = dataclasses.asdict(board)
-        values["rows"] = list(values["rows"])  # PySide passes lists to QML as arrays, but not tuples
+        # PySide passes lists to QML as arrays, but not tuples
+        values["rows"] = list(values["rows"])
+        values["messages"] = list(values["messages"])
         return values
 
     def update_predictions(self):

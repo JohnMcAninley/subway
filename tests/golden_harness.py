@@ -21,7 +21,7 @@ ROOT = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(ROOT))
 
 from subway_clock.core.clock import Clock  # noqa: E402
-from subway_clock.core.feeds import ALL_FEED_URLS, fetch_feed  # noqa: E402
+from subway_clock.core.feeds import ALERTS_URL, ALL_FEED_URLS, fetch_feed  # noqa: E402
 from subway_clock.core.gtfs import StaticTables  # noqa: E402
 from subway_clock.core.settings import Settings  # noqa: E402
 
@@ -55,36 +55,59 @@ def more_lines_steps(t):
     return steps
 
 
+def alerts_steps(t):
+    """Refresh, rotate enough to go through the trains and alerts, then refresh with the alerts fetched again."""
+    steps = [{"action": "refresh", "now": t}, {"action": "board", "now": t}]
+    for k in range(1, 11):
+        steps += [{"action": "rotate", "now": t + 5 * k}, {"action": "board", "now": t + 5 * k}]
+    steps += [{"action": "refresh", "now": t + 120}, {"action": "board", "now": t + 120}]
+    return steps
+
+
+# Cases captured before alerts existed have no alerts feed.
+NO_ALERTS = {"show_alerts": False}
+
 CASES = {
     "union-sq-south": {
         "description": "14 St-Union Sq complex southbound: three feeds (4/5/6, N/Q/R/W, L) and second-line "
                        "rotation, then the N/Q/R/W feed fails until the board goes stale.",
-        "settings": {"stops": ["635S", "R20S", "L03S"]},
+        "settings": {"stops": ["635S", "R20S", "L03S"], **NO_ALERTS},
         "extra_steps": lambda t: failing_feed_steps(t, "gtfs-nqrw"),
     },
     "brooklyn-bridge-north": {
         "description": "Brooklyn Bridge-City Hall northbound: 6 trains starting here have only departure times.",
-        "settings": {"stops": ["640N"]},
+        "settings": {"stops": ["640N"], **NO_ALERTS},
     },
     "broad-channel": {
         "description": "Broad Channel, both directions: A trains and the Rockaway Park Shuttle (route H, SR "
                        "bullet). Northbound H trips end at H19, an unnamed stop past Broad Channel.",
-        "settings": {"stops": ["H04"]},
+        "settings": {"stops": ["H04"], **NO_ALERTS},
     },
     "jackson-hts": {
         "description": "Jackson Hts-Roosevelt Av complex, both directions: E/F/M/R and 7 across four feeds, "
                        "then on taller screens with 4 and 7 lines.",
-        "settings": {"stops": ["G14", "710"]},
+        "settings": {"stops": ["G14", "710"], **NO_ALERTS},
         "extra_steps": more_lines_steps,
     },
     "28-st-new-short": {
         "description": "28 St (6) southbound in the new style, limited to 3 trains within 20 minutes.",
-        "settings": {"stops": ["633S"], "style": "new", "max_trains": 3, "max_minutes": 20},
+        "settings": {"stops": ["633S"], "style": "new", "max_trains": 3, "max_minutes": 20, **NO_ALERTS},
+    },
+    "grand-central-alerts": {
+        "description": "Grand Central-42 St (4/5/6), both directions, with service alerts in the classic style.",
+        "settings": {"stops": ["631"]},
+        "steps": alerts_steps,
+    },
+    "union-sq-south-alerts-new": {
+        "description": "14 St-Union Sq complex southbound in the new style, where service alerts take turns "
+                       "with trains on the last line.",
+        "settings": {"stops": ["635S", "R20S", "L03S"], "style": "new"},
+        "steps": alerts_steps,
     },
     "kings-hwy-no-service": {
         "description": "Kings Hwy (B/Q) southbound, captured on a weekend with the Q cut short by planned "
                        "work and no B service: the board is empty.",
-        "settings": {"stops": ["D35S"]},
+        "settings": {"stops": ["D35S"], **NO_ALERTS},
     },
 }
 
@@ -140,6 +163,7 @@ def capture(names):
     static = StaticData(ROOT / "data")
     captured_at = int(time.time())
     feeds = {url: fetch_feed(url) for url in ALL_FEED_URLS}
+    alerts = fetch_feed(ALERTS_URL)
 
     for name in names:
         definition = CASES[name]
@@ -162,6 +186,22 @@ def capture(names):
                     trip_ids.add(entity.trip_update.trip.trip_id)
             (case_dir / "feeds" / f"{feed_name(url)}.pb").write_bytes(trimmed.SerializeToString())
 
+        if settings.show_alerts:
+            # Keep alerts for the case's stops, or for whole routes scheduled or running there.
+            case_parents = {static.stop_parents.get(s, s) for s in stops}
+            routes = set(static.routes_for(stops))
+            for url in feeds:
+                trimmed = gtfs_realtime_pb2.FeedMessage()
+                trimmed.ParseFromString((case_dir / "feeds" / f"{feed_name(url)}.pb").read_bytes())
+                routes.update(e.trip_update.trip.route_id for e in trimmed.entity)
+            trimmed = gtfs_realtime_pb2.FeedMessage()
+            trimmed.header.CopyFrom(alerts.header)
+            for entity in alerts.entity:
+                if any(e.stop_id in case_parents or (not e.stop_id and e.route_id in routes)
+                       for e in entity.alert.informed_entity):
+                    trimmed.entity.add().CopyFrom(entity)
+            (case_dir / "feeds" / "subway-alerts.pb").write_bytes(trimmed.SerializeToString())
+
         # Only the static tables the case can look up.
         parents = {s: static.stop_parents[s] for s in stops | trip_stops if s in static.stop_parents}
         write_json(case_dir / "static.json", {
@@ -173,7 +213,8 @@ def capture(names):
             "direction_labels": direction_labels(static, stops),
         })
 
-        steps = standard_steps(captured_at) + definition.get("extra_steps", lambda t: [])(captured_at)
+        steps = definition.get("steps", standard_steps)(captured_at)
+        steps += definition.get("extra_steps", lambda t: [])(captured_at)
         write_json(case_dir / "case.json", {
             "description": definition["description"],
             "captured_at": datetime.fromtimestamp(captured_at, timezone.utc).isoformat(),

@@ -22,6 +22,10 @@ class Board:
     style: str
     rows: tuple[Row, ...]
     stale: bool = False  # live data is out of date, e.g. the network is down
+    # Service alerts to show, most urgent first. Routes are in brackets, like "[4]".
+    messages: tuple[str, ...] = ()
+    # In styles that show alerts in place of the last line: the one to show there now, or "".
+    message: str = ""
 
 
 # Route IDs whose bullet isn't named after the route

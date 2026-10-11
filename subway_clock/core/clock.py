@@ -6,7 +6,7 @@ import requests
 from google.protobuf.message import DecodeError
 
 from .board import Board, Row, bullet_id
-from .feeds import ALL_FEED_URLS, feed_urls, fetch_feed, get_predictions
+from .feeds import ALERTS_URL, ALL_FEED_URLS, feed_urls, fetch_feed, get_alerts, get_predictions
 from .gtfs import destination
 
 log = logging.getLogger(__name__)
@@ -18,12 +18,22 @@ OVERDUE_SECONDS = 5 * 60
 # The board is marked stale once any feed it needs has failed for this many refreshes.
 STALE_REFRESHES = 3
 
+# Alerts change slowly and their feed is large, so it is fetched less often than the trains.
+ALERTS_SECONDS = 120
+MAX_MESSAGES = 5
+
+# Styles that show alerts in place of the last line, in rotation with its trains.
+# Each alert stays for MESSAGE_ROTATIONS rotations, as it takes longer to read than a train.
+MESSAGE_LINE_STYLES = ("new",)
+MESSAGE_ROTATIONS = 2
+
 
 @dataclass(frozen=True)
 class FetchResult:
     fetched_at: float
     feeds: dict  # feed URL -> list of Predictions, or None if fetching that feed failed
     scheduled: tuple  # URLs of the feeds for routes scheduled at the stops
+    alerts: list | None = None  # Alerts, or None if they weren't fetched this time or fetching failed
 
 
 class Clock:
@@ -35,7 +45,8 @@ class Clock:
     board(). refresh() does fetch and apply in one step.
 
     The board has `lines` lines, set by the renderer to fit its screen. Lines
-    1 to lines-1 show the next trains; the last line rotates through the rest.
+    1 to lines-1 show the next trains; the last line rotates through the rest
+    (and, in some styles, through the service alerts).
     """
 
     def __init__(self, settings, static, fetch_feed=fetch_feed):
@@ -44,7 +55,9 @@ class Clock:
         self.fetch_feed = fetch_feed
         self.upcoming = []  # every train within max_minutes, soonest first
         self._lines = 2
-        self.rotation_index = 1  # the train on the last line
+        self.rotation_index = 0  # position of the last line in what it rotates through
+        self.alerts = []
+        self._alerts_at = None  # when the alerts were last fetched successfully
         self._feeds = {}  # feed URL -> (predictions, fetched_at) from the last successful fetch
         self._scheduled = []  # feed URLs for routes scheduled at the chosen stops
 
@@ -68,7 +81,15 @@ class Clock:
             except (requests.RequestException, DecodeError) as e:
                 log.warning("Fetching %s failed: %s", url, e)
                 feeds[url] = None
-        return FetchResult(now, feeds, tuple(scheduled))
+
+        alerts = None
+        due = self._alerts_at is None or now - self._alerts_at >= ALERTS_SECONDS
+        if self.settings.show_alerts and due:
+            try:
+                alerts = get_alerts(self.fetch_feed(ALERTS_URL))
+            except (requests.RequestException, DecodeError) as e:
+                log.warning("Fetching alerts failed: %s", e)
+        return FetchResult(now, feeds, tuple(scheduled), alerts)
 
     def apply(self, result, now=None):
         """Update the upcoming trains from a fetch(). Feeds that failed keep their last good data."""
@@ -77,12 +98,15 @@ class Clock:
             if preds is not None:
                 self._feeds[url] = (preds, result.fetched_at)
         self._scheduled = list(result.scheduled)
+        if result.alerts is not None:
+            self.alerts = result.alerts
+            self._alerts_at = result.fetched_at
 
         preds = [p for url in result.feeds if url in self._feeds for p in self._feeds[url][0]]
         earliest = now - OVERDUE_SECONDS
         latest = now + self.settings.max_minutes * 60
         self.upcoming = sorted([p for p in preds if earliest <= p.time <= latest], key=lambda p: p.time)
-        self.rotation_index = self._fixed  # Restart rotation
+        self.rotation_index = 0  # Restart rotation
 
     @property
     def lines(self):
@@ -94,7 +118,7 @@ class Clock:
             raise ValueError(f"lines must be at least 1, not {lines}")
         if lines != self._lines:
             self._lines = lines
-            self.rotation_index = self._fixed
+            self.rotation_index = 0
 
     @property
     def predictions(self):
@@ -116,31 +140,74 @@ class Clock:
         limit = STALE_REFRESHES * self.settings.refresh_seconds
         return any(url not in self._feeds or now - self._feeds[url][1] > limit for url in self._scheduled)
 
-    def rotate(self, now=None):
-        """Advance the last line to the next train. Returns False if there is nothing to rotate."""
+    def messages(self, now=None):
+        """Text of the active alerts for the stops and their routes: those happening now, then planned work."""
         now = time.time() if now is None else now
+        if not self.settings.show_alerts:
+            return ()
+        relevant = [a for a in self.alerts if a.active(now) and self._affected(a)]
+        texts = [a.text for a in sorted(relevant, key=lambda a: a.planned)]
+        return tuple(dict.fromkeys(texts))[:MAX_MESSAGES]  # Alerts are often repeated per route
+
+    def _affected(self, alert):
+        """True if alert names one of the stops (in a direction shown), or a whole route that serves them."""
+        parents = self.static.stop_parents
+        # (parent stop, direction) pairs shown: one for a directional stop, both for a parent stop
+        shown = {(parents.get(stop, stop), d) for stop in self.settings.stops
+                 for d in ("NS" if parents.get(stop, stop) == stop else stop[-1])}
+        routes = set(self.static.routes_for(self.settings.stops)) | {p.route_id for p in self.predictions}
+        for route, stop, direction in alert.affects:
+            directions = direction or "NS"
+            if stop:
+                if any((parents.get(stop, stop), d) in shown for d in directions):
+                    return True
+            elif route in routes and any(d in directions for _, d in shown):
+                return True
+        return False
+
+    def _rotation(self, now):
+        """What the last line rotates through: ("train", index) and ("message", text) entries."""
         count = len(self.predictions)
-        if self.lines < 2 or count <= self.lines or self._arriving(self._fixed, now):
+        if self.lines < 2:
+            return []
+        if count > self._fixed and (count <= self.lines or self._arriving(self._fixed, now)):
+            trains = [self._fixed]  # Nothing else to show, or it is arriving and stays put
+        else:
+            trains = range(self._fixed, count)
+        rotation = [("train", i) for i in trains]
+        arriving = count > self._fixed and self._arriving(self._fixed, now)
+        if self.settings.style in MESSAGE_LINE_STYLES and not arriving:
+            rotation += [("message", text) for text in self.messages(now) for _ in range(MESSAGE_ROTATIONS)]
+        return rotation
+
+    def rotate(self, now=None):
+        """Advance the last line to its next train or alert. Returns False if there is nothing to rotate."""
+        now = time.time() if now is None else now
+        rotation = self._rotation(now)
+        if len(rotation) < 2:
             return False
-        self.rotation_index += 1
-        if self.rotation_index >= count:
-            self.rotation_index = self._fixed
+        self.rotation_index = (self.rotation_index + 1) % len(rotation)
         return True
 
     def board(self, now=None):
         now = time.time() if now is None else now
-        count = len(self.predictions)
 
         # The fixed lines always show the next trains.
-        indexes = list(range(min(self._fixed, count)))
+        indexes = list(range(min(self._fixed, len(self.predictions))))
 
-        # The last line cycles through the rest, unless its first train is arriving.
-        if self.lines > 1 and count > self._fixed:
-            rotating = count > self.lines and not self._arriving(self._fixed, now)
-            indexes.append(self.rotation_index if rotating and self.rotation_index < count else self._fixed)
+        # The last line cycles through the rest.
+        message = ""
+        rotation = self._rotation(now)
+        if rotation:
+            kind, value = rotation[self.rotation_index if self.rotation_index < len(rotation) else 0]
+            if kind == "train":
+                indexes.append(value)
+            else:
+                message = value
 
         rows = tuple(self._row(i, now) for i in indexes)
-        return Board(style=self.settings.style, rows=rows, stale=self.stale(now))
+        return Board(style=self.settings.style, rows=rows, stale=self.stale(now),
+                     messages=self.messages(now), message=message)
 
     def _minutes(self, index, now):
         return (self.predictions[index].time - now) / 60.0

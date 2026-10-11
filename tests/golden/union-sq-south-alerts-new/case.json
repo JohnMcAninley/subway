@@ -1,0 +1,110 @@
+{
+  "description": "14 St-Union Sq complex southbound in the new style, where service alerts take turns with trains on the last line.",
+  "captured_at": "2026-10-11T15:20:25+00:00",
+  "settings": {
+    "stops": [
+      "635S",
+      "R20S",
+      "L03S"
+    ],
+    "style": "new"
+  },
+  "steps": [
+    {
+      "action": "refresh",
+      "now": 1791732025
+    },
+    {
+      "action": "board",
+      "now": 1791732025
+    },
+    {
+      "action": "rotate",
+      "now": 1791732030
+    },
+    {
+      "action": "board",
+      "now": 1791732030
+    },
+    {
+      "action": "rotate",
+      "now": 1791732035
+    },
+    {
+      "action": "board",
+      "now": 1791732035
+    },
+    {
+      "action": "rotate",
+      "now": 1791732040
+    },
+    {
+      "action": "board",
+      "now": 1791732040
+    },
+    {
+      "action": "rotate",
+      "now": 1791732045
+    },
+    {
+      "action": "board",
+      "now": 1791732045
+    },
+    {
+      "action": "rotate",
+      "now": 1791732050
+    },
+    {
+      "action": "board",
+      "now": 1791732050
+    },
+    {
+      "action": "rotate",
+      "now": 1791732055
+    },
+    {
+      "action": "board",
+      "now": 1791732055
+    },
+    {
+      "action": "rotate",
+      "now": 1791732060
+    },
+    {
+      "action": "board",
+      "now": 1791732060
+    },
+    {
+      "action": "rotate",
+      "now": 1791732065
+    },
+    {
+      "action": "board",
+      "now": 1791732065
+    },
+    {
+      "action": "rotate",
+      "now": 1791732070
+    },
+    {
+      "action": "board",
+      "now": 1791732070
+    },
+    {
+      "action": "rotate",
+      "now": 1791732075
+    },
+    {
+      "action": "board",
+      "now": 1791732075
+    },
+    {
+      "action": "refresh",
+      "now": 1791732145
+    },
+    {
+      "action": "board",
+      "now": 1791732145
+    }
+  ]
+}

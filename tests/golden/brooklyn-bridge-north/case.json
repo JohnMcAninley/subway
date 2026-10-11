@@ -4,7 +4,8 @@
   "settings": {
     "stops": [
       "640N"
-    ]
+    ],
+    "show_alerts": false
   },
   "steps": [
     {

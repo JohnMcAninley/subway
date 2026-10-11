@@ -4,9 +4,10 @@ import pytest
 import requests
 from google.protobuf.message import DecodeError
 
-from conftest import NOW, FakeStatic, feed, make_clock, trip, url
+from conftest import NOW, FakeStatic, alert, alerts_feed, feed, make_clock, trip, url
 from subway_clock.core.board import bullet_id
 from subway_clock.core.clock import Clock
+from subway_clock.core.feeds import ALERTS_URL
 from subway_clock.core.settings import Settings
 
 
@@ -175,7 +176,7 @@ def test_scheduled_feeds_only():
         url("Q"): feed(trip("q", "Q", [("R20S", 5)])),
         url("L"): feed(),
     }
-    clock = make_clock(static=static, feeds=feeds, stops=["635S", "R20S"], fetch_all_feeds=False)
+    clock = make_clock(static=static, feeds=feeds, stops=["635S", "R20S"], fetch_all_feeds=False, show_alerts=False)
     assert sorted(clock.fetched) == sorted([url("6"), url("Q")])
     assert [r.route for r in clock.board(now=NOW).rows] == ["6", "Q"]
 
@@ -202,6 +203,97 @@ def test_departure_only_first_stop_is_shown():
     clock = make_clock(trip("a", "6", [("640N", 4, "departure"), ("639N", 6)]), stops=["640N"],
                        static=FakeStatic(stop_routes={"640": ["6"]}))
     assert [r.minutes for r in clock.board(now=NOW).rows] == [4]
+
+
+# Alerts
+
+
+def alert_clock(*alerts, trips=(), **settings):
+    settings.setdefault("stops", ["633S"])
+    return make_clock(*trips, feeds={ALERTS_URL: alerts_feed(*alerts), url("6"): feed(*trips)}, **settings)
+
+
+def test_alert_for_a_route_at_the_stop():
+    clock = alert_clock(alert("a", "[6] delays", ("6", "", None)), alert("b", "[A] delays", ("A", "", None)))
+    assert clock.board(now=NOW).messages == ("[6] delays",)
+
+
+def test_alert_for_a_stop_only_in_the_direction_shown():
+    alerts = [alert("a", "Uptown [6] skips 28 St", ("6", "633", 0)),
+              alert("b", "Downtown [6] skips 28 St", ("6", "633", 1)),
+              alert("c", "[6] skips 23 St", ("6", "634", None))]
+    assert alert_clock(*alerts).messages(NOW) == ("Downtown [6] skips 28 St",)
+    assert alert_clock(*alerts, stops=["633"]).messages(NOW) == ("Uptown [6] skips 28 St", "Downtown [6] skips 28 St")
+
+
+def test_alert_only_while_active():
+    clock = alert_clock(alert("a", "Later", ("6", "", None), periods=[(NOW + 600, NOW + 1200)]),
+                        alert("b", "Open ended", ("6", "", None), periods=[(NOW - 60, 0)]))
+    assert clock.messages(NOW) == ("Open ended",)
+    assert clock.messages(NOW + 900) == ("Later", "Open ended")
+    assert clock.messages(NOW + 1200) == ("Open ended",)
+
+
+def test_alerts_happening_now_come_before_planned_work_and_repeats_are_dropped():
+    clock = alert_clock(alert("lmm:planned_work:1", "Planned", ("6", "", None)),
+                        alert("lmm:alert:2:26", "Delays", ("6", "", None)),
+                        alert("lmm:alert:2:29", "Delays", ("6X", "", None)))
+    assert clock.messages(NOW) == ("Delays", "Planned")
+
+
+def test_alert_for_a_rerouted_train_on_the_board():
+    clock = alert_clock(alert("a", "[2] runs local", ("2", "", None)), trips=[trip("two", "2", [("633S", 4)])])
+    assert clock.messages(NOW) == ("[2] runs local",)
+
+
+def test_show_alerts_off():
+    clock = alert_clock(alert("a", "[6] delays", ("6", "", None)), show_alerts=False)
+    assert ALERTS_URL not in clock.fetched
+    assert clock.board(now=NOW).messages == ()
+
+
+def test_alerts_fetched_every_two_minutes_and_kept_if_fetching_fails():
+    clock = alert_clock(alert("a", "[6] delays", ("6", "", None)))
+    clock.refresh(now=NOW + 60)
+    assert clock.fetched.count(ALERTS_URL) == 1
+    clock.fetch_feed = fail_alerts(clock.fetch_feed)
+    clock.refresh(now=NOW + 120)
+    assert clock.messages(NOW + 120) == ("[6] delays",)
+    assert not clock.stale(NOW + 120)
+
+
+def fail_alerts(fetch):
+    def fetch_feed(feed_url):
+        if feed_url == ALERTS_URL:
+            raise requests.ConnectionError("down")
+        return fetch(feed_url)
+    return fetch_feed
+
+
+def test_new_style_shows_alerts_in_place_of_the_last_line():
+    trips = [six(str(i), i * 2 + 2) for i in range(3)]
+    clock = alert_clock(alert("a", "[6] delays", ("6", "", None)), trips=trips, style="new")
+    states = []
+    for _ in range(5):
+        board = clock.board(now=NOW)
+        states.append(([r.number for r in board.rows], board.message))
+        assert clock.rotate(now=NOW)
+    assert states == [([1, 2], ""), ([1, 3], ""), ([1], "[6] delays"), ([1], "[6] delays"), ([1, 2], "")]
+
+
+def test_new_style_keeps_an_arriving_train_on_the_last_line():
+    trips = [six("a", 0), six("b", 0.5), six("c", 5)]
+    clock = alert_clock(alert("a", "[6] delays", ("6", "", None)), trips=trips, style="new")
+    assert not clock.rotate(now=NOW)
+    assert clock.board(now=NOW).message == ""
+
+
+def test_classic_style_never_replaces_the_last_line():
+    trips = [six(str(i), i * 2 + 2) for i in range(2)]
+    clock = alert_clock(alert("a", "[6] delays", ("6", "", None)), trips=trips)
+    assert not clock.rotate(now=NOW)
+    board = clock.board(now=NOW)
+    assert (len(board.rows), board.message, board.messages) == (2, "", ("[6] delays",))
 
 
 # Settings

@@ -1,5 +1,6 @@
 {
     "base": "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs",
+    "alerts": "https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/camsys%2Fsubway-alerts",
     "feeds": {
         "": ["1", "2", "3", "4", "5", "6", "6X", "7", "7X", "GS"],
         "-ace": ["A", "C", "E", "H"],

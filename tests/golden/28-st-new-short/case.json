@@ -7,7 +7,8 @@
     ],
     "style": "new",
     "max_trains": 3,
-    "max_minutes": 20
+    "max_minutes": 20,
+    "show_alerts": false
   },
   "steps": [
     {

@@ -29,6 +29,8 @@ class Settings:
     # fetch only the feeds for routes scheduled at the stops (including the
     # next week of planned work), which uses less data.
     fetch_all_feeds: bool = True
+    # Show the MTA's service alerts for the stops and their routes (another 500 KB every 2 minutes).
+    show_alerts: bool = True
     refresh_seconds: int = 30
     rotation_seconds: int = 5  # how long each train stays on the second line
     data_dir: str = "data"  # static GTFS cache; relative paths are relative to the settings file

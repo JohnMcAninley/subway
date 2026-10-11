@@ -1,8 +1,9 @@
 import QtQuick
+import "Messages.js" as Messages
 import "Styles.js" as Styles
 
-// The newer clocks: a numbered card per train on a dark screen, with a
-// message across the bottom only when there is one.
+// The newer clocks: a numbered card per train on a dark screen. Service alerts
+// take turns with the trains on the last line.
 Rectangle {
     id: root
 
@@ -38,6 +39,37 @@ Rectangle {
         }
     }
 
+    // A service alert in place of the last line
+    Rectangle {
+        id: alert
+        visible: root.board.message !== ""
+        x: root.rowHeight * 0.4
+        y: (root.lines - 1) * root.rowHeight + root.rowHeight * 0.08
+        width: root.width - x - root.rowHeight * 0.1
+        height: root.rowHeight * 0.84
+        radius: root.rowHeight * 0.05
+        color: root.colors.card
+
+        Text {
+            anchors.fill: parent
+            anchors.leftMargin: root.rowHeight * 0.14
+            anchors.rightMargin: root.rowHeight * 0.14
+            anchors.topMargin: root.rowHeight * 0.06
+            anchors.bottomMargin: root.rowHeight * 0.06
+            verticalAlignment: Text.AlignVCenter
+            textFormat: Text.StyledText
+            text: Messages.styled(root.board.message, root.bulletsUrl, Math.round(font.pixelSize * 1.05))
+            wrapMode: Text.WordWrap
+            elide: Text.ElideRight
+            maximumLineCount: 3
+            font.family: "Roboto"
+            font.weight: Font.Medium
+            font.pixelSize: root.rowHeight * 0.17
+            color: root.colors.text
+        }
+    }
+
+    // Stale data warning across the bottom
     Rectangle {
         anchors.left: parent.left
         anchors.right: parent.right

@@ -2,7 +2,7 @@ import QtQuick
 import "Styles.js" as Styles
 
 // The classic LCD clock: lines of "1. (bullet) Destination   3 min" over a
-// strip with the time and a message.
+// strip with the time and scrolling service alerts.
 Rectangle {
     id: root
 
@@ -60,6 +60,7 @@ Rectangle {
         anchors.bottom: parent.bottom
         height: root.statusHeight
         colors: root.colors
-        message: root.board.stale ? root.staleMessage : ""
+        bulletsUrl: root.bulletsUrl
+        messages: (root.board.stale ? [root.staleMessage] : []).concat(root.board.messages)
     }
 }

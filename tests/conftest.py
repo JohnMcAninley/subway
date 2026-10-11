@@ -32,6 +32,30 @@ def feed(*trips):
     return message
 
 
+def alert(alert_id, text, *affects, periods=()):
+    """An alert; affects is (route_id, stop_id, direction_id or None), ...; periods is [(start, end), ...]."""
+    return (alert_id, text, affects, periods)
+
+
+def alerts_feed(*alerts):
+    message = feed()
+    for alert_id, text, affects, periods in alerts:
+        entity = message.entity.add(id=alert_id)
+        entity.alert.header_text.translation.add(language="en", text=text)
+        entity.alert.header_text.translation.add(language="en-html", text=f"<p>{text}</p>")
+        for route_id, stop_id, direction_id in affects:
+            selector = entity.alert.informed_entity.add(agency_id="MTASBWY", route_id=route_id)
+            if stop_id:
+                selector.stop_id = stop_id
+            if direction_id is not None:
+                selector.direction_id = direction_id
+        for start, end in periods:
+            period = entity.alert.active_period.add(start=int(start))
+            if end:
+                period.end = int(end)
+    return message
+
+
 def FakeStatic(stop_routes=None, headsigns=None, stop_names=None, direction_labels=None):
     """StaticTables for parent stops in stop_routes and their N/S platforms."""
     stop_routes = stop_routes or {"633": ["6", "6X"]}
