@@ -1,0 +1,995 @@
+/* The clock's styles, drawn as ui/qml draws them. Each board's script works out
+   its sizes from the screen's and sets them as custom properties in pixels
+   (--row, --font, ...); the proportions here are the QML's. The colours come
+   from ui/qml/Styles.js (--classic-background, ...). */
+
+@font-face {
+    font-family: "Roboto";
+    src: url("assets/fonts/Roboto.ttf");
+    font-weight: 100 900;
+}
+
+html, body {
+    height: 100%;
+    margin: 0;
+    overflow: hidden;
+    background: #000000;
+}
+
+#clock, #menu {
+    position: fixed;
+    inset: 0;
+    overflow: hidden;
+    font-family: "Roboto", sans-serif;
+    font-kerning: normal;
+    user-select: none;
+    cursor: default;
+}
+
+[hidden] {
+    display: none !important;
+}
+
+img {
+    display: block;
+    flex: none;
+}
+
+.bullets {
+    display: flex;
+    flex: none;
+}
+
+/* A line of text that ends in "..." when it doesn't fit */
+.station, .direction, .destination, .headline, .detail, .text, .label, .value, .title {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/* A route's bullet in the middle of a sentence */
+.inline-bullet {
+    display: inline;
+    width: 0.95em;
+    height: 0.95em;
+    vertical-align: middle;
+}
+
+/* One straight after another */
+.inline-bullet.next {
+    margin-left: 0.1em;
+}
+
+
+/* classic: lines of "1. (bullet) Destination   3 min" over a strip with the time and the alerts */
+
+.classic {
+    background: var(--classic-background);
+    color: var(--classic-text);
+    --margin: calc(var(--font) * 0.3);
+}
+
+.classic .header {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: var(--header);
+    box-sizing: border-box;
+    padding: 0 var(--margin);
+    display: flex;
+    align-items: center;
+    background: var(--classic-statusBackground);
+    color: var(--classic-statusText);
+}
+
+/* An arriving train's line is black too */
+.classic .header::after {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: var(--rule);
+    background: var(--classic-separator);
+}
+
+.classic .header .station {
+    flex: 0 1 auto;
+    min-width: 0;
+    font-weight: 500;
+    font-size: calc(var(--header) * 0.62);
+}
+
+.classic .header .bullets {
+    margin-left: var(--margin);
+    gap: calc(var(--header) * 0.08);
+}
+
+.classic .header .bullets img {
+    width: calc(var(--header) * 0.68);
+    height: calc(var(--header) * 0.68);
+}
+
+.classic .header .direction {
+    flex: none;
+    margin-left: auto;
+    padding-left: var(--margin);
+    font-size: calc(var(--header) * 0.5);
+}
+
+.classic .rows {
+    position: absolute;
+    top: var(--header);
+    left: 0;
+    right: 0;
+}
+
+.classic .row {
+    position: relative;
+    height: var(--row);
+    display: flex;
+    align-items: center;
+}
+
+.classic .row.arriving {
+    background: var(--classic-arrivingBackground);
+    color: var(--classic-arrivingText);
+}
+
+/* Separators between lines */
+.classic .row + .row::before {
+    content: "";
+    position: absolute;
+    left: 0;
+    right: 0;
+    top: calc(var(--rule) / -2);
+    height: var(--rule);
+    background: var(--classic-separator);
+}
+
+/* Everything on the line sits on the number's baseline, and the number is centred in the line. */
+.classic .train, .classic .notice {
+    flex: 1;
+    min-width: 0;
+    display: flex;
+    align-items: baseline;
+    padding: 0 var(--margin);
+    font-size: var(--font);
+    white-space: nowrap;
+}
+
+/* Centred on the capitals, not the line box (Roboto's cap height is 0.71 em) */
+.classic .train .bullet {
+    width: calc(var(--font) * 0.95);
+    height: calc(var(--font) * 0.95);
+    margin-left: calc(var(--font) * 0.04);
+    position: relative;
+    top: calc(var(--font) * 0.12);
+}
+
+.classic .train .destination {
+    flex: 1;
+    min-width: 0;
+    margin-left: calc(var(--font) * 0.25);
+    margin-right: var(--margin);
+}
+
+.classic .train .minutes {
+    font-size: calc(var(--font) * 1.05);
+    line-height: 0;
+    margin-right: calc(var(--font) * 0.08);
+}
+
+.classic .train .min {
+    font-size: calc(var(--font) * 0.55);
+    line-height: 0;
+}
+
+.classic .notice .text {
+    flex: 1;
+    min-width: 0;
+    margin-right: var(--margin);
+}
+
+.classic .strip {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: var(--status);
+    display: flex;
+    background: var(--classic-statusBackground);
+    color: var(--classic-statusText);
+    font-size: calc(var(--status) * 0.6);
+    white-space: pre;
+}
+
+.classic .strip .time {
+    flex: none;
+    display: flex;
+    align-items: center;
+    padding: 0 calc(var(--status) * 0.4);
+    background: var(--classic-statusAccent);
+}
+
+.classic .strip .ticker {
+    position: relative;
+    flex: 1;
+    overflow: hidden;
+}
+
+.classic .strip .scrolling {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    display: flex;
+    align-items: center;
+}
+
+.classic .strip .scrolling img {
+    width: calc(var(--status) * 0.62);
+    height: calc(var(--status) * 0.62);
+}
+
+.classic .strip .gap {
+    width: calc(var(--status) * 3);
+}
+
+
+/* new: a numbered card per train on a black screen. --u is a line's height;
+   the proportions follow the MTA's 1920x480 design, where a line is 240 high. */
+
+.new, .new-portrait {
+    background: var(--new-background);
+    color: var(--new-text);
+}
+
+.new-row {
+    height: var(--u);
+    display: flex;
+    align-items: center;
+}
+
+.new-row:not(.numbered) {
+    box-sizing: border-box;
+    padding: 0 calc(var(--u) * 0.12);
+}
+
+.new-row .number {
+    flex: none;
+    width: calc(var(--u) * 0.4);
+    height: 100%;
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 700;
+    font-size: calc(var(--u) * 0.36);
+    color: var(--new-number);
+}
+
+.new-row .number span {
+    display: block;
+}
+
+.new-row .card {
+    flex: 1;
+    min-width: 0;
+    height: calc(var(--u) * 0.92);
+    background: var(--new-card);
+}
+
+.new-row.arriving .card {
+    background: var(--new-arrivingCard);
+    color: var(--new-arrivingText);
+}
+
+.new-row .content {
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
+.new-row .bullet {
+    width: calc(var(--u) * 0.66);
+    height: calc(var(--u) * 0.66);
+    margin-left: calc(var(--u) * 0.125);
+}
+
+.new-row .words {
+    flex: 1;
+    min-width: 0;
+    margin: 0 calc(var(--u) * 0.1);
+}
+
+.new-row .headline {
+    font-weight: 700;
+    font-size: calc(var(--u) * 0.4);
+}
+
+.new-row .detail {
+    margin-top: calc(var(--u) * -0.04);
+    font-size: calc(var(--u) * 0.22);
+}
+
+/* The minutes and "MIN" share a fixed centre line, whether one digit or two. */
+.new-row .minutes {
+    flex: none;
+    width: calc(var(--u) * 0.8);
+    margin-right: calc(var(--u) * 0.08);
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    font-weight: 700;
+    white-space: nowrap;
+}
+
+.new-row .minutes .value {
+    overflow: visible;
+    font-size: calc(var(--u) * 0.6);
+}
+
+.new-row .minutes .label {
+    margin-top: calc(var(--u) * -0.07);
+    font-size: calc(var(--u) * 0.11);
+    letter-spacing: calc(var(--u) * 0.012);
+    opacity: 0.75;
+}
+
+/* Before there are trains to show: what the clock is doing, on a card in the first line */
+.new-row.notice .words {
+    margin-left: calc(var(--u) * 0.2);
+}
+
+.new-row.notice .percent {
+    flex: none;
+    margin-right: calc(var(--u) * 0.2);
+    font-weight: 700;
+    font-size: calc(var(--u) * 0.5);
+}
+
+.new .header {
+    position: absolute;
+    top: 0;
+    left: calc(var(--u) * 0.4);
+    right: calc(var(--u) * 0.125);
+    height: var(--header);
+    display: flex;
+    align-items: center;
+    font-size: calc(var(--header) * 0.62);
+}
+
+.new .header .station {
+    flex: 0 1 auto;
+    min-width: 0;
+    font-weight: 700;
+}
+
+.new .header .bullets {
+    margin-left: calc(var(--header) * 0.35);
+    gap: calc(var(--header) * 0.08);
+}
+
+.new .header .bullets img {
+    width: calc(var(--header) * 0.68);
+    height: calc(var(--header) * 0.68);
+}
+
+.new .header .direction {
+    flex: 1;
+    min-width: 0;
+    margin-left: calc(var(--header) * 0.35);
+    color: var(--new-number);
+}
+
+.new .lines, .new .startup {
+    position: absolute;
+    top: var(--header);
+    left: 0;
+    right: 0;
+}
+
+.new .slot {
+    height: var(--u);
+}
+
+/* A service alert in place of the last line: a white card with a yellow bar where the number was */
+.new .alert {
+    position: absolute;
+    top: calc(var(--header) + (var(--lines) - 1) * var(--u) + var(--u) * 0.04);
+    left: 0;
+    right: 0;
+    height: calc(var(--u) * 0.92);
+}
+
+.new .alert .bar {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: calc(var(--u) * 0.5);
+    border-radius: calc(var(--u) * 0.06);
+    background: var(--new-alertBar);
+}
+
+.new .alert .panel {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: calc(var(--u) * 0.4);
+    right: 0;
+    box-sizing: border-box;
+    padding: 0 calc(var(--u) * 0.18);
+    display: flex;
+    align-items: center;
+    border-radius: calc(var(--u) * 0.06);
+    background: var(--new-alertCard);
+    color: var(--new-alertText);
+    font-size: calc(var(--u) * 0.32);
+    --max-lines: 2;
+}
+
+.new .alert.lengthy .panel {
+    font-size: calc(var(--u) * 0.23);
+    --max-lines: 3;
+}
+
+/* Text on several lines, ending in "..." after the last it has room for */
+.alert .text, .no-service .text {
+    white-space: normal;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: var(--max-lines);
+    line-clamp: var(--max-lines);
+}
+
+/* No trains are coming, and this alert says why */
+.no-service {
+    position: absolute;
+    color: var(--new-alertText);
+}
+
+.new .no-service {
+    top: calc(var(--header) + var(--u) * 0.04);
+    left: 0;
+    right: 0;
+    height: calc(var(--lines) * var(--u) - var(--u) * 0.08);
+}
+
+.no-service .bar {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: 0;
+    width: calc(var(--bar) * 1.25);
+    border-radius: calc(var(--bar) * 0.15);
+    background: var(--new-alertBar);
+}
+
+.no-service .panel {
+    position: absolute;
+    top: 0;
+    bottom: 0;
+    left: var(--bar);
+    right: 0;
+    box-sizing: border-box;
+    padding: 0 calc(var(--title-size) * 0.45);
+    display: flex;
+    align-items: center;
+    border-radius: calc(var(--bar) * 0.15);
+    background: var(--new-alertCard);
+}
+
+.no-service .words {
+    flex: 1;
+    min-width: 0;
+}
+
+.no-service .title {
+    white-space: normal;
+    font-weight: 700;
+    font-size: var(--title-size);
+}
+
+.no-service .text {
+    margin-top: calc(var(--text-size) * 0.25);
+    font-size: var(--text-size);
+}
+
+/* Stale data warning across the bottom */
+.new .stale {
+    position: absolute;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    height: var(--stale);
+    box-sizing: border-box;
+    padding: 0 calc(var(--stale) * 0.4);
+    display: flex;
+    align-items: center;
+    background: var(--new-messageBackground);
+    color: var(--new-messageText);
+    font-weight: 500;
+    font-size: calc(var(--stale) * 0.55);
+}
+
+.new .stale span {
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+
+/* new, on a portrait screen: the time, the trains, and the service alerts at the
+   bottom. --p is a pixel of the real screens, which are 1080x1920. */
+
+.new-portrait {
+    display: flex;
+    flex-direction: column;
+}
+
+.new-portrait .header {
+    flex: none;
+    height: calc(var(--p) * 105);
+    box-sizing: border-box;
+    padding: 0 calc(var(--p) * 28);
+    display: flex;
+    align-items: center;
+    font-size: calc(var(--p) * 46);
+}
+
+.new-portrait .header .station {
+    flex: 1;
+    min-width: 0;
+    margin-right: calc(var(--p) * 40);
+    font-weight: 700;
+}
+
+.new-portrait .header .now {
+    flex: none;
+    margin-left: auto;
+    white-space: nowrap;
+}
+
+.new-portrait .header .time {
+    font-weight: 700;
+}
+
+.new-portrait .header .seconds {
+    opacity: 0.75;
+}
+
+/* The station's routes, and the direction when the screen shows only one */
+.new-portrait .entrance {
+    flex: none;
+    height: calc(var(--p) * 76);
+    box-sizing: border-box;
+    padding-left: calc(var(--p) * 28);
+    display: flex;
+    align-items: flex-start;
+}
+
+.new-portrait .entrance .bullets {
+    gap: calc(var(--p) * 8);
+}
+
+.new-portrait .entrance .bullets img {
+    width: calc(var(--p) * 58);
+    height: calc(var(--p) * 58);
+}
+
+.new-portrait .entrance .direction {
+    margin-left: calc(var(--p) * 30);
+    line-height: calc(var(--p) * 58);
+    font-weight: 700;
+    font-size: calc(var(--p) * 36);
+}
+
+.new-portrait .below {
+    position: relative;
+    flex: none;
+}
+
+.new-portrait .startup {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+}
+
+/* The heading over a direction's trains */
+.new-portrait .heading {
+    height: calc(var(--p) * 62);
+    box-sizing: border-box;
+    padding: 0 calc(var(--p) * 28) calc(var(--p) * 4);
+    display: flex;
+    align-items: flex-end;
+    white-space: nowrap;
+    font-weight: 700;
+    font-size: calc(var(--p) * 36);
+}
+
+.new-portrait .no-service {
+    top: 0;
+    left: calc(var(--u) * 0.12);
+    right: calc(var(--u) * 0.12);
+    height: calc(var(--u) * 2.4);
+}
+
+/* Service alerts, from the bottom up to where the trains end */
+.new-portrait .alert-panel {
+    position: absolute;
+    left: calc(var(--p) * 55);
+    right: calc(var(--p) * 55);
+    bottom: calc(var(--p) * 40);
+}
+
+.new-portrait .caption {
+    font-weight: 700;
+    font-size: calc(var(--p) * 46);
+}
+
+.new-portrait .alert {
+    margin-top: calc(var(--p) * 26);
+}
+
+.new-portrait .alert .rule {
+    height: max(1px, calc(var(--p) * 3));
+    background: var(--new-text);
+    opacity: 0.5;
+}
+
+.new-portrait .alert .columns {
+    margin-top: calc(var(--p) * 22);
+    display: flex;
+    align-items: flex-start;
+    gap: calc(var(--p) * 30);
+}
+
+.new-portrait .alert .about {
+    flex: none;
+    width: 30%;
+}
+
+/* Its routes' bullets, small, with a badge on the corner of the last */
+.new-portrait .alert .marks {
+    height: calc(var(--p) * 52);
+    display: flex;
+    align-items: flex-end;
+    gap: calc(var(--p) * 6);
+}
+
+.new-portrait .alert .marks .bullets {
+    gap: calc(var(--p) * 6);
+}
+
+.new-portrait .alert .marks img {
+    width: calc(var(--p) * 44);
+    height: calc(var(--p) * 44);
+}
+
+.new-portrait .alert .badge {
+    position: relative;
+    align-self: stretch;
+    width: calc(var(--p) * 10);
+}
+
+.new-portrait .alert .badge i {
+    position: absolute;
+    top: 0;
+    left: calc(var(--p) * -22);
+    width: calc(var(--p) * 26);
+    height: calc(var(--p) * 26);
+    box-sizing: border-box;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border: max(1px, calc(var(--p) * 2)) solid var(--new-background);
+    border-radius: 50%;
+    background: var(--new-alertBar);
+    color: var(--new-alertText);
+    font-style: normal;
+    font-weight: 700;
+    font-size: calc(var(--p) * 26 * 0.75);
+}
+
+.new-portrait .alert .badge.alone i {
+    left: 0;
+}
+
+.new-portrait .alert .title {
+    margin-top: calc(var(--p) * 6);
+    white-space: normal;
+    font-weight: 700;
+    font-size: calc(var(--p) * 34);
+}
+
+.new-portrait .alert .updated {
+    margin-top: calc(var(--p) * 6);
+    font-size: calc(var(--p) * 24);
+    color: var(--new-number);
+}
+
+.new-portrait .alert .text {
+    flex: 1;
+    min-width: 0;
+    font-size: calc(var(--p) * 34);
+    --max-lines: 4;
+}
+
+.new-portrait .alert .text .inline-bullet {
+    width: calc(var(--p) * 36);
+    height: calc(var(--p) * 36);
+}
+
+
+/* led: the canvas has a pixel for each dot, scaled up, under a mask with a round hole over each */
+
+.led {
+    background: #000000;
+}
+
+.led .frame {
+    position: absolute;
+}
+
+.led canvas {
+    display: block;
+    width: 100%;
+    height: 100%;
+    image-rendering: pixelated;
+}
+
+.led .mask {
+    position: absolute;
+    inset: 0;
+    background: url("assets/led-dot.svg") left top repeat;
+}
+
+
+/* The settings menu. It keeps to one look of its own, whatever the style, so that it
+   reads the same over all of them. --m is a row's height. */
+
+#menu {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    --ink: #ffffff;
+    --faint: #a4a4ad;
+    color: var(--ink);
+}
+
+#menu .shade {
+    position: absolute;
+    inset: 0;
+    background: #000000;
+    opacity: 0.6;
+}
+
+#menu .panel {
+    position: relative;
+    box-sizing: border-box;
+    width: min(96%, calc(var(--m) * 20));
+    background: #1c1c21;
+    box-shadow: inset 0 0 0 var(--edge) #5a5a63;
+}
+
+#menu .top {
+    height: calc(var(--m) * 1.3);
+    padding: 0 calc(var(--m) * 0.3) 0 calc(var(--m) * 0.5);
+    display: flex;
+    align-items: center;
+    gap: calc(var(--m) * 0.3);
+}
+
+#menu .title {
+    flex: 1;
+    min-width: 0;
+    font-weight: 700;
+    font-size: calc(var(--m) * 0.56);
+}
+
+/* The button that does what Esc does */
+#menu .back {
+    flex: none;
+    height: calc(var(--m) * 0.7);
+    margin: 0;
+    padding: 0 calc(var(--m) * 0.3);
+    background: transparent;
+    border: var(--edge) solid var(--faint);
+    border-radius: 0;
+    color: var(--ink);
+    font: inherit;
+    font-size: calc(var(--m) * 0.36);
+    cursor: pointer;
+}
+
+#menu .back:hover, #menu .item:not(.selected):hover::before {
+    background: #3a3a42;
+}
+
+/* What has been typed */
+#menu .query {
+    height: var(--m);
+    box-sizing: border-box;
+    margin: 0 calc(var(--m) * 0.3);
+    padding: 0 calc(var(--m) * 0.3);
+    display: flex;
+    align-items: center;
+    background: #000000;
+    border: var(--edge) solid var(--faint);
+    font-size: calc(var(--m) * 0.42);
+    white-space: pre;
+}
+
+/* The end of it, when it is too long to fit */
+#menu .query .typed {
+    min-width: 0;
+    overflow: hidden;
+    display: flex;
+    justify-content: flex-end;
+}
+
+#menu .query .caret {
+    flex: none;
+    width: max(2px, calc(var(--m) * 0.05));
+    height: calc(var(--m) * 0.5);
+    margin-left: calc(var(--m) * 0.04);
+    background: var(--ink);
+}
+
+/* Until something is typed the caret is over the prompt, which gives way to it */
+#menu .query.prompt {
+    position: relative;
+    color: var(--faint);
+}
+
+#menu .query.prompt .typed {
+    justify-content: flex-start;
+    text-overflow: ellipsis;
+}
+
+#menu .query.prompt .caret {
+    position: absolute;
+    left: calc(var(--m) * 0.3 - var(--edge));
+    margin: 0;
+    opacity: 0.5;
+}
+
+#menu .list {
+    position: relative;
+    overflow: hidden;
+}
+
+#menu .empty {
+    padding: calc(var(--m) * 0.5);
+    font-size: calc(var(--m) * 0.4);
+    color: var(--faint);
+}
+
+#menu .item {
+    position: relative;
+    cursor: pointer;
+    height: var(--m);
+    box-sizing: border-box;
+    padding: 0 calc(var(--m) * 0.45);
+    display: flex;
+    align-items: center;
+}
+
+#menu .item.selected {
+    --ink: #000000;
+    --faint: #4a4a52;
+    color: var(--ink);
+}
+
+#menu .item::before {
+    content: "";
+    position: absolute;
+    inset: calc(var(--m) * 0.04) calc(var(--m) * 0.15);
+}
+
+#menu .item.selected::before {
+    background: #ffffff;
+}
+
+#menu .item > * {
+    position: relative;
+}
+
+#menu .left {
+    flex: 1;
+    min-width: 0;
+    margin-right: calc(var(--m) * 0.3);
+    overflow: hidden;
+    display: flex;
+    align-items: center;
+    gap: calc(var(--m) * 0.2);
+}
+
+#menu .box {
+    flex: none;
+    width: calc(var(--m) * 0.46);
+    height: calc(var(--m) * 0.46);
+    box-sizing: border-box;
+    border: max(1px, calc(var(--m) * 0.05)) solid var(--ink);
+}
+
+#menu .box.checked {
+    background: var(--ink);
+    background-clip: content-box;
+    padding: calc(var(--m) * 0.07);
+}
+
+#menu .bullets {
+    gap: calc(var(--m) * 0.06);
+}
+
+#menu .bullets img {
+    width: calc(var(--m) * 0.5);
+    height: calc(var(--m) * 0.5);
+}
+
+#menu .box ~ .bullets img {
+    width: calc(var(--m) * 0.56);
+    height: calc(var(--m) * 0.56);
+}
+
+#menu .label {
+    flex: 0 1 auto;
+    min-width: 0;
+    font-weight: 500;
+    font-size: calc(var(--m) * 0.44);
+}
+
+/* It gives way to the label, which has the room first */
+#menu .detail {
+    flex: 0 1000 auto;
+    min-width: 0;
+    overflow: hidden;
+    white-space: nowrap;
+    font-size: calc(var(--m) * 0.34);
+    color: var(--faint);
+}
+
+/* A station's borough or a stop's ID is an aside */
+#menu .value {
+    flex: none;
+    max-width: 40%;
+    font-size: calc(var(--m) * 0.34);
+    color: var(--faint);
+}
+
+/* A setting's value is what the row is for */
+#menu .main .value {
+    max-width: 66%;
+    font-size: calc(var(--m) * 0.42);
+    color: var(--ink);
+}
+
+/* Where the rows shown are among all of them */
+#menu .place {
+    position: absolute;
+    right: calc(var(--m) * 0.04);
+    width: max(2px, calc(var(--m) * 0.07));
+    background: var(--faint);
+}
+
+#menu .keys {
+    height: calc(var(--m) * 1.3);
+    margin: 0 calc(var(--m) * 0.5);
+    display: flex;
+    align-items: center;
+    font-size: calc(var(--m) * 0.32);
+    color: var(--faint);
+}
+
+#menu .keys span {
+    overflow: hidden;
+    display: -webkit-box;
+    -webkit-box-orient: vertical;
+    -webkit-line-clamp: 2;
+    line-clamp: 2;
+}

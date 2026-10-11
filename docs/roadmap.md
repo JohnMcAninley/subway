@@ -17,6 +17,10 @@ Last updated 2026-10-11.
 - The Qt/QML front end draws three styles: `classic`, `new` (wide and
   portrait) and `led`, each with a loading screen and an optional station
   header.
+- The web front end (`subway_clock/web`, `python -m subway_clock.web`) draws
+  the same styles and the settings menu in a browser, with HTML and CSS. The
+  Python core stays: a small server runs the clock and hands the page its
+  `Board` as JSON.
 - Development is on a PC for now. The intended device, a Pi Zero 2 W, can't
   be bought at the moment; see H1.
 - Settings are a JSON file, read again whenever it is saved, so changes take
@@ -37,6 +41,14 @@ The split between the core and the renderers is what makes this possible.
 - **Each style's QML is its own territory.** `Classic*.qml`, `New*.qml` and
   `Led*.qml` don't share code beyond `Styles.js` and `Messages.js`, so
   packages marked **classic**, **new** or **led** can run side by side.
+- **The web page follows the QML.** `web/static/classic.js`, `new.js`,
+  `led.js` and `menu.js`, with their parts of `clock.css`, are the web's
+  `Classic*.qml`, `New*.qml`, `Led*.qml` and `SettingsMenu.qml`: a package
+  that changes how a style looks changes both, and checks both with
+  `scripts/capture.py` (with and without `--web`). `Styles.js`, `Messages.js`
+  and `LedFont.js` are served to the page as they are, so a change there
+  reaches both, and anything they define at the top level must stay plain
+  JavaScript.
 - **Shared files to coordinate on:** `Main.qml`, `Styles.js`, `display.py`,
   `settings.py`, `README.md`.
 - **Done means:** tests pass, the README and the references or golden spec
@@ -103,14 +115,15 @@ Blocked on hardware (H1) except where noted.
 |---|---|---|---|
 | F1 | **Run on a Pi** | M | Apt PySide6 with eglfs, full screen, check frame rate. The LED style's layer and the classic ticker are the likeliest trouble. Also adjust the loading screen's percentage (`DOWNLOADS_SHARE` in `core/gtfs.py`), which gives the downloads 60% and the indexing 40%: a guess from a PC with a fast connection. |
 | F2 | **Image** | L | Pi OS Lite, a systemd service, read-only root, a watchdog. |
-| F3 | **Wi-Fi setup and phone settings** | L | Provisioning for a device with no keyboard, then a settings page at `subway.local` (reusing `core/stations.py`). |
+| F3 | **Wi-Fi setup and phone settings** | L | Provisioning for a device with no keyboard, then a settings page at `subway.local`. The web front end is the start of that page: it serves the settings menu, which takes taps, to any browser that can reach it. Missing for a phone: typing a station's name without a keyboard (E4's question too), a layout for the menu on a small upright screen, and some thought about who on the network may change the settings. |
 | F4 | **Updates** | L | From GitHub Releases, with rollback if the new version fails to start. The update check and version logic can be written and tested on a PC now. |
 
 ### G. Web version
 
 | ID | Package | Size | Notes |
 |---|---|---|---|
-| G1 | **Draw the clock in a browser** | L | The same `Board`, drawn with HTML and CSS instead of QML, in the three styles. The golden cases are the shared spec: each one drawn in the browser should match the Qt capture at the `--dev` preset sizes. To decide first: whether the Python core stays and serves the `Board` as JSON to the page, or the core is ported to JavaScript and checked against the golden cases; and, if the page is to fetch the feeds itself, whether the MTA's servers allow that from a browser (if not, it needs S2's relay). Settings should follow the settings menu (`subway_clock/ui/menu.py`), and the page is a starting point for F3's phone settings. |
+| G1 | **Finish checking the page against Qt** | S | The page is in (see "Where things stand"). Compared with Qt's captures so far, and matching but for a pixel or two of text width: each style at 1920x600 or 1920x480, `new` at 1280x720 and 608x1080, the station header, an alert on the last line, the no-service alert wide and in portrait, the loading screens, and the menu's three pages. Still to do: every golden case at every `--dev` preset size; 360x1080, which the headless browsers `capture.py --web` uses can't be made narrow enough for (a real browser window can); and bullets inside an alert's text, which have a full space either side on the page and less in Qt. |
+| G2 | **The core in the page** | L | Only if the web wins (H5); `docs/architecture.md` has the whole plan and what was weighed. The page becomes plain files on a static host with the logic in it: the core and the settings menu ported to JavaScript and checked against the golden cases (needs Node), settings kept in the browser, the feeds fetched from the MTA directly, and the schedule tables built by `gtfs.py` on a schedule and published beside the page, as a browser can't read the schedule zips. Then a service worker so a device starts without the host, and a reload when there is a new version. S2's relay becomes a mirror of the feeds that the page is pointed at. |
 
 ### S. Selling a prebuilt clock
 
@@ -131,11 +144,13 @@ it and a product, as read on 2026-10-11; none of it is legal advice.
 ## Suggested order
 
 1. B3: small, and nothing blocks it.
-2. G1, the web version.
-3. A1, A2, A4 and C1 as photos and station visits come in.
-4. S1 early if the clock is to be sold: the answer decides whether there is a
+2. G1, the rest of checking the web version.
+3. H5 as soon as there is a Pi: Qt or web on the device, which decides G2
+   and what F1 to F4 have to do.
+4. A1, A2, A4 and C1 as photos and station visits come in.
+5. S1 early if the clock is to be sold: the answer decides whether there is a
    product, and it may take a while.
-5. F once there is hardware; F4's PC-testable parts can start earlier.
+6. F once there is hardware; F4's PC-testable parts can start earlier.
 
 ## Waiting on John
 
@@ -145,5 +160,6 @@ it and a product, as read on 2026-10-11; none of it is legal advice.
 | H2 | **A station visit with the clock running**, to compare when the real clock removes an arriving train and moves line 2 up. | A1 |
 | H3 | **What a home view should be**, beyond naming the station. | D2 |
 | H4 | **The header's direction at Union Sq downtown.** It is left empty, because the L's platform is labelled "Brooklyn" and the others "Downtown & Brooklyn". Should it pick one instead (the commonest, or the first stop's)? | |
+| H5 | **Qt or web on the device.** Decided by running the web page in a kiosk browser on the Pi and comparing it with the Qt app; `docs/architecture.md` says what to look at and what follows from each answer. Until then, no features for the QML alone. | G2, F |
 | P1 | **Photos**, collected over the next couple of weeks of riding: the newer clocks (especially an F at 75 Av and a 2 at Franklin Av), LED signs close up (a line near enough to count the dots, a bullet, an express diamond if one turns up, and long terminals such as Van Cortlandt Park-242 St and Brooklyn Bridge-City Hall), anything showing an alert, and how far ahead the last train listed is. | A2, A4, C1 |
 | S1 | **Whether to sell it**, and if so, writing to IMG Licensing or the Transit Museum. | S |
