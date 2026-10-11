@@ -50,8 +50,8 @@ Item {
         Dots {
             anchors.centerIn: parent
             text: row.letter.length === 1 ? row.letter : row.train.bullet.charAt(0)
-            font.styleName: "Condensed Medium"  // thinner, so the unlit digit stays readable inside the disc
-            font.pixelSize: 12
+            font.styleName: "Condensed SemiBold"
+            font.pixelSize: 11
             color: row.colors.background
         }
     }

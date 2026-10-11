@@ -13,18 +13,21 @@ Rectangle {
 
     readonly property var colors: Styles.colors.led
 
-    // The real 2-line signs are about 192 dots wide. Taller screens get more
-    // lines, like the 4-line signs on mezzanines.
+    // The real 2-line signs are about 192 dots wide, and so is this, with black
+    // above and below on a taller screen. As in the other styles, wide screens
+    // get 2 lines and taller ones more, like the 4-line signs on mezzanines.
     readonly property int columns: 192
     readonly property int lineDots: 16
     readonly property int pitch: Math.max(1, Math.floor(width / columns))
     readonly property int lines: width > 0 && height > 0
-        ? Math.max(1, Math.min(10, Math.floor(height / (lineDots * pitch)))) : 2
+        ? Math.max(1, Math.min(10, Math.round(height / (width / 7.5)), Math.floor(height / (lineDots * pitch)))) : 2
 
     color: "black"
 
     Item {
-        anchors.centerIn: parent
+        // Whole pixels, so the dots stay sharp
+        x: Math.floor((root.width - width) / 2)
+        y: Math.floor((root.height - height) / 2)
         width: root.columns * root.pitch
         height: root.lines * root.lineDots * root.pitch
 
@@ -60,6 +63,9 @@ Rectangle {
             source: root.bulletsUrl + "../led-dot.svg"
             sourceSize: Qt.size(root.pitch, root.pitch)
             fillMode: Image.Tile
+            // Tile from the corner, so every hole sits exactly over one dot
+            horizontalAlignment: Image.AlignLeft
+            verticalAlignment: Image.AlignTop
             smooth: false
         }
     }
