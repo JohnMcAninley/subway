@@ -33,6 +33,11 @@ seconds of each other.
 ## Classic style (the older LCD countdown clocks)
 
 - Two lines over a strip. Each line: `1.` bullet, terminal, `2 min`.
+- Colours, from the official design in the write-up: black text on white
+  (`#ffffff`), a thin grey (`#808080`) rule between the lines, and a black
+  strip with white text whose time box is dark grey (`#555555`). In photos
+  the white looks slightly cool and the time box pale blue, but that is the
+  panel and the camera.
 - The strip has the time and temperature in a box at the left, then a message
   such as "Please stand back from the platform edge".
 - **Rotation**: line 1 is the next train. Line 2 goes through trains 2 to 5,

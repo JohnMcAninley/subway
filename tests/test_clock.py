@@ -281,6 +281,19 @@ def test_classic_style_rotates_through_max_trains_whatever_the_routes():
     assert states == [[1, 3], [1, 4], [1, 5], [1, 2]]
 
 
+def test_rotation_setting_overrides_the_style():
+    def states(**settings):
+        clock = make_clock(six("a", 2), trip("b", "6X", [("633S", 3)]), six("c", 4), six("d", 5), **settings)
+        return [shown(clock)] + [clock.rotate(now=NOW) and shown(clock) for _ in range(3)]
+
+    assert states(rotation="unique") == [[1, 2], False, False, False]
+    assert states(style="new", rotation="all") == [[1, 2], [1, 3], [1, 4], [1, 2]]
+    assert states(style="new") == states(rotation="unique")
+    assert states() == states(style="new", rotation="all")
+    with pytest.raises(ValueError):
+        Settings(rotation="sometimes")
+
+
 # Grouped boards, for screens with room for a list
 
 

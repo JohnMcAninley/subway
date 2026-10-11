@@ -48,6 +48,7 @@ left out uses its default, and the file is optional:
     "style": "classic",
     "max_trains": 5,
     "max_minutes": 30,
+    "rotation": "auto",
     "fetch_all_feeds": true,
     "show_alerts": true,
     "refresh_seconds": 30,
@@ -59,7 +60,7 @@ left out uses its default, and the file is optional:
 - `stops`: GTFS stop IDs (listed in `data/gtfs_subway/stops.txt`). A directional ID like `633S` is one
   direction; a parent ID like `633` is both. List several for a whole station complex or nearby
   stations, e.g. Union Sq southbound is `["635S", "R20S", "L03S"]`.
-- `style`: which MTA clock to look like. `classic` is the LCD clocks with a pale blue screen and a
+- `style`: which MTA clock to look like. `classic` is the LCD clocks with a white screen and a
   time strip; `new` is the newer clocks with a card per train, headed by its direction
   (e.g. "Downtown & Brooklyn") over the destination. In portrait it becomes the screens in station
   entrances: the time, trains under a heading for each direction, and service alerts at the bottom.
@@ -69,6 +70,10 @@ left out uses its default, and the file is optional:
   `max_minutes`. The board fits as many lines as the screen's shape allows (2 on a wide bar, 4 at
   16:9, up to 10 in portrait); the last line rotates through the trains that don't fit. A screen
   with more lines than `max_trains` shows more trains.
+- `rotation`: which trains the last line rotates through. `all` is every train up to
+  `max_trains`, as the classic and LED clocks do. `unique` stops once every route among them has
+  been shown, as the newer clocks do, so the next few trains come round more often. `auto` (the
+  default) does whichever the real clocks of the chosen `style` do.
 - `fetch_all_feeds`: fetch every realtime feed (about 430 KB per refresh) so rerouted trains always
   appear, including unplanned reroutes. Set to `false` to fetch only the feeds for routes
   scheduled at your stops, including the next week of planned work.

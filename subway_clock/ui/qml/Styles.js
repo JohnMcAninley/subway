@@ -1,16 +1,16 @@
 .pragma library
 
-// Colours for each settings.style, picked from photos of the MTA's platform clocks.
+// Colours for each settings.style, from the MTA's designs and photos of its platform clocks.
 var colors = {
     // The LCD clocks on the lettered lines
     classic: {
-        background: "#d4edf7",
-        text: "#1b2a4e",
-        separator: "#9cb8c6",
+        background: "#ffffff",
+        text: "#000000",
+        separator: "#808080",
         arrivingBackground: "#000000",
         arrivingText: "#ffd200",
         statusBackground: "#000000",
-        statusAccent: "#2d6f80",
+        statusAccent: "#555555",
         statusText: "#ffffff",
     },
     // The newer clocks with a card per train, from the MTA's design. An arriving

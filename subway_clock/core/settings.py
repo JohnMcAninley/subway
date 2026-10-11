@@ -5,10 +5,17 @@ from dataclasses import dataclass, field
 from pathlib import Path
 
 # The looks of the MTA's platform clocks, each with its own layout:
-#   classic: the LCD clocks with a pale blue screen and a time and message strip
+#   classic: the LCD clocks with a white screen and a time and message strip
 #   new: the newer clocks with a card per train, direction labels and terminals
 #   led: the LED dot-matrix signs on the numbered lines
 STYLES = ("classic", "new", "led")
+
+# Which trains the last line rotates through:
+#   all: every train up to max_trains, as the classic and LED clocks do
+#   unique: stop once every route among them has been shown, as the newer clocks do,
+#       so the next few trains come round more often
+#   auto: whichever the real clocks of the chosen style do
+ROTATIONS = ("auto", "all", "unique")
 
 # Settings files from before styles called them themes.
 OLD_THEMES = {"light": "classic", "dark": "new"}
@@ -25,6 +32,7 @@ class Settings:
     # TODO: calibrate both defaults against the real countdown clocks.
     max_trains: int = 5
     max_minutes: int = 30
+    rotation: str = "auto"
     # Fetch every realtime feed (about 430 KB per refresh), so trains rerouted
     # onto the chosen stops always appear, even unplanned reroutes. If false,
     # fetch only the feeds for routes scheduled at the stops (including the
@@ -39,6 +47,8 @@ class Settings:
     def __post_init__(self):
         if self.style not in STYLES:
             raise ValueError(f"style must be one of {STYLES}, not {self.style!r}")
+        if self.rotation not in ROTATIONS:
+            raise ValueError(f"rotation must be one of {ROTATIONS}, not {self.rotation!r}")
 
     @classmethod
     def load(cls, path):

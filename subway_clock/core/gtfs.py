@@ -238,11 +238,12 @@ class StaticData(StaticTables):
         self.data_dir.mkdir(parents=True, exist_ok=True)
         self._checked_at = 0
         try:
+            # Start from the cached copy if there is one; the first refresh() checks for a newer one.
+            self._load()
+        except (OSError, KeyError, ValueError):
+            log.info("No usable static GTFS in %s, downloading it", self.data_dir)
             self._update_sources()
-        except (requests.RequestException, OSError) as e:
-            # Without a cached copy, loading below fails and the clock can't start.
-            log.warning("Downloading static GTFS failed, using the cached copy: %s", e)
-        self._load()
+            self._load()
 
     def refresh(self):
         """Pick up new static GTFS if the MTA has published it, checking at most every CHECK_SECONDS."""

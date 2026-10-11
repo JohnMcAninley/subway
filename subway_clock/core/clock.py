@@ -1,5 +1,6 @@
 import logging
 import time
+from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
 
 import requests
@@ -28,8 +29,8 @@ MAX_MESSAGES = 5
 MESSAGE_LINE_STYLES = ("new",)
 MESSAGE_ROTATIONS = 2
 
-# Styles that stop the rotation once every route among the trains has been shown, so
-# the next few trains come round more often. The others always go through max_trains.
+# Styles whose real clocks stop the rotation once every route among the trains has been
+# shown (settings.rotation "unique"). The others always go through max_trains ("all").
 UNIQUE_ROUTE_STYLES = ("new",)
 
 
@@ -77,28 +78,34 @@ class Clock:
     def fetch(self, now=None):
         """Download the feeds for the chosen stops. Safe to call from a worker thread."""
         now = time.time() if now is None else now
-        try:
-            self.static.refresh()
-        except (requests.RequestException, OSError) as e:
-            log.warning("Checking for new static GTFS failed, using the cached copy: %s", e)
-
         stops = set(self.settings.stops)
         scheduled = feed_urls(self.static.routes_for(stops))
-        feeds = {}
-        for url in ALL_FEED_URLS if self.settings.fetch_all_feeds else scheduled:
+        urls = list(ALL_FEED_URLS if self.settings.fetch_all_feeds else scheduled)
+        due = self._alerts_at is None or now - self._alerts_at >= ALERTS_SECONDS
+        alerts_due = self.settings.show_alerts and due
+
+        def fetch(url):
             try:
-                feeds[url] = get_predictions(self.fetch_feed(url), stops)
+                return self.fetch_feed(url)
             except (requests.RequestException, DecodeError) as e:
                 log.warning("Fetching %s failed: %s", url, e)
-                feeds[url] = None
+                return None
 
-        alerts = None
-        due = self._alerts_at is None or now - self._alerts_at >= ALERTS_SECONDS
-        if self.settings.show_alerts and due:
+        def refresh_static():
             try:
-                alerts = get_alerts(self.fetch_feed(ALERTS_URL))
-            except (requests.RequestException, DecodeError) as e:
-                log.warning("Fetching alerts failed: %s", e)
+                self.static.refresh()
+            except (requests.RequestException, OSError) as e:
+                log.warning("Checking for new static GTFS failed, using the cached copy: %s", e)
+
+        # All at once: one after another, the feeds take several seconds. New
+        # static GTFS, checked for meanwhile, takes effect from the next fetch.
+        wanted = urls + [ALERTS_URL] * alerts_due
+        with ThreadPoolExecutor(max_workers=len(wanted) + 1) as pool:
+            pool.submit(refresh_static)
+            fetched = dict(zip(wanted, pool.map(fetch, wanted)))
+
+        feeds = {url: None if fetched[url] is None else get_predictions(fetched[url], stops) for url in urls}
+        alerts = get_alerts(fetched[ALERTS_URL]) if fetched.get(ALERTS_URL) is not None else None
         return FetchResult(now, feeds, tuple(scheduled), alerts)
 
     def apply(self, result, now=None):
@@ -134,7 +141,8 @@ class Clock:
     def predictions(self):
         """The trains the board can show: max_trains, or more if there are more lines than that."""
         trains = self.upcoming[:max(self.settings.max_trains, self.lines)]
-        if self.settings.style in UNIQUE_ROUTE_STYLES:
+        rotation = self.settings.rotation
+        if rotation == "unique" or rotation == "auto" and self.settings.style in UNIQUE_ROUTE_STYLES:
             # Stop after the last train that brings a new route, but still fill the lines.
             routes = [p.route_id for p in trains]
             last_new = max((routes.index(route) for route in routes), default=0)

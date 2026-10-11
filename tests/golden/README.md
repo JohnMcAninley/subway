@@ -105,9 +105,10 @@ What the cases test, for anyone implementing the core:
   on `refresh`, with that step's `now`.
 - The board shows the first `max(max_trains, lines)` of those: `max_trains`,
   or more if the screen has more lines than that.
-- In the `new` style, that list is then cut after the last train whose route
-  hasn't appeared earlier in it, but never to fewer than `lines` trains. (So
-  the last line stops rotating once every route has been shown.)
+- If `rotation` is `unique`, or `auto` (the default) in the `new` style,
+  that list is then cut after the last train whose route hasn't appeared
+  earlier in it, but never to fewer than `lines` trains. (So the last line
+  stops rotating once every route has been shown.)
 
 **Rows**
 - `minutes` is `floor((time - now) / 60)`, but never below 0. `arriving` is

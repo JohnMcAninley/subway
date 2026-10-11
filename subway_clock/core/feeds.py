@@ -19,8 +19,13 @@ def feed_urls(routes):
     return sorted({ROUTE_FEEDS[route] for route in routes if route in ROUTE_FEEDS})
 
 
+# Shared so each refresh reuses the last one's connections; setting them up is most of a fetch.
+_session = requests.Session()
+_session.mount("https://", requests.adapters.HTTPAdapter(pool_maxsize=len(ALL_FEED_URLS) + 1))
+
+
 def fetch_feed(url):
-    response = requests.get(url, timeout=10)
+    response = _session.get(url, timeout=10)
     response.raise_for_status()
     feed = gtfs_realtime_pb2.FeedMessage()
     feed.ParseFromString(response.content)
