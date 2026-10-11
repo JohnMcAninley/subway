@@ -55,8 +55,7 @@ Item {
 
     SettingsMenu {
         anchors.fill: parent
-        menu: root.clock.menu
-        bulletsUrl: root.clock.bulletsUrl
+        clock: root.clock
     }
 
     // Tell the core the layout whenever the style's board is replaced or resized.

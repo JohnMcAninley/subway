@@ -234,3 +234,59 @@ def test_going_back_from_a_station_returns_to_it_in_the_list(keys):
     press(menu, "down enter " + keys)
     view = menu.view()
     assert (view["page"], view["query"], view["index"]) == ("search", "14", 1)
+
+
+# With a mouse
+
+
+def test_a_click_on_the_clock_opens_the_menu():
+    menu, _ = make_menu()
+    press(menu, "escape")
+    menu.back()  # Nothing to go back from
+    menu.scroll(1)
+    assert not menu.view()["open"]
+    menu.click()
+    view = menu.view()
+    assert (view["open"], view["page"], view["index"], view["back"]) == (True, "main", 0, "Close")
+
+
+def test_a_click_on_a_setting_changes_it():
+    menu, applied = make_menu()
+    menu.click(1)
+    assert applied[-1].style == "new" and menu.view()["index"] == 1
+    menu.click(2)
+    assert applied[-1].show_station is True
+
+
+def test_clicks_choose_a_station_and_tick_its_directions():
+    menu, applied = make_menu()
+    menu.click(0)
+    assert (menu.view()["page"], menu.view()["back"]) == ("search", "Back")
+    type_in(menu, "union")
+    menu.click(0)
+    assert menu.view()["title"] == "14 St-Union Sq"
+    menu.click(1)
+    menu.click(3)
+    assert rows(menu, "checked") == [False, True, False, True]
+    menu.back()
+    menu.back()
+    assert menu.view()["page"] == "main" and applied[-1].stops == ["633S", "635S", "L03S"]
+    menu.back()
+    assert not menu.view()["open"]
+
+
+def test_a_click_past_the_rows_does_nothing():
+    menu, applied = make_menu()
+    menu.click(len(CHOICES) + 1)
+    menu.click(-1)
+    assert not applied and menu.view()["index"] == 0
+
+
+def test_the_wheel_stops_at_the_ends():
+    menu, _ = make_menu()
+    menu.scroll(-1)
+    assert menu.view()["index"] == 0
+    menu.scroll(2)
+    assert menu.view()["index"] == 2
+    menu.scroll(99)
+    assert menu.view()["index"] == len(CHOICES)

@@ -226,6 +226,23 @@ class Display(QObject):
             self.menuChanged.emit()
         return taken
 
+    @Slot()
+    @Slot(int)
+    def menuClick(self, index=None):
+        """A click on the menu's row at index, or with no index, on the clock, which opens the menu."""
+        self.menu_model.click(index)
+        self.menuChanged.emit()
+
+    @Slot()
+    def menuBack(self):
+        self.menu_model.back()
+        self.menuChanged.emit()
+
+    @Slot(int)
+    def menuScroll(self, rows):
+        self.menu_model.scroll(rows)
+        self.menuChanged.emit()
+
     def change_settings(self, settings):
         """Put settings chosen on the menu into effect, and save them if there is a file to save to."""
         if self.settings_path is not None:

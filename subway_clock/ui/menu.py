@@ -1,6 +1,8 @@
 """The settings menu: what it lists and what each key does. No Qt here, so it can be tested without a screen.
 
 Display passes it the keys pressed and draws view() with qml/SettingsMenu.qml.
+A mouse does what the keys do: a click on the clock opens it, a click on a row
+is Enter there, the wheel moves up and down, and a button stands in for Esc.
 
 It has three pages. "main" lists the settings: Left and Right change the one
 selected, at once. Its first row opens "search", which finds a station as its
@@ -85,6 +87,24 @@ class Menu:
         else:
             {"main": self._main_key, "search": self._search_key, "station": self._station_key}[self.page](key)
         return True
+
+    def click(self, index=None):
+        """Act on a click: on the row at index, or, while the menu is closed, anywhere on the clock."""
+        if not self.open:
+            self.key("enter")
+        elif index is not None and 0 <= index < len(self._rows()):
+            self.index = index
+            self.key("enter")
+
+    def back(self):
+        """Go back a page, or from the main page, close: what Esc does."""
+        if self.open:
+            self.key("escape")
+
+    def scroll(self, rows):
+        """Move down by rows (up, if negative), stopping at the ends where the keys would wrap."""
+        if self.open:
+            self.index = max(0, min(self.index + rows, len(self._rows()) - 1))
 
     def _main_key(self, key):
         if key == "escape":
@@ -206,4 +226,5 @@ class Menu:
             "rows": rows,
             "index": self.index,
             "keys": KEYS[self.page],
+            "back": "Close" if self.page == "main" else "Back",
         }

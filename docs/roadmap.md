@@ -21,8 +21,9 @@ Last updated 2026-10-11.
   be bought at the moment; see H1.
 - Settings are a JSON file, read again whenever it is saved, so changes take
   effect without a restart; `scripts/find_station.py` finds a station's stop
-  IDs by name. A settings menu, opened with Enter or M, changes the usual
-  ones from the keyboard, with a search to choose the stations. There is no
+  IDs by name. A settings menu, opened with Enter or M or a click, changes
+  the usual ones from the keyboard or with a mouse, with a search to choose
+  the stations (which still needs a keyboard to type in). There is no
   device image or update mechanism yet.
 
 ## Working in parallel
@@ -88,6 +89,12 @@ first step, the `show_station` header, is in.
 |---|---|---|---|
 | D2 | **A home style of its own** | M | Wants a sketch or a description from John first (H3). Ideas: a station-sign header in the black-band Helvetica style with the route bullets; several stations on one screen, each under its own heading (the grouped board already does this by direction); "leave by" times that allow for the walk to the station. |
 
+### E. Settings without editing JSON
+
+| ID | Package | Size | Notes |
+|---|---|---|---|
+| E4 | **Touch settings?** | M? | A question until the screen is chosen (H1): Waveshare sells the same shapes with touch, and a touchscreen would let the settings menu do without a keyboard and mouse, and perhaps without the phone page in F3. The menu already takes taps, as they arrive as clicks: tap the clock to open it, a row to change it, Back to go back. What is missing is typing a station's name. Two ways: a keyboard drawn in the menu, feeding it the characters a real one does, which is simple but leaves little room for the results on a bar 480 high; or browsing instead of typing: tap a route's bullet, then a station from that line's list. Browsing first, probably. Also to check on the real screen: that the rows are big enough for a finger (about 52 px high at 1920x480), and dragging a long list to scroll it. |
+
 ### F. The device
 
 Blocked on hardware (H1) except where noted.
@@ -134,7 +141,7 @@ it and a product, as read on 2026-10-11; none of it is legal advice.
 
 | ID | What | Blocks |
 |---|---|---|
-| H1 | **Hardware.** The Pi Zero 2 W isn't available anywhere. John has an older Pi "Model B or something like that" to dig out. Which model matters a great deal: an original Model B or B+ (single core, 512 MB) is unlikely to run Qt Quick acceptably, while a Pi 2 or 3 Model B should. Also still open: which screen, which sets the shape that gets the most polish. | F |
+| H1 | **Hardware.** The Pi Zero 2 W isn't available anywhere. John has an older Pi "Model B or something like that" to dig out. Which model matters a great deal: an original Model B or B+ (single core, 512 MB) is unlikely to run Qt Quick acceptably, while a Pi 2 or 3 Model B should. Also still open: which screen, which sets the shape that gets the most polish, and whether it has touch (E4). | F, E4 |
 | H2 | **A station visit with the clock running**, to compare when the real clock removes an arriving train and moves line 2 up. | A1 |
 | H3 | **What a home view should be**, beyond naming the station. | D2 |
 | H4 | **The header's direction at Union Sq downtown.** It is left empty, because the L's platform is labelled "Brooklyn" and the others "Downtown & Brooklyn". Should it pick one instead (the commonest, or the first stop's)? | |

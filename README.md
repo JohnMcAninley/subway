@@ -59,7 +59,7 @@ train times" for the second or two until the first trains are in.
 
 By default the window is frameless at the top left of the screen, the screen's
 width at a 3.2:1 ratio. `--fullscreen` is for the device. Press Esc to quit,
-or Enter (or M) for the [settings menu](#settings).
+or Enter (or M), or click the clock, for the [settings menu](#settings).
 
 `--dev` opens a normal, resizable window for working on the display:
 
@@ -74,6 +74,9 @@ The settings menu, opened with Enter or M, covers the usual ones: the station,
 the style, the station name, alerts, what the last line shows, and whether to
 fetch every feed. Up and Down move, Left and Right change the setting selected,
 and Esc closes it. Changes show at once and are saved to `settings.json`.
+With a mouse, click the clock to open the menu and a setting to change it; the
+wheel moves up and down, and the button at the top right, or a click beside the
+menu, does what Esc does.
 
 "Station" leads to a search: type part of a station's name or one of its routes
 ("union", "86 q", "west 4th"), and Enter opens the station found, which lists

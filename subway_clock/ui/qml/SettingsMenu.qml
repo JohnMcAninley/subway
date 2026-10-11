@@ -8,14 +8,16 @@ import QtQuick
 //   index: the row selected
 //   query, prompt: on the search page, what has been typed, and what to say until something is
 //   empty: what to say in place of the rows when there are none
+//   back: what to call the button that does what Esc does
+// A mouse goes back to Python too: clock.menuClick, menuBack and menuScroll.
 // It keeps to one look of its own, whatever the style, so that it reads the same over all of them.
 Item {
     id: root
 
-    required property var menu
-    required property url bulletsUrl
+    required property QtObject clock
 
-    visible: menu.open
+    readonly property var menu: clock.menu
+    readonly property url bulletsUrl: clock.bulletsUrl
 
     // A row's height. The panel is a title, the rows and the keys, and fits six rows on the
     // widest bar; a taller screen gets more rows, not bigger ones, for the pages that are lists.
@@ -31,13 +33,22 @@ Item {
     readonly property color ink: "#ffffff"
     readonly property color faint: "#a4a4ad"
 
+    // A click on the clock opens the menu; one beside the open menu goes back, as Esc does.
+    MouseArea {
+        anchors.fill: parent
+        onClicked: root.menu.open ? root.clock.menuBack() : root.clock.menuClick()
+    }
+
     Rectangle {
         anchors.fill: parent
+        visible: root.menu.open
         color: "#000000"
         opacity: 0.6
     }
 
     Rectangle {
+        id: panel
+        visible: root.menu.open
         anchors.centerIn: parent
         width: Math.min(parent.width * 0.96, root.unit * 20)
         height: root.unit * (root.lines + 2.6)
@@ -45,10 +56,45 @@ Item {
         border.color: "#5a5a63"
         border.width: Math.max(1, Math.round(root.unit * 0.03))
 
+        // Clicks on the panel that hit nothing are not clicks beside it. The wheel moves a row a notch.
+        MouseArea {
+            anchors.fill: parent
+            onWheel: wheel => root.clock.menuScroll(wheel.angleDelta.y > 0 ? -1 : 1)
+        }
+
+        Rectangle {
+            id: back
+            anchors.right: parent.right
+            anchors.rightMargin: root.unit * 0.3
+            y: root.unit * 0.3
+            width: backLabel.implicitWidth + root.unit * 0.6
+            height: root.unit * 0.7
+            color: backArea.containsMouse ? "#3a3a42" : "transparent"
+            border.color: root.faint
+            border.width: Math.max(1, Math.round(root.unit * 0.03))
+
+            Text {
+                id: backLabel
+                anchors.centerIn: parent
+                text: root.menu.back
+                font.family: "Roboto"
+                font.pixelSize: root.unit * 0.36
+                color: root.ink
+            }
+
+            MouseArea {
+                id: backArea
+                anchors.fill: parent
+                hoverEnabled: true
+                cursorShape: Qt.PointingHandCursor
+                onClicked: root.clock.menuBack()
+            }
+        }
+
         Text {
             id: title
             x: root.unit * 0.5
-            width: parent.width - x * 2
+            width: back.x - x - root.unit * 0.3
             height: root.unit * 1.3
             verticalAlignment: Text.AlignVCenter
             text: root.menu.title
@@ -135,8 +181,17 @@ Item {
                         anchors.rightMargin: root.unit * 0.15
                         anchors.topMargin: root.unit * 0.04
                         anchors.bottomMargin: root.unit * 0.04
-                        visible: line.selected
-                        color: "#ffffff"
+                        visible: line.selected || lineArea.containsMouse
+                        color: line.selected ? "#ffffff" : "#3a3a42"
+                    }
+
+                    MouseArea {
+                        id: lineArea
+                        anchors.fill: parent
+                        hoverEnabled: true
+                        cursorShape: Qt.PointingHandCursor
+                        onClicked: root.clock.menuClick(root.first + line.index)
+                        onWheel: wheel => root.clock.menuScroll(wheel.angleDelta.y > 0 ? -1 : 1)
                     }
 
                     Text {
