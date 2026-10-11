@@ -37,7 +37,7 @@ def main():
 
     app = QGuiApplication(sys.argv[:1])
     load_fonts()
-    display = Display(clock, dev=args.dev)
+    display = Display(clock, dev=args.dev, settings_path=args.settings)
     view = display.view
 
     if args.fullscreen:

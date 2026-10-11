@@ -70,7 +70,9 @@ width at a 3.2:1 ratio. `--fullscreen` is for the device. Press Esc to quit.
 ## Settings
 
 Settings are read from `settings.json` (or the `--settings` path). Any setting
-left out uses its default, and the file is optional:
+left out uses its default, and the file is optional. The file is read again
+whenever it is saved, so changes show up without a restart (all but `data_dir`);
+if it can't be read, the clock says so in its log and carries on as it was.
 
 ```json
 {

@@ -37,6 +37,7 @@ class FetchResult:
     feeds: dict  # feed URL -> list of Predictions, or None if fetching that feed failed
     scheduled: tuple  # URLs of the feeds for routes scheduled at the stops
     alerts: list | None = None  # Alerts, or None if they weren't fetched this time or fetching failed
+    stops: frozenset = frozenset()  # the stops the predictions are for
 
 
 class Clock:
@@ -45,7 +46,8 @@ class Clock:
     The caller drives timing: every settings.refresh_seconds, run fetch() (which
     blocks on the network, so off the UI thread if there is one) and pass its
     result to apply(); every settings.rotation_seconds call rotate(); then draw
-    board(). refresh() does fetch and apply in one step.
+    board(). refresh() does fetch and apply in one step. To change the settings
+    while running, pass the new ones to apply_settings().
 
     The board has `lines` lines, set by the renderer to fit its screen. Lines
     1 to lines-1 show the next trains; the last line rotates through the rest
@@ -73,14 +75,35 @@ class Clock:
     def refresh(self, now=None):
         self.apply(self.fetch(now), now)
 
+    def apply_settings(self, settings):
+        """Replace the settings while running. Returns True if the trains need fetching again now.
+
+        With different stops the old trains are dropped at once, and so is a
+        fetch for the old stops that is still on its way (see apply). The
+        caller restarts its own timers if refresh_seconds or rotation_seconds
+        changed. data_dir is only read at startup.
+        """
+        old, self.settings = self.settings, settings
+        self.rotation_index = 0
+        if set(settings.stops) != set(old.stops):
+            self.upcoming = []
+            self._feeds = {}
+            self._scheduled = []
+            return True
+        # More feeds or further ahead needs a fetch; fewer or nearer does too, to drop what
+        # no longer belongs. Alerts turned on are fetched with the trains if they are due.
+        return ((settings.fetch_all_feeds, settings.max_minutes) != (old.fetch_all_feeds, old.max_minutes)
+                or settings.show_alerts and not old.show_alerts)
+
     def fetch(self, now=None):
         """Download the feeds for the chosen stops. Safe to call from a worker thread."""
         now = time.time() if now is None else now
-        stops = set(self.settings.stops)
+        settings = self.settings  # apply_settings may replace them while this runs
+        stops = frozenset(settings.stops)
         scheduled = feed_urls(self.static.routes_for(stops))
-        urls = list(ALL_FEED_URLS if self.settings.fetch_all_feeds else scheduled)
+        urls = list(ALL_FEED_URLS if settings.fetch_all_feeds else scheduled)
         due = self._alerts_at is None or now - self._alerts_at >= ALERTS_SECONDS
-        alerts_due = self.settings.show_alerts and due
+        alerts_due = settings.show_alerts and due
 
         def fetch(url):
             try:
@@ -97,7 +120,7 @@ class Clock:
 
         feeds = {url: None if fetched[url] is None else get_predictions(fetched[url], stops) for url in urls}
         alerts = get_alerts(fetched[ALERTS_URL]) if fetched.get(ALERTS_URL) is not None else None
-        return FetchResult(now, feeds, tuple(scheduled), alerts)
+        return FetchResult(now, feeds, tuple(scheduled), alerts, stops)
 
     def _refresh_static(self):
         """Check for new static GTFS on a thread of its own, to take effect from a later fetch.
@@ -118,8 +141,13 @@ class Clock:
         self._static_refresh.start()
 
     def apply(self, result, now=None):
-        """Update the upcoming trains from a fetch(). Feeds that failed keep their last good data."""
+        """Update the upcoming trains from a fetch(). Feeds that failed keep their last good data.
+
+        Returns False, changing nothing, if the fetch was for stops that have since been replaced.
+        """
         now = time.time() if now is None else now
+        if result.stops != frozenset(self.settings.stops):
+            return False
         for url, preds in result.feeds.items():
             if preds is not None:
                 self._feeds[url] = (preds, result.fetched_at)
@@ -132,6 +160,7 @@ class Clock:
         latest = now + self.settings.max_minutes * 60
         self.upcoming = sorted([p for p in preds if p.time <= latest], key=lambda p: p.time)
         self.rotation_index = 0  # Restart rotation
+        return True
 
     @property
     def lines(self):

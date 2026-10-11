@@ -9,7 +9,7 @@ from PySide6.QtCore import Property, QFileSystemWatcher, QObject, QSize, Qt, QTi
 from PySide6.QtGui import QFontDatabase
 from PySide6.QtQuick import QQuickView
 
-from ..core.settings import STYLES
+from ..core.settings import STYLES, Settings
 
 ASSETS_DIR = Path(__file__).resolve().parent.parent / "assets"
 QML_DIR = Path(__file__).resolve().parent / "qml"
@@ -28,6 +28,10 @@ PRESETS = {
 # How long to wait before trying again when the schedules can't be fetched at startup.
 RETRY_SECONDS = 15
 
+# How long the settings file has to be left alone before it is read again: an editor
+# saving it can change it several times over.
+SETTLE_MS = 300
+
 
 def load_fonts():
     if QFontDatabase.addApplicationFont(str(ASSETS_DIR / "fonts" / "Roboto.ttf")) < 0:
@@ -44,6 +48,9 @@ class Display(QObject):
     There is no board to show until the first trains have been fetched, and a
     first run has to fetch the schedules before that. Until then clock.startup
     says what to show in its place.
+
+    With settings_path, the settings file is read again whenever it is saved,
+    and the changes take effect without a restart (apply_settings).
     """
 
     # Carries a FetchResult from the worker thread back to the UI thread.
@@ -54,8 +61,9 @@ class Display(QObject):
     prepared = Signal(object)
     boardChanged = Signal()
     startupChanged = Signal()
+    settingsChanged = Signal()
 
-    def __init__(self, clock, dev=False):
+    def __init__(self, clock, dev=False, settings_path=None):
         super().__init__()
         self.clock = clock
         self.dev = dev
@@ -85,6 +93,9 @@ class Display(QObject):
         self.update_timer.timeout.connect(self.update_predictions)
         self.rotation_timer = QTimer()
         self.rotation_timer.timeout.connect(self.rotate_last_line)
+
+        if settings_path is not None:
+            self.watch_settings(settings_path)
 
         if clock.static.ready:
             self.start()
@@ -162,7 +173,7 @@ class Display(QObject):
             self.clock.grouped = grouped
             self.publish()
 
-    @Property(bool, constant=True)
+    @Property(bool, notify=settingsChanged)
     def showStation(self):
         return self.clock.settings.show_station
 
@@ -214,8 +225,8 @@ class Display(QObject):
             self.fetched.emit(None)
 
     def apply_predictions(self, result):
-        if result is not None:
-            self.clock.apply(result)
+        if result is not None and not self.clock.apply(result):
+            return  # For stops that have since been replaced; the fetch for the new ones is on its way.
         if self._startup["state"] != "ready":
             # The first fetch is back. If it failed, the board says so itself (it is stale).
             self.set_startup("ready")
@@ -228,8 +239,63 @@ class Display(QObject):
 
     def next_style(self):
         settings = self.clock.settings
-        settings.style = STYLES[(STYLES.index(settings.style) + 1) % len(STYLES)]
+        style = STYLES[(STYLES.index(settings.style) + 1) % len(STYLES)]
+        self.apply_settings(dataclasses.replace(settings, style=style))
+
+    def apply_settings(self, settings):
+        """Switch to new settings without a restart."""
+        old = self.clock.settings
+        refetch = self.clock.apply_settings(settings)
+        self.settingsChanged.emit()
+        # With the timers stopped the schedules are still being fetched, and start() is yet to come.
+        if self.update_timer.isActive():
+            if settings.rotation_seconds != old.rotation_seconds:
+                self.rotation_timer.start(settings.rotation_seconds * 1000)
+            if refetch or settings.refresh_seconds != old.refresh_seconds:
+                self.update_timer.start(settings.refresh_seconds * 1000)
+            if refetch:
+                if set(settings.stops) != set(old.stops):
+                    self.set_startup("loading", "Loading train times", progress=-1)
+                # Not update_predictions, which leaves it to a fetch under way: that one has the old settings.
+                self.fetching = self.executor.submit(self.fetch_predictions)
         self.publish()
+
+    def watch_settings(self, path):
+        self.settings_path = Path(path)
+        # What the file last said, which isn't always what is in use: S in --dev changes the style.
+        self.file_settings = self.clock.settings
+        # The directory too, for a file that doesn't exist yet or is saved by being replaced.
+        self.settings_watcher = QFileSystemWatcher([str(self.settings_path.resolve().parent)])
+        self.settings_watcher.fileChanged.connect(self.settings_file_changed)
+        self.settings_watcher.directoryChanged.connect(self.settings_file_changed)
+        self.settings_timer = QTimer()
+        self.settings_timer.setSingleShot(True)
+        self.settings_timer.setInterval(SETTLE_MS)
+        self.settings_timer.timeout.connect(self.reload_settings)
+        self.settings_file_changed()
+
+    def settings_file_changed(self, _path=None):
+        file = str(self.settings_path.resolve())
+        if file not in self.settings_watcher.files() and self.settings_path.exists():
+            self.settings_watcher.addPath(file)
+        self.settings_timer.start()
+
+    def reload_settings(self):
+        old = self.file_settings
+        try:
+            settings = Settings.load(self.settings_path)
+        except (OSError, ValueError, TypeError, AttributeError) as e:
+            log.warning("Can't read %s, keeping the settings as they were: %s", self.settings_path, e)
+            return
+        if settings == old:
+            return
+        if settings.data_dir != old.data_dir:
+            log.warning("A new data_dir takes effect at the next start")
+        log.info("Settings changed (%s)", ", ".join(
+            field.name for field in dataclasses.fields(settings)
+            if getattr(settings, field.name) != getattr(old, field.name)))
+        self.file_settings = settings
+        self.apply_settings(settings)
 
     def close(self):
         self.closing = True

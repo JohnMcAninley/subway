@@ -1,3 +1,4 @@
+import dataclasses
 import json
 import threading
 
@@ -608,3 +609,68 @@ def test_unrelated_feed_failure_is_not_stale():
     for seconds in (30, 60, 90, 120):
         clock.refresh(now=NOW + seconds)
     assert not clock.stale(now=NOW + 120)
+
+
+# Changing the settings while running
+
+
+def two_station_clock(**settings):
+    """A clock at 28 St on the 6, with trains there and at 23 St on the R."""
+    static = FakeStatic({"633": ["6"], "R19": ["R"]}, headsigns={"six": "Dest six", "r": "Dest r"})
+    feeds = {url("6"): feed(trip("six", "6", [("633S", 4)])), url("R"): feed(trip("r", "R", [("R19S", 2)]))}
+    return make_clock(static=static, feeds=feeds, stops=["633S"], **settings)
+
+
+def changed(clock, **settings):
+    return clock.apply_settings(dataclasses.replace(clock.settings, **settings))
+
+
+def test_new_stops_clear_the_old_trains_and_need_a_fetch():
+    clock = two_station_clock()
+    assert changed(clock, stops=["R19S"])
+    assert clock.board(now=NOW).rows == ()
+    assert not clock.stale(now=NOW)  # Nothing has failed: there has been no fetch yet
+    clock.refresh(now=NOW)
+    assert [r.route for r in clock.board(now=NOW).rows] == ["R"]
+
+
+def test_a_fetch_for_the_old_stops_is_dropped():
+    clock = two_station_clock()
+    late = clock.fetch(now=NOW)
+    changed(clock, stops=["R19S"])
+    assert not clock.apply(late, now=NOW)
+    assert clock.board(now=NOW).rows == ()
+    assert clock.apply(clock.fetch(now=NOW), now=NOW)
+
+
+def test_the_same_stops_keep_their_trains():
+    clock = two_station_clock()
+    assert not changed(clock, stops=["633S"], style="new", refresh_seconds=30, rotation_seconds=8, max_trains=3)
+    assert [(r.route, clock.board(now=NOW).style) for r in clock.board(now=NOW).rows] == [("6", "new")]
+
+
+def test_new_settings_restart_the_rotation():
+    clock = make_clock(*[six(str(i), i * 2 + 2) for i in range(5)])
+    clock.rotate(now=NOW)
+    clock.rotate(now=NOW)
+    changed(clock, max_trains=3)
+    assert shown(clock) == [1, 2]
+
+
+@pytest.mark.parametrize("before, after, fetch", [
+    ({"max_minutes": 30}, {"max_minutes": 45}, True),
+    ({"fetch_all_feeds": True}, {"fetch_all_feeds": False}, True),
+    ({"show_alerts": False}, {"show_alerts": True}, True),
+    ({"show_alerts": True}, {"show_alerts": False}, False),
+    ({"departed_seconds": 300}, {"departed_seconds": 30}, False),
+])
+def test_which_settings_need_a_fetch(before, after, fetch):
+    assert changed(two_station_clock(**before), **after) == fetch
+
+
+def test_alerts_turned_on_are_fetched_with_the_next_trains():
+    clock = two_station_clock(show_alerts=False)
+    assert ALERTS_URL not in clock.fetched
+    changed(clock, show_alerts=True)
+    clock.refresh(now=NOW + 10)
+    assert ALERTS_URL in clock.fetched
