@@ -177,6 +177,6 @@ Rectangle {
         height: root.statusHeight
         colors: root.colors
         bulletsUrl: root.bulletsUrl
-        messages: (root.board.stale ? [root.staleMessage] : []).concat(root.board.messages)
+        messages: (root.board.stale ? [root.staleMessage] : []).concat(root.board.messages.map(m => m.text))
     }
 }
