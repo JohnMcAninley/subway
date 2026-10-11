@@ -25,7 +25,7 @@ The write-up names them:
 - **Customer Information Screens**: portrait screens on walls or posts.
   1080x1920.
 - **Subway entrance screens**: a strip of arrivals along the bottom of the
-  advertising screens at street entrances. Not built here.
+  advertising screens at street entrances. Out of scope here.
 
 Since the redesign, all three use the same arrival data and update within
 seconds of each other.
@@ -41,7 +41,9 @@ seconds of each other.
 - **Arriving train**: the line turns black with yellow text and shows `0 min`
   (photo at Union Sq in the write-up).
 - On island platforms an arrow before the number points to the train's side.
-  We don't show these: the feeds don't say which side.
+  We don't show these: they only mean something on the platform. (The feeds
+  give each train's track, but not which side of the platform it is on, so
+  it would also take a table per station.)
 - **Alerts** took over the whole screen: yellow text scrolling slowly on
   black, repeated twice, hiding the arrivals. The write-up calls this out as a
   problem. We scroll alerts in the strip instead, which is our own choice.
@@ -50,7 +52,9 @@ seconds of each other.
 
 - Two lines fill the screen; no strip. Each line: a grey number on black,
   then a dark card with a large bullet, a bold headline over a smaller
-  detail line, and bold minutes over a small grey `MIN`.
+  detail line, and bold minutes over a small grey `MIN`. The minutes and
+  `MIN` are centred on one fixed line near the right edge, so `MIN` stays
+  put whether there are one or two digits.
 - **Headline**: "To better match the train announcements, we list the
   direction (i.e. 'Downtown & Brooklyn') instead of the terminal station."
   "Once in the destination borough, the terminal station appears in large
@@ -92,7 +96,7 @@ seconds of each other.
   Skipped"), a line such as "Updated 15 mins ago", and the text beside it.
   We show the text with "Happening now" or "Planned work" as the title.
 - When two screens are paired, the right one shows the next train's stops as
-  a strip map. Not built.
+  a strip map. Out of scope here.
 
 ### Where our headlines differ from the real ones
 

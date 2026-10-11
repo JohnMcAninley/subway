@@ -114,31 +114,37 @@ Item {
                 }
             }
 
-            Column {
+            // The minutes and "MIN" share a fixed centre line, whether one digit or two.
+            Item {
                 id: minutes
                 anchors.right: parent.right
-                anchors.rightMargin: row.unit * 0.24
-                anchors.verticalCenter: parent.verticalCenter
-                spacing: -row.unit * 0.07
+                anchors.rightMargin: row.unit * 0.08
+                width: row.unit * 0.8
+                height: parent.height
 
-                Text {
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    text: row.shown.minutes
-                    font.family: "Roboto"
-                    font.weight: Font.Bold
-                    font.pixelSize: row.unit * 0.6
-                    color: row.textColor
-                }
+                Column {
+                    anchors.centerIn: parent
+                    spacing: -row.unit * 0.07
 
-                Text {
-                    anchors.horizontalCenter: parent.horizontalCenter
-                    text: "MIN"
-                    font.family: "Roboto"
-                    font.weight: Font.Bold
-                    font.letterSpacing: row.unit * 0.012
-                    font.pixelSize: row.unit * 0.11
-                    color: row.textColor
-                    opacity: 0.75
+                    Text {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        text: row.shown.minutes
+                        font.family: "Roboto"
+                        font.weight: Font.Bold
+                        font.pixelSize: row.unit * 0.6
+                        color: row.textColor
+                    }
+
+                    Text {
+                        anchors.horizontalCenter: parent.horizontalCenter
+                        text: "MIN"
+                        font.family: "Roboto"
+                        font.weight: Font.Bold
+                        font.letterSpacing: row.unit * 0.012
+                        font.pixelSize: row.unit * 0.11
+                        color: row.textColor
+                        opacity: 0.75
+                    }
                 }
             }
         }
