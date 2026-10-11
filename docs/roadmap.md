@@ -1,8 +1,10 @@
 # Roadmap
 
 What is left to do, split into packages that can be worked on separately.
-`docs/references.md` records how the real clocks look and behave;
-`tests/golden/README.md` is the spec for what the core produces.
+Finished packages are taken out; what they built is described in the README,
+`docs/references.md` (how the real clocks look and behave) and
+`tests/golden/README.md` (the spec for what the core produces). IDs aren't
+reused, so a gap in the numbering is a finished package.
 
 Last updated 2026-10-11.
 
@@ -10,16 +12,17 @@ Last updated 2026-10-11.
 
 - The core (`subway_clock/core`) turns the MTA's feeds into a `Board`: the
   trains for each line, the rotating last line, service alerts, per-train
-  headlines, grouped boards for portrait screens. It has unit tests and
-  golden cases captured from live data.
+  headlines, grouped boards for portrait screens, and the station's name. It
+  has unit tests and golden cases captured from live data.
 - The Qt/QML front end draws three styles: `classic`, `new` (wide and
-  portrait) and `led`.
+  portrait) and `led`, each with a loading screen and an optional station
+  header.
 - Development is on a PC for now. The intended device, a Pi Zero 2 W, can't
   be bought at the moment; see H1.
 - Settings are a JSON file, read again whenever it is saved, so changes take
   effect without a restart; `scripts/find_station.py` finds a station's stop
-  IDs by name. There is no settings screen,
-  device image or update mechanism yet.
+  IDs by name. There is no settings screen, device image or update mechanism
+  yet.
 
 ## Working in parallel
 
@@ -35,14 +38,17 @@ The split between the core and the renderers is what makes this possible.
 - **Shared files to coordinate on:** `Main.qml`, `Styles.js`, `display.py`,
   `settings.py`, `README.md`.
 - **Done means:** tests pass, the README and the references or golden spec
-  are updated where behaviour changed, and UI changes were checked with
-  captures at the `--dev` preset sizes (1920x600, 1920x480, 1280x720,
-  608x1080, 360x1080). `scripts/capture.py` draws a golden case to a PNG
-  without the live feeds.
+  are updated where behaviour changed, UI changes were checked with captures
+  at the `--dev` preset sizes (1920x600, 1920x480, 1280x720, 608x1080,
+  360x1080), and the package is taken out of this file. `scripts/capture.py`
+  draws a golden case to a PNG without the live feeds.
 - **Seeing QML errors:** Qt only prints QML warnings and `console.log` to
   the terminal with `QT_FORCE_STDERR_LOGGING=1` set.
-- **Standing rule:** nothing personal goes to outside services. Requests use
-  a plain User-Agent.
+- **Standing rules:** nothing personal goes to outside services or into the
+  repo, and requests use a plain User-Agent. The code is under the GPL,
+  version 3; it may be loosened to a permissive licence later, which stays
+  possible as long as outside contributions are either not taken or come
+  with permission to relicense.
 
 ## Packages
 
@@ -52,27 +58,23 @@ Sizes are rough: S is an hour or two, M a day, L several days.
 
 | ID | Package | Size | Notes |
 |---|---|---|---|
-| A1 | **Arriving trains: check against a real clock** | S | The feeds have no door or departure signal; the nearest is a train's list of stops no longer including the station. The clock now follows that, refreshing every 10 seconds (the feeds are republished about that often). Measured on 2026-10-11 (47 trains on the 1 to 6, N/Q/R/W and L): the feeds list a train for a median of 39 to 51 seconds after its arrival time, and up to 166. `departed_seconds` can drop trains sooner (30 suits a clock at home). Open: John will take the clock to a station and compare when the real one removes a train and moves line 2 up. The vehicle "stopped at" reports aren't consistent between the numbered and lettered lines, so nothing depends on them. |
+| A1 | **Arriving trains: check against a real clock** | S | The clock drops a train when the feeds stop listing it at the stop; see "When a train has left" in `docs/references.md` for what was measured. Open: compare with a real clock at a station (H2), and change the rule or the default `departed_seconds` if they disagree. |
 | A2 | **Headline override table** | M | A hand-made table for what the borough rule gets wrong or can't know: the F at 75 Av and the 2 at Franklin Av ("Manhattan", not "Manhattan & ..."), short terminal names ("Coney Island", "Whitehall St"), the JFK plane, "via Court Square", and the H train ending at Broad Channel. Needs photos (P1) for the uncertain cases. |
-| A3 | **Alerts, second pass** | done | The alerts feed carries an extension of the MTA's own, with each alert's type and when it was last changed. Each of `Board.messages` now has a `title` (the type: "Delays", "Stops Skipped"), `updated_minutes`, and `no_service`: true when the type is a suspension or skipped stops and none of the route's trains are on their way (a suspension names the stops at its ends too, where trains still run one way). No-service messages come first. Route-wide alerts are left off clocks for the other direction, going by "uptown", "southbound" or "Woodlawn-bound" in the text; places are looked up in the stop's direction labels and the route's terminals, and one found in neither ("Bronx-bound" for a D in Brooklyn) still shows both ways. Nothing draws the new fields yet: that is C2 and C3. |
 | A4 | **Calibrate `max_minutes`** | S | Compare against real clocks: how far ahead do they list trains? Needs observation (P1). |
-| A5 | **Station name on the board** | done | `Board.station` is the chosen stops' station names, each once, with " / " between different ones; `Board.direction` is the direction label when every stop is one direction and they share it, otherwise ""; `Board.routes` is the routes scheduled at the stops, with their bullets (from the schedules, which include late-night service and the coming week's planned work, so 28 St lists the 4 beside the 6). The rule is under "The station" in `tests/golden/README.md`. At Union Sq downtown the direction is empty, because the L's platform is labelled "Brooklyn" and the others "Downtown & Brooklyn"; say if it should pick one (the commonest, or the first stop's) instead. |
 
 ### B. Starting up and failing well
 
 | ID | Package | Size | Notes |
 |---|---|---|---|
-| B1 | **Loading screen** | done | The window opens at once, and a first run fetches the schedules on the worker thread (`StaticData.prepare`). Meanwhile `clock.startup` in `display.py` tells the QML what to show (it is not part of the `Board`): a title, a lesser line and a percentage, drawn by each style as it draws a train, with the percentage where the minutes go. A start with the schedules already in `data/` shows "Loading train times", with no percentage, for the second or two until the first trains are in (`--loading-trains`); the check for newer schedules, and the indexing if there are some, runs on a thread of its own in `Clock`, so the trains don't wait for it. `scripts/capture.py --loading 42` pictures the first run. The percentage gives the downloads 60% and the indexing 40%, a guess from a PC with a fast connection; adjust once it has run on a Pi. |
-| B2 | **Recover from bad downloads** | done | A zip that can't be read is deleted, so it is downloaded again; a zip is extracted beside the old copy and swapped in, with a marker (`.extracted`) saying which zip it came from, so an extraction that was cut short is redone; an unreadable `stop_routes.json` is rebuilt. A first run that can't fetch the schedules shows "No connection" (or "Can't read the schedules" if the trouble isn't the network) and tries again every 15 seconds. `scripts/capture.py --no-connection` pictures it. Not covered: losing the network later, which the stale warning already shows. |
 | B3 | **Stale indicator for `led`** | S | The other styles show when data is out of date; the LED style doesn't. |
 
 ### C. Style polish (one package per style, can run side by side)
 
 | ID | Package | Size | Notes |
 |---|---|---|---|
-| C1 | **led: bullets and font** | M | Done, without photos: `LedFont.js` has a dot-matrix font, a dot pattern for each route bullet, and abbreviations for long terminals. Open until close-up photos come in (P1): the letter shapes, the size of the bullets (the 6 and the Q are hard to read on a small screen), and what the signs show for long terminals other than "Flatbush Av-Bklyn Col" (e.g. Van Cortlandt Park-242 St, which we show as "Van Cortlandt Park"). |
-| C2 | **new: portrait alerts panel** | S | Titles, small bullets with badges, and "Updated 15 mins ago", as on the real screens. After A3. |
-| C3 | **new: full-screen alert** | S | The card takes over the whole screen when service isn't running. After A3. |
+| C1 | **led: check the font and bullets against photos** | S | `LedFont.js` was drawn from measurements, without a close-up. Once photos come in (P1): the letter shapes, the size of the bullets (the 6 and the Q are hard to read on a small screen), the express diamond, and what the signs show for long terminals other than "Flatbush Av-Bklyn Col" (e.g. Van Cortlandt Park-242 St, which we show as "Van Cortlandt Park"). |
+| C2 | **new: portrait alerts panel** | S | Titles, small bullets with badges, and "Updated 15 mins ago", as on the real screens. The board's messages already carry `title` and `updated_minutes`; nothing draws them yet. |
+| C3 | **new: full-screen alert** | S | The card takes over the whole screen when service isn't running: a message with `no_service` set, which nothing draws yet. |
 | C4 | **classic: weather in the strip** | S | The real strip shows the temperature beside the time. Needs a weather source with no key and a location setting; decide whether it is worth it. |
 
 Out of scope: the arrivals strip under street-entrance ad screens, the
@@ -80,23 +82,18 @@ paired strip-map screen, track-side arrows and the MTA logo.
 
 ### D. Home views
 
-Layouts that make sense on someone's wall rather than in a station. On a
-platform the screen doesn't need to say where it is; at home it does.
+Layouts that make sense on someone's wall rather than in a station. The
+first step, the `show_station` header, is in.
 
 | ID | Package | Size | Notes |
 |---|---|---|---|
-| D1 | **Station header** | done | `show_station` in the settings (off by default), after the signs over station entrances: the name, the routes' bullets, and the direction. `classic`: a black strip across the top, the name and bullets at the left and the direction at the right. `new`: a line above the cards, the name in bold, the bullets, and the direction in grey; in portrait the name goes beside the time, with the bullets and the direction under it. `led`: a line of dots at the top, with the name abbreviated if that fits the bullets beside it, and the direction at the right when there is room; a station with too many routes for that (Union Sq) gets a second line for them on a screen with room for four lines, and no bullets on a two-line bar. The lines below give up the room, so nothing changes with it off. `scripts/capture.py --station` draws it. |
-| D2 | **A home style of its own** | M | To be designed once D1 is in use. Ideas: a station-sign header in the black-band Helvetica style with the route bullets; several stations on one screen, each under its own heading (the grouped board already does this by direction); "leave by" times that allow for the walk to the station. |
-
-Open question for John: D2 wants a sketch or a description first.
+| D2 | **A home style of its own** | M | Wants a sketch or a description from John first (H3). Ideas: a station-sign header in the black-band Helvetica style with the route bullets; several stations on one screen, each under its own heading (the grouped board already does this by direction); "leave by" times that allow for the walk to the station. |
 
 ### E. Settings without editing JSON
 
 | ID | Package | Size | Notes |
 |---|---|---|---|
-| E1 | **Station picker (core)** | done | `core/stations.py`: `StationPicker.search` narrows the station list as words are typed (each word starts a word of the name or is a route; abbreviations and ordinals understood; no spelling correction) and returns whole complexes, each stop with its routes and its directions' stop IDs and labels. `station_for` goes from a stop ID back to its station. `scripts/find_station.py` is the same search from the command line. For E2 and the phone page. Whether this is the right behaviour is to be seen in use. |
-| E2 | **Keyboard settings overlay** | L | A QML overlay, opened with a key, for style, rotation, stops (using E1), and the toggles. Saves `settings.json` and applies without a restart. |
-| E3 | **Apply settings live** | done | `Clock.apply_settings` swaps the settings in: new stops drop the old trains at once, and a fetch for the old stops that comes back late is ignored (a `FetchResult` says which stops it was for). It returns whether to fetch now, which is so for new stops, `max_minutes`, `fetch_all_feeds`, and alerts turned on. `Display.apply_settings` does that fetch, restarts the timers whose intervals changed, and shows "Loading train times" until the new stops' trains are in. For E2 to call. Until there is an overlay, the clock reads `settings.json` again whenever it is saved, so editing the file is enough; a file that can't be read, or has a bad value, is reported in the log and the old settings stay. Not live: `data_dir`. |
+| E2 | **Keyboard settings overlay** | L | A QML overlay, opened with a key, for style, rotation, stops, and the toggles. Saves `settings.json` and applies without a restart. The pieces are there: `StationPicker.search` in `core/stations.py` narrows the station list as words are typed, and `Display.apply_settings` puts new settings into effect (all but `data_dir`). Whether the picker's matching is right is to be seen in use here. |
 
 ### F. The device
 
@@ -104,22 +101,10 @@ Blocked on hardware (H1) except where noted.
 
 | ID | Package | Size | Notes |
 |---|---|---|---|
-| F1 | **Run on a Pi** | M | Apt PySide6 with eglfs, full screen, check frame rate. The LED style's layer and the classic ticker are the likeliest trouble. |
+| F1 | **Run on a Pi** | M | Apt PySide6 with eglfs, full screen, check frame rate. The LED style's layer and the classic ticker are the likeliest trouble. Also adjust the loading screen's percentage (`DOWNLOADS_SHARE` in `core/gtfs.py`), which gives the downloads 60% and the indexing 40%: a guess from a PC with a fast connection. |
 | F2 | **Image** | L | Pi OS Lite, a systemd service, read-only root, a watchdog. |
-| F3 | **Wi-Fi setup and phone settings** | L | Provisioning for a device with no keyboard, then a settings page at `subway.local` (reusing E1). |
+| F3 | **Wi-Fi setup and phone settings** | L | Provisioning for a device with no keyboard, then a settings page at `subway.local` (reusing `core/stations.py`). |
 | F4 | **Updates** | L | From GitHub Releases, with rollback if the new version fails to start. The update check and version logic can be written and tested on a PC now. |
-
-### G. Making the repo public
-
-The repo on GitHub is already public. The README now starts from "clone and
-run" with a picture of each style (`docs/images/`, made with
-`scripts/capture.py`), and the history was checked on 2026-10-11: no keys,
-addresses, local paths or personal settings in any commit, and every commit
-uses the GitHub noreply address. `docs/design.md`, the original notes, is
-gone: the README's `stops` setting now describes the kinds of clock it listed.
-The code is under the GPL, version 3 (`LICENSE`). It may be loosened to a
-permissive licence later; that stays possible as long as outside
-contributions are either not taken or come with permission to relicense.
 
 ### S. Selling a prebuilt clock
 
@@ -140,9 +125,9 @@ it and a product, as read on 2026-10-11; none of it is legal advice.
 
 ## Suggested order
 
-1. Done: A3, A5 and D1 (the home header), B1 and B2, C1, and E1.
-2. A2 and A4 as photos come in. C2 and C3.
-3. E2 (E3 is done).
+1. C2, C3 and B3: small, and nothing blocks them.
+2. E2.
+3. A1, A2, A4 and C1 as photos and station visits come in.
 4. S1 early if the clock is to be sold: the answer decides whether there is a
    product, and it may take a while.
 5. F once there is hardware; F4's PC-testable parts can start earlier.
@@ -152,6 +137,8 @@ it and a product, as read on 2026-10-11; none of it is legal advice.
 | ID | What | Blocks |
 |---|---|---|
 | H1 | **Hardware.** The Pi Zero 2 W isn't available anywhere. John has an older Pi "Model B or something like that" to dig out. Which model matters a great deal: an original Model B or B+ (single core, 512 MB) is unlikely to run Qt Quick acceptably, while a Pi 2 or 3 Model B should. Also still open: which screen, which sets the shape that gets the most polish. | F |
+| H2 | **A station visit with the clock running**, to compare when the real clock removes an arriving train and moves line 2 up. | A1 |
+| H3 | **What a home view should be**, beyond naming the station. | D2 |
+| H4 | **The header's direction at Union Sq downtown.** It is left empty, because the L's platform is labelled "Brooklyn" and the others "Downtown & Brooklyn". Should it pick one instead (the commonest, or the first stop's)? | |
 | P1 | **Photos**, collected over the next couple of weeks of riding: the newer clocks (especially an F at 75 Av and a 2 at Franklin Av), LED signs close up (a line near enough to count the dots, a bullet, an express diamond if one turns up, and long terminals such as Van Cortlandt Park-242 St and Brooklyn Bridge-City Hall), anything showing an alert, and how far ahead the last train listed is. | A2, A4, C1 |
-| D2 | **What a home view should be**, beyond naming the station. | D2 |
 | S1 | **Whether to sell it**, and if so, writing to IMG Licensing or the Transit Museum. | S |

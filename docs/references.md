@@ -116,6 +116,20 @@ seconds of each other.
   trains serving the airport, and "via Court Square" for the F's weekday
   route since the F and M swapped in December 2025.
 
+## When a train has left
+
+The feeds have no door or departure signal. The nearest is a train's list of
+stops no longer including the station, so the clock keeps an arriving train
+at `0 min` until then, refreshing every 10 seconds (the feeds are republished
+about that often).
+
+Measured on 2026-10-11, over 47 trains on the 1 to 6, N/Q/R/W and L: the
+feeds list a train for a median of 39 to 51 seconds after its arrival time,
+and up to 166. The vehicle "stopped at" reports aren't consistent between the
+numbered and lettered lines, so nothing depends on them.
+
+When the real clocks remove a train hasn't been checked against this yet.
+
 ## What the alerts feed says
 
 The alerts feed is GTFS-realtime with an extension of the MTA's own
