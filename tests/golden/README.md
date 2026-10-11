@@ -81,8 +81,10 @@ One entry per `board` step:
   ],
   "stale": false,
   "messages": [{"text": "Downtown [4][6] trains are running with delays after ...", "planned": false,
-                "title": "Delays", "updated_minutes": 3, "no_service": false}],
+                "title": "Delays", "updated_minutes": 3, "no_service": false,
+                "routes": [{"route": "4", "bullet": "4"}, {"route": "6", "bullet": "6"}]}],
   "message": "",
+  "takeover": false,
   "groups": [],
   "station": "28 St",
   "direction": "Downtown",
@@ -162,7 +164,8 @@ With `lines` = L and n trains shown:
 **Grouped boards**
 
 A renderer with room for a list (a portrait screen) asks for a grouped board.
-Nothing rotates, `message` is `""`, and `max_trains` doesn't apply:
+Nothing rotates, `message` is `""` (unless an alert takes over: see "Alerts"),
+and `max_trains` doesn't apply:
 - Take every train kept on `refresh` (see "Which trains") and its `direction`.
   The headings are the distinct directions in order of first appearance, cut
   to the first L.
@@ -197,7 +200,7 @@ as last fetched:
     no `direction_id`, that goes by the alert's text at that platform: see
     below.
   The alert's routes are the `route_id`s of the entities that make it
-  relevant.
+  relevant, in the order they first appear in the alert.
 - A message has the alert's `text`, and:
   - `planned`: false if the alert's ID starts with `lmm:alert:` (it is
     happening now), otherwise true (planned work);
@@ -207,10 +210,12 @@ as last fetched:
     where `changed` is when the alert was last changed; `null` if it doesn't
     say;
   - `no_service`: true if `title` is `Suspended`, `Part Suspended`, `Stops
-    Skipped` or `No Scheduled Service`, and none of the trains kept on
-    `refresh` that haven't left (see "Which trains") is on one of the alert's
-    routes, comparing route IDs without a final `X`. (Suspensions name the
-    stops at their ends as well, where trains still run one way.)
+    Skipped` or `No Scheduled Service`, the board isn't `stale`, and none of
+    the trains kept on `refresh` that haven't left (see "Which trains") is on
+    one of the alert's routes, comparing route IDs without a final `X`.
+    (Suspensions name the stops at their ends as well, where trains still run
+    one way.)
+  - `routes`: the alert's routes, each with its `bullet`, as for a row.
 - `messages` is the messages of the active, relevant alerts: those with
   `no_service` first, then the rest that are happening now, then the rest
   that are planned work, each in feed order; with repeated texts dropped
@@ -247,6 +252,13 @@ advances it one place. While it is at a message, `message` is its text and
 the last line has no row; otherwise `message` is `""`. If its position is past
 the end of that list (the list got shorter), it shows the first entry. In
 other styles `message` is always `""`.
+
+Also in the `new` style, when none of the trains kept on `refresh` are left
+and some messages have `no_service`, those alerts take over: `takeover` is
+true, and the screen is theirs rather than only the last line. The last line
+then goes through each of them twice and nothing else, whatever L is, and
+`message` is the one it is at. On a grouped board, where nothing rotates,
+`message` is the first of them. Otherwise `takeover` is false.
 
 **The station**
 

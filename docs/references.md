@@ -82,9 +82,12 @@ seconds of each other.
     bullets inline;
   - service not running: the same card takes over the whole screen, with a
     bold title ("No uptown [A][C] here") over the advice.
-  We do the first. For the second, the core marks which alerts mean no
-  service at the clock's stops (`no_service`), from the alert type in the
-  MTA's extension to the alerts feed, but nothing draws it yet.
+  We do both, the second only when no trains at all are coming to the
+  clock's stops and an alert says why (see "What the alerts feed says"). Our
+  title is "No [L] trains here", with the routes the alert is about; the
+  real one also gives the direction, and its wording isn't in the feed. The
+  alert's own text stands in for the advice. Drawn from the description
+  above, without a photo of the real screen.
 - Track-side arrows sit before the bullet on island platforms. Not shown, as
   above.
 
@@ -100,7 +103,12 @@ seconds of each other.
 - Alerts are under "Happening now" or "Upcoming alerts". Each has a small
   bullet with a badge, a bold title ("Delays", "Planned work", "Stops
   Skipped"), a line such as "Updated 15 mins ago", and the text beside it.
-  We show the text with "Happening now" or "Planned work" as the title.
+  We show one list, as every alert we show is in effect now: the bullets of
+  the routes it is about here, the alert's type as the title ("Delays", "Part
+  Suspended"), and how long ago it was changed. The badge is a yellow "!" on
+  the corner of the last bullet, which is a guess: the description doesn't
+  say what the real one looks like. With no trains coming, the alert saying
+  why has the trains' place at the top.
 - When two screens are paired, the right one shows the next train's stops as
   a strip map. Out of scope here.
 
@@ -146,6 +154,9 @@ unknown fields. As seen on 2026-10-11, in 194 alerts:
   covers, but those include the ends of a suspended stretch, where trains
   still run one way, and some stops where trains still call. So a message is
   only `no_service` when none of the route's trains are on their way as well.
+  That check has a gap: a train that ends its run at the stop is still on its
+  way there, so at the last stop before a suspended stretch the alert isn't
+  marked (Hunts Point Av towards Manhattan, with no 6 from there to 125 St).
   `No Scheduled Service` is taken as a no-service type too; it wasn't in the
   feed that day, and is a guess at how a route that isn't running is marked.
 - **Direction.** Alerts for particular stops give a direction. Alerts for a

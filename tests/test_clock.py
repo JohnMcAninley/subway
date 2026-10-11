@@ -489,6 +489,67 @@ def test_no_service_alerts_come_first():
     assert [(m.text, m.no_service) for m in clock.messages(NOW)] == [("No [6] here", True), ("[6] delays", False)]
 
 
+def test_no_service_needs_fresh_train_times():
+    clock = alert_clock(alert("a", "No [6] here", ("6", "633", None), kind="Suspended"))
+    clock.fetch_feed = fail_all(clock.fetch_feed)
+    clock.refresh(now=NOW + 120)
+    assert [m.no_service for m in clock.messages(NOW + 120)] == [False]
+
+
+def fail_all(fetch):
+    def fetch_feed(feed_url):
+        raise requests.ConnectionError("down")
+    return fetch_feed
+
+
+def test_alert_routes_are_those_it_is_about_here_in_its_order():
+    clock = alert_clock(alert("a", "[A][6X][6] delays", ("A", "", None), ("6X", "", None), ("6", "", None), ("6", "", None)))
+    assert [(r.route, r.bullet) for r in clock.messages(NOW)[0].routes] == [("6X", "6d"), ("6", "6")]
+
+
+NO_SIX = alert("a", "No [6] here", ("6", "633", None), kind="Suspended")
+SIX_DELAYS = alert("b", "[6] delays", ("6", "", None), kind="Delays")
+
+
+def test_no_service_alert_takes_over_the_new_style_when_no_trains_are_coming():
+    clock = alert_clock(NO_SIX, SIX_DELAYS, style="new")
+    board = clock.board(now=NOW)
+    assert (board.rows, board.message, board.takeover) == ((), "No [6] here", True)
+    for _ in range(3):  # Only the no-service alert, however often it rotates
+        clock.rotate(now=NOW)
+        assert clock.board(now=NOW).message == "No [6] here"
+
+
+def test_takeover_fits_one_line():
+    clock = alert_clock(NO_SIX, style="new")
+    clock.lines = 1
+    assert clock.board(now=NOW).takeover
+
+
+def test_no_takeover_while_any_train_is_coming():
+    clock = alert_clock(NO_SIX, trips=[trip("two", "2", [("633S", 4)])], style="new")
+    board = clock.board(now=NOW)
+    assert (len(board.rows), board.takeover, board.messages[0].no_service) == (1, False, True)
+
+
+def test_no_takeover_without_a_no_service_alert():
+    board = alert_clock(SIX_DELAYS, style="new").board(now=NOW)
+    assert (board.message, board.takeover) == ("[6] delays", False)
+
+
+def test_no_takeover_in_the_classic_style():
+    assert not alert_clock(NO_SIX).board(now=NOW).takeover
+
+
+def test_grouped_board_is_taken_over_by_the_first_no_service_alert():
+    other = alert("c", "No [6X] here either", ("6X", "633", None), kind="Suspended")
+    clock = alert_clock(SIX_DELAYS, NO_SIX, other, style="new")
+    clock.grouped = True
+    assert not clock.rotate(now=NOW)
+    board = clock.board(now=NOW)
+    assert (board.message, board.takeover) == ("No [6] here", True)
+
+
 def test_show_alerts_off():
     clock = alert_clock(alert("a", "[6] delays", ("6", "", None)), show_alerts=False)
     assert ALERTS_URL not in clock.fetched

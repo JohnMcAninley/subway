@@ -216,21 +216,24 @@ class Clock:
             return ()
         on_board = {p.route_id for p in self.predictions(now)}
         coming = {p.route_id.removesuffix("X") for p in self._waiting(now)}
+        stale = self.stale(now)  # Then there is no telling which trains are coming
         messages = []
         for alert in self.alerts:
             routes = self._affected(alert, on_board) if alert.active(now) else ()
             if routes:
                 # A suspension often names the stops at its ends too, where trains still run one way.
-                no_service = alert.no_service and coming.isdisjoint(route.removesuffix("X") for route in routes)
+                no_service = (alert.no_service and not stale
+                              and coming.isdisjoint(route.removesuffix("X") for route in routes))
                 updated = max(0, int((now - alert.updated) // 60)) if alert.updated else None
-                messages.append(Message(alert.text, alert.planned, alert.title, updated, no_service))
+                messages.append(Message(alert.text, alert.planned, alert.title, updated, no_service,
+                                        tuple(Route(route, bullet_id(route)) for route in routes)))
         by_text = {}  # Alerts are often repeated per route
         for message in sorted(messages, key=lambda m: (not m.no_service, m.planned)):
             by_text.setdefault(message.text, message)
         return tuple(by_text.values())[:MAX_MESSAGES]
 
     def _affected(self, alert, on_board):
-        """The routes alert is about here: empty if it isn't about the stops at all.
+        """The routes alert is about here, in its own order: empty if it isn't about the stops at all.
 
         They are the routes it names at one of the stops (in a direction shown),
         or names as a whole when they serve the stops (and it isn't only about
@@ -243,15 +246,15 @@ class Clock:
         shown = {(parents.get(stop, stop), d) for stop in self.settings.stops
                  for d in ("NS" if parents.get(stop, stop) == stop else stop[-1])}
         routes = set(self.static.routes_for(self.settings.stops)) | on_board
-        affected = set()
+        affected = {}
         for route, stop, direction in alert.affects:
             if stop:
                 if any((parents.get(stop, stop), d) in shown for d in direction or "NS"):
-                    affected.add(route)
+                    affected[route] = True
             elif route in routes and any(d in (direction or self._headed(alert, route, parent))
                                          for parent, d in shown):
-                affected.add(route)
-        return affected
+                affected[route] = True
+        return tuple(affected)
 
     def _headed(self, alert, route, parent):
         """The directions at a parent stop, "N" and "S", of the trains a route-wide alert is about.
@@ -290,6 +293,9 @@ class Clock:
         """What the last line rotates through: ("train", index) and ("message", text) entries."""
         predictions = self.predictions(now)
         count = len(predictions)
+        takeover = self._takeover(now)
+        if takeover:
+            return [("message", m.text) for m in takeover for _ in range(MESSAGE_ROTATIONS)]
         if self.lines < 2:
             return []
         arriving = count > self._fixed and predictions[self._fixed].time - now < 60
@@ -301,6 +307,15 @@ class Clock:
         if self.settings.style in MESSAGE_LINE_STYLES and not arriving:
             rotation += [("message", m.text) for m in self.messages(now) for _ in range(MESSAGE_ROTATIONS)]
         return rotation
+
+    def _takeover(self, now):
+        """The alerts to fill the screen with, in the styles that put alerts on the last line.
+
+        They are the ones that say why no trains are coming, when none are.
+        """
+        if self.settings.style not in MESSAGE_LINE_STYLES or self._waiting(now):
+            return ()
+        return tuple(m for m in self.messages(now) if m.no_service)
 
     def rotate(self, now=None):
         """Advance the last line to its next train or alert. Returns False if there is nothing to rotate."""
@@ -332,7 +347,8 @@ class Clock:
 
         rows = tuple(self._row(predictions[i], i + 1, now) for i in indexes)
         return Board(style=self.settings.style, rows=rows, stale=self.stale(now),
-                     messages=self.messages(now), message=message, **self._station())
+                     messages=self.messages(now), message=message, takeover=bool(self._takeover(now)),
+                     **self._station())
 
     def _grouped_board(self, now):
         """Every line shows a train; with more than one direction, each gets an equal share of the lines."""
@@ -352,8 +368,10 @@ class Clock:
                                      enumerate(by_direction[heading][:share + (g < extra)])))
                 for g, heading in enumerate(headings))
             rows = tuple(row for group in groups for row in group.rows)
-        return Board(style=self.settings.style, rows=rows, stale=self.stale(now),
-                     messages=self.messages(now), groups=groups, **self._station())
+        takeover = self._takeover(now)  # Nothing rotates, so the first of them
+        return Board(style=self.settings.style, rows=rows, stale=self.stale(now), messages=self.messages(now),
+                     message=takeover[0].text if takeover else "", takeover=bool(takeover), groups=groups,
+                     **self._station())
 
     def _station(self):
         """The Board's station, direction and routes: where the chosen stops are and what stops there."""

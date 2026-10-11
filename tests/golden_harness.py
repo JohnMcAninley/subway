@@ -112,6 +112,12 @@ CASES = {
                        "work and no B service: the board is empty.",
         "settings": {"stops": ["D35S"], **NO_ALERTS},
     },
+    "union-sq-l-no-service-new": {
+        "description": "14 St-Union Sq (L) towards Brooklyn in the new style, captured on a weekend with no L "
+                       "between Lorimer St and 8 Av: the alert saying so takes over the screen.",
+        "settings": {"stops": ["L03S"], "style": "new"},
+        "steps": alerts_steps,
+    },
 }
 
 

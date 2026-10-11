@@ -1,0 +1,23 @@
+{
+  "stop_names": {
+    "L03S": "14 St-Union Sq"
+  },
+  "stop_parents": {
+    "L03S": "L03"
+  },
+  "stop_routes": {
+    "L03": [
+      "L"
+    ]
+  },
+  "headsigns": {},
+  "direction_labels": {
+    "L03": {
+      "N": "8 Av",
+      "S": "Brooklyn"
+    }
+  },
+  "stop_boroughs": {
+    "L03": "M"
+  }
+}

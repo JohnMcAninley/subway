@@ -74,8 +74,6 @@ Sizes are rough: S is an hour or two, M a day, L several days.
 | ID | Package | Size | Notes |
 |---|---|---|---|
 | C1 | **led: check the font and bullets against photos** | S | `LedFont.js` was drawn from measurements, without a close-up. Once photos come in (P1): the letter shapes, the size of the bullets (the 6 and the Q are hard to read on a small screen), the express diamond, and what the signs show for long terminals other than "Flatbush Av-Bklyn Col" (e.g. Van Cortlandt Park-242 St, which we show as "Van Cortlandt Park"). |
-| C2 | **new: portrait alerts panel** | S | Titles, small bullets with badges, and "Updated 15 mins ago", as on the real screens. The board's messages already carry `title` and `updated_minutes`; nothing draws them yet. |
-| C3 | **new: full-screen alert** | S | The card takes over the whole screen when service isn't running: a message with `no_service` set, which nothing draws yet. |
 | C4 | **classic: weather in the strip** | S | The real strip shows the temperature beside the time. Needs a weather source with no key and a location setting; decide whether it is worth it. |
 
 Out of scope: the arrivals strip under street-entrance ad screens, the
@@ -120,7 +118,7 @@ it and a product, as read on 2026-10-11; none of it is legal advice.
 
 ## Suggested order
 
-1. C2, C3 and B3: small, and nothing blocks them.
+1. B3: small, and nothing blocks it.
 2. A1, A2, A4 and C1 as photos and station visits come in.
 3. S1 early if the clock is to be sold: the answer decides whether there is a
    product, and it may take a while.

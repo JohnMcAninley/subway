@@ -243,7 +243,7 @@ class Display(QObject):
         values = dataclasses.asdict(board)
         # PySide passes lists to QML as arrays, but not tuples
         values["rows"] = list(values["rows"])
-        values["messages"] = list(values["messages"])
+        values["messages"] = [{**message, "routes": list(message["routes"])} for message in values["messages"]]
         values["routes"] = list(values["routes"])
         values["groups"] = [{**group, "rows": list(group["rows"])} for group in values["groups"]]
         return values

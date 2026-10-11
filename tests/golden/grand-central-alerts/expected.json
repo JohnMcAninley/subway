@@ -33,24 +33,47 @@
         "planned": false,
         "title": "Delays",
         "updated_minutes": 3,
-        "no_service": false
+        "no_service": false,
+        "routes": [
+          {
+            "route": "4",
+            "bullet": "4"
+          },
+          {
+            "route": "6",
+            "bullet": "6"
+          }
+        ]
       },
       {
         "text": "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
         "planned": true,
         "title": "Express to Local",
         "updated_minutes": 4549,
-        "no_service": false
+        "no_service": false,
+        "routes": [
+          {
+            "route": "5",
+            "bullet": "5"
+          }
+        ]
       },
       {
         "text": "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St",
         "planned": true,
         "title": "Express to Local",
         "updated_minutes": 8825,
-        "no_service": false
+        "no_service": false,
+        "routes": [
+          {
+            "route": "4",
+            "bullet": "4"
+          }
+        ]
       }
     ],
     "message": "",
+    "takeover": false,
     "groups": [],
     "station": "Grand Central-42 St",
     "direction": "",
@@ -107,24 +130,47 @@
         "planned": false,
         "title": "Delays",
         "updated_minutes": 3,
-        "no_service": false
+        "no_service": false,
+        "routes": [
+          {
+            "route": "4",
+            "bullet": "4"
+          },
+          {
+            "route": "6",
+            "bullet": "6"
+          }
+        ]
       },
       {
         "text": "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
         "planned": true,
         "title": "Express to Local",
         "updated_minutes": 4549,
-        "no_service": false
+        "no_service": false,
+        "routes": [
+          {
+            "route": "5",
+            "bullet": "5"
+          }
+        ]
       },
       {
         "text": "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St",
         "planned": true,
         "title": "Express to Local",
         "updated_minutes": 8825,
-        "no_service": false
+        "no_service": false,
+        "routes": [
+          {
+            "route": "4",
+            "bullet": "4"
+          }
+        ]
       }
     ],
     "message": "",
+    "takeover": false,
     "groups": [],
     "station": "Grand Central-42 St",
     "direction": "",
@@ -181,24 +227,47 @@
         "planned": false,
         "title": "Delays",
         "updated_minutes": 3,
-        "no_service": false
+        "no_service": false,
+        "routes": [
+          {
+            "route": "4",
+            "bullet": "4"
+          },
+          {
+            "route": "6",
+            "bullet": "6"
+          }
+        ]
       },
       {
         "text": "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
         "planned": true,
         "title": "Express to Local",
         "updated_minutes": 4549,
-        "no_service": false
+        "no_service": false,
+        "routes": [
+          {
+            "route": "5",
+            "bullet": "5"
+          }
+        ]
       },
       {
         "text": "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St",
         "planned": true,
         "title": "Express to Local",
         "updated_minutes": 8825,
-        "no_service": false
+        "no_service": false,
+        "routes": [
+          {
+            "route": "4",
+            "bullet": "4"
+          }
+        ]
       }
     ],
     "message": "",
+    "takeover": false,
     "groups": [],
     "station": "Grand Central-42 St",
     "direction": "",
@@ -255,24 +324,47 @@
         "planned": false,
         "title": "Delays",
         "updated_minutes": 3,
-        "no_service": false
+        "no_service": false,
+        "routes": [
+          {
+            "route": "4",
+            "bullet": "4"
+          },
+          {
+            "route": "6",
+            "bullet": "6"
+          }
+        ]
       },
       {
         "text": "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
         "planned": true,
         "title": "Express to Local",
         "updated_minutes": 4549,
-        "no_service": false
+        "no_service": false,
+        "routes": [
+          {
+            "route": "5",
+            "bullet": "5"
+          }
+        ]
       },
       {
         "text": "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St",
         "planned": true,
         "title": "Express to Local",
         "updated_minutes": 8826,
-        "no_service": false
+        "no_service": false,
+        "routes": [
+          {
+            "route": "4",
+            "bullet": "4"
+          }
+        ]
       }
     ],
     "message": "",
+    "takeover": false,
     "groups": [],
     "station": "Grand Central-42 St",
     "direction": "",
@@ -329,24 +421,47 @@
         "planned": false,
         "title": "Delays",
         "updated_minutes": 3,
-        "no_service": false
+        "no_service": false,
+        "routes": [
+          {
+            "route": "4",
+            "bullet": "4"
+          },
+          {
+            "route": "6",
+            "bullet": "6"
+          }
+        ]
       },
       {
         "text": "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
         "planned": true,
         "title": "Express to Local",
         "updated_minutes": 4549,
-        "no_service": false
+        "no_service": false,
+        "routes": [
+          {
+            "route": "5",
+            "bullet": "5"
+          }
+        ]
       },
       {
         "text": "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St",
         "planned": true,
         "title": "Express to Local",
         "updated_minutes": 8826,
-        "no_service": false
+        "no_service": false,
+        "routes": [
+          {
+            "route": "4",
+            "bullet": "4"
+          }
+        ]
       }
     ],
     "message": "",
+    "takeover": false,
     "groups": [],
     "station": "Grand Central-42 St",
     "direction": "",
@@ -403,24 +518,47 @@
         "planned": false,
         "title": "Delays",
         "updated_minutes": 3,
-        "no_service": false
+        "no_service": false,
+        "routes": [
+          {
+            "route": "4",
+            "bullet": "4"
+          },
+          {
+            "route": "6",
+            "bullet": "6"
+          }
+        ]
       },
       {
         "text": "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
         "planned": true,
         "title": "Express to Local",
         "updated_minutes": 4549,
-        "no_service": false
+        "no_service": false,
+        "routes": [
+          {
+            "route": "5",
+            "bullet": "5"
+          }
+        ]
       },
       {
         "text": "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St",
         "planned": true,
         "title": "Express to Local",
         "updated_minutes": 8826,
-        "no_service": false
+        "no_service": false,
+        "routes": [
+          {
+            "route": "4",
+            "bullet": "4"
+          }
+        ]
       }
     ],
     "message": "",
+    "takeover": false,
     "groups": [],
     "station": "Grand Central-42 St",
     "direction": "",
@@ -477,24 +615,47 @@
         "planned": false,
         "title": "Delays",
         "updated_minutes": 3,
-        "no_service": false
+        "no_service": false,
+        "routes": [
+          {
+            "route": "4",
+            "bullet": "4"
+          },
+          {
+            "route": "6",
+            "bullet": "6"
+          }
+        ]
       },
       {
         "text": "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
         "planned": true,
         "title": "Express to Local",
         "updated_minutes": 4549,
-        "no_service": false
+        "no_service": false,
+        "routes": [
+          {
+            "route": "5",
+            "bullet": "5"
+          }
+        ]
       },
       {
         "text": "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St",
         "planned": true,
         "title": "Express to Local",
         "updated_minutes": 8826,
-        "no_service": false
+        "no_service": false,
+        "routes": [
+          {
+            "route": "4",
+            "bullet": "4"
+          }
+        ]
       }
     ],
     "message": "",
+    "takeover": false,
     "groups": [],
     "station": "Grand Central-42 St",
     "direction": "",
@@ -551,24 +712,47 @@
         "planned": false,
         "title": "Delays",
         "updated_minutes": 3,
-        "no_service": false
+        "no_service": false,
+        "routes": [
+          {
+            "route": "4",
+            "bullet": "4"
+          },
+          {
+            "route": "6",
+            "bullet": "6"
+          }
+        ]
       },
       {
         "text": "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
         "planned": true,
         "title": "Express to Local",
         "updated_minutes": 4549,
-        "no_service": false
+        "no_service": false,
+        "routes": [
+          {
+            "route": "5",
+            "bullet": "5"
+          }
+        ]
       },
       {
         "text": "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St",
         "planned": true,
         "title": "Express to Local",
         "updated_minutes": 8826,
-        "no_service": false
+        "no_service": false,
+        "routes": [
+          {
+            "route": "4",
+            "bullet": "4"
+          }
+        ]
       }
     ],
     "message": "",
+    "takeover": false,
     "groups": [],
     "station": "Grand Central-42 St",
     "direction": "",
@@ -625,24 +809,47 @@
         "planned": false,
         "title": "Delays",
         "updated_minutes": 3,
-        "no_service": false
+        "no_service": false,
+        "routes": [
+          {
+            "route": "4",
+            "bullet": "4"
+          },
+          {
+            "route": "6",
+            "bullet": "6"
+          }
+        ]
       },
       {
         "text": "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
         "planned": true,
         "title": "Express to Local",
         "updated_minutes": 4549,
-        "no_service": false
+        "no_service": false,
+        "routes": [
+          {
+            "route": "5",
+            "bullet": "5"
+          }
+        ]
       },
       {
         "text": "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St",
         "planned": true,
         "title": "Express to Local",
         "updated_minutes": 8826,
-        "no_service": false
+        "no_service": false,
+        "routes": [
+          {
+            "route": "4",
+            "bullet": "4"
+          }
+        ]
       }
     ],
     "message": "",
+    "takeover": false,
     "groups": [],
     "station": "Grand Central-42 St",
     "direction": "",
@@ -699,24 +906,47 @@
         "planned": false,
         "title": "Delays",
         "updated_minutes": 4,
-        "no_service": false
+        "no_service": false,
+        "routes": [
+          {
+            "route": "4",
+            "bullet": "4"
+          },
+          {
+            "route": "6",
+            "bullet": "6"
+          }
+        ]
       },
       {
         "text": "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
         "planned": true,
         "title": "Express to Local",
         "updated_minutes": 4549,
-        "no_service": false
+        "no_service": false,
+        "routes": [
+          {
+            "route": "5",
+            "bullet": "5"
+          }
+        ]
       },
       {
         "text": "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St",
         "planned": true,
         "title": "Express to Local",
         "updated_minutes": 8826,
-        "no_service": false
+        "no_service": false,
+        "routes": [
+          {
+            "route": "4",
+            "bullet": "4"
+          }
+        ]
       }
     ],
     "message": "",
+    "takeover": false,
     "groups": [],
     "station": "Grand Central-42 St",
     "direction": "",
@@ -773,24 +1003,47 @@
         "planned": false,
         "title": "Delays",
         "updated_minutes": 4,
-        "no_service": false
+        "no_service": false,
+        "routes": [
+          {
+            "route": "4",
+            "bullet": "4"
+          },
+          {
+            "route": "6",
+            "bullet": "6"
+          }
+        ]
       },
       {
         "text": "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
         "planned": true,
         "title": "Express to Local",
         "updated_minutes": 4549,
-        "no_service": false
+        "no_service": false,
+        "routes": [
+          {
+            "route": "5",
+            "bullet": "5"
+          }
+        ]
       },
       {
         "text": "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St",
         "planned": true,
         "title": "Express to Local",
         "updated_minutes": 8826,
-        "no_service": false
+        "no_service": false,
+        "routes": [
+          {
+            "route": "4",
+            "bullet": "4"
+          }
+        ]
       }
     ],
     "message": "",
+    "takeover": false,
     "groups": [],
     "station": "Grand Central-42 St",
     "direction": "",
@@ -847,24 +1100,47 @@
         "planned": false,
         "title": "Delays",
         "updated_minutes": 5,
-        "no_service": false
+        "no_service": false,
+        "routes": [
+          {
+            "route": "4",
+            "bullet": "4"
+          },
+          {
+            "route": "6",
+            "bullet": "6"
+          }
+        ]
       },
       {
         "text": "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
         "planned": true,
         "title": "Express to Local",
         "updated_minutes": 4551,
-        "no_service": false
+        "no_service": false,
+        "routes": [
+          {
+            "route": "5",
+            "bullet": "5"
+          }
+        ]
       },
       {
         "text": "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St",
         "planned": true,
         "title": "Express to Local",
         "updated_minutes": 8827,
-        "no_service": false
+        "no_service": false,
+        "routes": [
+          {
+            "route": "4",
+            "bullet": "4"
+          }
+        ]
       }
     ],
     "message": "",
+    "takeover": false,
     "groups": [],
     "station": "Grand Central-42 St",
     "direction": "",

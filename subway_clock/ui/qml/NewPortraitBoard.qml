@@ -4,7 +4,8 @@ import "Styles.js" as Styles
 
 // The portrait screens in station entrances and mezzanines: the time, a card
 // per train (under a heading per direction when there is more than one), and
-// the service alerts at the bottom. With showStation, the station's name
+// the service alerts at the bottom. When no trains are coming, the alert
+// saying why has their place. With showStation, the station's name
 // goes beside the time, where the real screens have the MTA's logo, with its
 // routes' bullets and the direction under it, as on the sign over an entrance.
 Rectangle {
@@ -30,9 +31,15 @@ Rectangle {
         ? board.groups.reduce((all, g) => all.concat([{ heading: g.heading }], g.rows.map(r => ({ train: r }))), [])
         : board.rows.map(r => ({ train: r }))
 
-    // Alerts as title and text. The stale data warning comes first.
-    readonly property var alerts: (board.stale ? [{ title: "Delayed", text: staleMessage }] : []).concat(
-        board.messages.map(m => ({ title: m.planned ? "Planned work" : "Happening now", text: m.text })))
+    // The alert that has the trains' place, when none are coming and it says why
+    readonly property var takeover: board.takeover ? board.messages.find(m => m.text === board.message) : undefined
+
+    // The other alerts. Each has the bullets of its routes, a title, how long ago it was
+    // changed, and its text. The stale data warning comes first.
+    readonly property var alerts: (board.stale ? [{ title: "Delayed", text: staleMessage, routes: [], updated: "" }] : [])
+        .concat(board.messages.filter(m => !(board.takeover && m.text === board.message)).map(m => ({
+            title: m.title || (m.planned ? "Planned work" : "Service change"), text: m.text, routes: m.routes,
+            updated: Messages.updated(m.updated_minutes) })))
 
     color: colors.background
 
@@ -178,6 +185,23 @@ Rectangle {
         sourceComponent: NewStartup { startup: root.startup; colors: root.colors; numbered: false }
     }
 
+    Loader {
+        id: noService
+        active: !!root.takeover
+        anchors.top: entrance.bottom
+        x: root.rowHeight * 0.12
+        width: root.width - 2 * x
+        height: active ? root.rowHeight * 2.4 : 0
+        sourceComponent: NewNoService {
+            alert: root.takeover
+            colors: root.colors
+            bulletsUrl: root.bulletsUrl
+            barWidth: root.unit * 40
+            titleSize: root.unit * 58
+            textSize: root.unit * 42
+        }
+    }
+
     // Service alerts, from the bottom up to where the trains end
     Column {
         id: alertPanel
@@ -200,7 +224,8 @@ Rectangle {
         Repeater {
             // As many as fit below the trains, at about 230 units each
             model: root.alerts.slice(0, Math.max(1, Math.floor(
-                (root.height - (header.height + entrance.height) - trains.height - root.unit * 200) / (root.unit * 230))))
+                (root.height - (header.height + entrance.height) - Math.max(trains.height, noService.height)
+                 - root.unit * 200) / (root.unit * 230))))
 
             Column {
                 id: alert
@@ -216,14 +241,73 @@ Rectangle {
                     width: parent.width
                     spacing: root.unit * 30
 
-                    Text {
+                    Column {
                         width: parent.width * 0.3
-                        text: alert.modelData.title
-                        wrapMode: Text.WordWrap
-                        font.family: "Roboto"
-                        font.weight: Font.Bold
-                        font.pixelSize: root.unit * 34
-                        color: root.colors.text
+                        spacing: root.unit * 6
+
+                        // Its routes' bullets, small, with a badge on the corner of the last
+                        Row {
+                            height: root.unit * 52
+                            spacing: root.unit * 6
+
+                            Repeater {
+                                model: alert.modelData.routes.slice(0, 4)
+
+                                Image {
+                                    required property var modelData
+
+                                    anchors.bottom: parent.bottom
+                                    width: root.unit * 44
+                                    height: width
+                                    sourceSize: Qt.size(width, height)
+                                    source: root.bulletsUrl + "NYCS-bull-trans-" + modelData.bullet + ".svg"
+                                }
+                            }
+
+                            Item {
+                                width: root.unit * 10
+                                height: parent.height
+
+                                Rectangle {
+                                    x: alert.modelData.routes.length ? -root.unit * 22 : 0
+                                    width: root.unit * 26
+                                    height: width
+                                    radius: width / 2
+                                    color: root.colors.alertBar
+                                    border.width: Math.max(1, root.unit * 2)
+                                    border.color: root.colors.background
+
+                                    Text {
+                                        anchors.centerIn: parent
+                                        text: "!"
+                                        font.family: "Roboto"
+                                        font.weight: Font.Bold
+                                        font.pixelSize: parent.height * 0.75
+                                        color: root.colors.alertText
+                                    }
+                                }
+                            }
+                        }
+
+                        Text {
+                            width: parent.width
+                            text: alert.modelData.title
+                            wrapMode: Text.WordWrap
+                            font.family: "Roboto"
+                            font.weight: Font.Bold
+                            font.pixelSize: root.unit * 34
+                            color: root.colors.text
+                        }
+
+                        Text {
+                            width: parent.width
+                            visible: text !== ""
+                            text: alert.modelData.updated
+                            wrapMode: Text.WordWrap
+                            font.family: "Roboto"
+                            font.pixelSize: root.unit * 24
+                            color: root.colors.number
+                        }
                     }
 
                     Text {

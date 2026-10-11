@@ -3,9 +3,10 @@ import "Messages.js" as Messages
 import "Styles.js" as Styles
 
 // The newer clocks: a numbered card per train on a black screen. Service alerts
-// take turns with the trains on the last line. The MTA's design is 1920x480
-// with two lines. With showStation, a line above them names the station as
-// the sign over an entrance does; the real clocks have nothing like it.
+// take turns with the trains on the last line, and one saying why no trains
+// are coming takes the whole screen. The MTA's design is 1920x480 with two
+// lines. With showStation, a line above them names the station as the sign
+// over an entrance does; the real clocks have nothing like it.
 Rectangle {
     id: root
 
@@ -25,6 +26,8 @@ Rectangle {
     readonly property real messageHeight: message ? Math.min(height * 0.1, width * 0.035) : 0
     readonly property real headerHeight: showStation && board.station ? Math.min(height * 0.14, width * 0.05) : 0
     readonly property real rowHeight: (height - headerHeight - messageHeight) / lines
+    // The alert on the last line now, when it is to fill the screen instead
+    readonly property var takeover: board.takeover ? board.messages.find(m => m.text === board.message) : undefined
 
     color: colors.background
 
@@ -117,7 +120,7 @@ Rectangle {
 
     // A service alert in place of the last line: a white card with a yellow bar where the number was
     Item {
-        visible: root.board.message !== ""
+        visible: root.board.message !== "" && !root.takeover
         y: root.headerHeight + (root.lines - 1) * root.rowHeight + root.rowHeight * 0.04
         width: root.width
         height: root.rowHeight * 0.92
@@ -152,6 +155,26 @@ Rectangle {
                 font.pixelSize: root.rowHeight * (lengthy ? 0.23 : 0.32)
                 color: root.colors.alertText
             }
+        }
+    }
+
+    // No trains are coming, and this alert says why: it has every line. Its title is
+    // the headlines' size where there is room.
+    Loader {
+        id: noService
+        active: !!root.takeover
+        y: root.headerHeight + root.rowHeight * 0.04
+        width: root.width
+        height: root.lines * root.rowHeight - root.rowHeight * 0.08
+        sourceComponent: NewNoService {
+            readonly property real unit: Math.min(root.rowHeight, noService.height / 2)
+
+            alert: root.takeover
+            colors: root.colors
+            bulletsUrl: root.bulletsUrl
+            barWidth: root.rowHeight * 0.4
+            titleSize: unit * 0.4
+            textSize: unit * 0.3
         }
     }
 

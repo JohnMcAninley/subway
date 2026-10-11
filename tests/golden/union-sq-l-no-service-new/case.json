@@ -1,0 +1,108 @@
+{
+  "description": "14 St-Union Sq (L) towards Brooklyn in the new style, captured on a weekend with no L between Lorimer St and 8 Av: the alert saying so takes over the screen.",
+  "captured_at": "2026-10-11T21:32:08+00:00",
+  "settings": {
+    "stops": [
+      "L03S"
+    ],
+    "style": "new"
+  },
+  "steps": [
+    {
+      "action": "refresh",
+      "now": 1791754328
+    },
+    {
+      "action": "board",
+      "now": 1791754328
+    },
+    {
+      "action": "rotate",
+      "now": 1791754333
+    },
+    {
+      "action": "board",
+      "now": 1791754333
+    },
+    {
+      "action": "rotate",
+      "now": 1791754338
+    },
+    {
+      "action": "board",
+      "now": 1791754338
+    },
+    {
+      "action": "rotate",
+      "now": 1791754343
+    },
+    {
+      "action": "board",
+      "now": 1791754343
+    },
+    {
+      "action": "rotate",
+      "now": 1791754348
+    },
+    {
+      "action": "board",
+      "now": 1791754348
+    },
+    {
+      "action": "rotate",
+      "now": 1791754353
+    },
+    {
+      "action": "board",
+      "now": 1791754353
+    },
+    {
+      "action": "rotate",
+      "now": 1791754358
+    },
+    {
+      "action": "board",
+      "now": 1791754358
+    },
+    {
+      "action": "rotate",
+      "now": 1791754363
+    },
+    {
+      "action": "board",
+      "now": 1791754363
+    },
+    {
+      "action": "rotate",
+      "now": 1791754368
+    },
+    {
+      "action": "board",
+      "now": 1791754368
+    },
+    {
+      "action": "rotate",
+      "now": 1791754373
+    },
+    {
+      "action": "board",
+      "now": 1791754373
+    },
+    {
+      "action": "rotate",
+      "now": 1791754378
+    },
+    {
+      "action": "board",
+      "now": 1791754378
+    },
+    {
+      "action": "refresh",
+      "now": 1791754448
+    },
+    {
+      "action": "board",
+      "now": 1791754448
+    }
+  ]
+}

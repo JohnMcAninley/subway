@@ -30,13 +30,33 @@ function escape(text) {
     return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;")
 }
 
+// A bullet asset as styled text, `size` pixels across.
+function image(asset, bulletsUrl, size) {
+    return '<img src="' + bulletsUrl + "NYCS-bull-trans-" + asset + '.svg" width="' + size + '" height="'
+        + size + '" align="middle">'
+}
+
 // A message as styled text for a wrapping Text, with bullets `size` pixels across.
 function styled(message, bulletsUrl, size) {
     return escape(message).replace(/\[([^\]]*)\]/g, function (marker, name) {
         var asset = bullet(name)
-        if (!asset)
-            return ""
-        return '<img src="' + bulletsUrl + "NYCS-bull-trans-" + asset + '.svg" width="' + size + '" height="'
-            + size + '" align="middle">'
+        return asset ? image(asset, bulletsUrl, size) : ""
     })
+}
+
+// The bullets of a message's routes as styled text.
+function routeBullets(routes, bulletsUrl, size) {
+    return routes.map(function (route) { return image(route.bullet, bulletsUrl, size) }).join("")
+}
+
+// "Updated 15 mins ago" for a message's updated_minutes, as the portrait screens put
+// it; "" if the message doesn't say.
+function updated(minutes) {
+    if (minutes === null || minutes === undefined)
+        return ""
+    if (minutes < 1)
+        return "Updated just now"
+    var hours = Math.floor(minutes / 60), days = Math.floor(hours / 24)
+    var count = days || hours || minutes, unit = days ? "day" : hours ? "hr" : "min"
+    return "Updated " + count + " " + unit + (count === 1 ? "" : "s") + " ago"
 }

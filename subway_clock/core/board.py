@@ -20,6 +20,12 @@ class Row:
 
 
 @dataclass(frozen=True)
+class Route:
+    route: str  # GTFS route_id, e.g. "6X"
+    bullet: str  # bullet asset id, e.g. "6d"
+
+
+@dataclass(frozen=True)
 class Message:
     text: str  # a service alert; routes are in brackets, like "[4]"
     planned: bool  # planned work, as opposed to something happening now like delays
@@ -28,18 +34,13 @@ class Message:
     # A route's trains aren't running, or aren't stopping, at the stops: the alert says so and
     # none of the route's trains are on their way.
     no_service: bool = False
+    routes: tuple[Route, ...] = ()  # the routes it is about at the stops
 
 
 @dataclass(frozen=True)
 class Group:
     heading: str  # the direction label its trains share; may be ""
     rows: tuple[Row, ...]
-
-
-@dataclass(frozen=True)
-class Route:
-    route: str  # GTFS route_id, e.g. "6X"
-    bullet: str  # bullet asset id, e.g. "6d"
 
 
 @dataclass(frozen=True)
@@ -50,6 +51,10 @@ class Board:
     messages: tuple[Message, ...] = ()  # service alerts to show, most urgent first
     # In styles that show alerts in place of the last line: the text of the one to show there now, or "".
     message: str = ""
+    # In those styles, when no trains are coming and alerts with no_service say why: True, and
+    # `message`, which is then always one of those alerts, is to fill the screen (or, on a
+    # grouped board, the space the trains would have).
+    takeover: bool = False
     # On a grouped board showing more than one direction: the same rows, split by direction.
     groups: tuple[Group, ...] = ()
     # Where the clock is, for screens that say so, as the sign over a station entrance does:
