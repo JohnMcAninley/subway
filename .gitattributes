@@ -1,3 +1,4 @@
-# Captured GTFS-realtime protobufs: never convert line endings
-*.pb binary
+# Captured GTFS-realtime protobufs: never convert line endings, and don't let
+# GitHub count them as PureBasic source (which also uses .pb)
+*.pb binary linguist-detectable=false
 *.ttf binary
