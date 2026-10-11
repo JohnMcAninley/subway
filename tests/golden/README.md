@@ -100,9 +100,12 @@ What the cases test, for anyone implementing the core:
 - Feeds fetched: all of them if `fetch_all_feeds` (the default), otherwise
   the feeds carrying the routes in `stop_routes` for the stops' parents.
   Feeds are processed in sorted URL order.
-- Keep trains with `now - 300 <= time <= now + max_minutes * 60`, sorted by
+- Keep trains with `time <= now + max_minutes * 60`, sorted by
   time (ties keep feed order, then entity order within a feed). This happens
   on `refresh`, with that step's `now`.
+- A train has left once `time < now - 30`, with the `now` of the board or
+  rotation being worked out (not the refresh's). Trains that have left are
+  skipped everywhere below, and the rest are numbered from 1.
 - The board shows the first `max(max_trains, lines)` of those: `max_trains`,
   or more if the screen has more lines than that.
 - If `rotation` is `unique`, or `auto` (the default) in the `new` style,

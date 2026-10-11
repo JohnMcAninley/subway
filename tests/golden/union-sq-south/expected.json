@@ -69,49 +69,17 @@
     "rows": [
       {
         "number": 1,
-        "route": "6",
-        "bullet": "6",
-        "destination": "Brooklyn Bridge-City Hall",
+        "route": "Q",
+        "bullet": "Q",
+        "destination": "Prospect Park",
         "direction": "Downtown & Brooklyn",
-        "headline": "Downtown",
-        "detail": "Brooklyn Bridge-City Hall",
-        "minutes": 0,
-        "arriving": true
+        "headline": "Downtown & Brooklyn",
+        "detail": "Prospect Park",
+        "minutes": 2,
+        "arriving": false
       },
       {
         "number": 4,
-        "route": "N",
-        "bullet": "N",
-        "destination": "Coney Island-Stillwell Av",
-        "direction": "Downtown & Brooklyn",
-        "headline": "Downtown & Brooklyn",
-        "detail": "Coney Island-Stillwell Av",
-        "minutes": 4,
-        "arriving": false
-      }
-    ],
-    "stale": false,
-    "messages": [],
-    "message": "",
-    "groups": []
-  },
-  {
-    "now": 1791668852,
-    "style": "classic",
-    "rows": [
-      {
-        "number": 1,
-        "route": "6",
-        "bullet": "6",
-        "destination": "Brooklyn Bridge-City Hall",
-        "direction": "Downtown & Brooklyn",
-        "headline": "Downtown",
-        "detail": "Brooklyn Bridge-City Hall",
-        "minutes": 0,
-        "arriving": true
-      },
-      {
-        "number": 5,
         "route": "R",
         "bullet": "R",
         "destination": "Bay Ridge-95 St",
@@ -128,28 +96,60 @@
     "groups": []
   },
   {
-    "now": 1791668857,
+    "now": 1791668852,
     "style": "classic",
     "rows": [
       {
         "number": 1,
-        "route": "6",
-        "bullet": "6",
-        "destination": "Brooklyn Bridge-City Hall",
-        "direction": "Downtown & Brooklyn",
-        "headline": "Downtown",
-        "detail": "Brooklyn Bridge-City Hall",
-        "minutes": 0,
-        "arriving": true
-      },
-      {
-        "number": 2,
         "route": "Q",
         "bullet": "Q",
         "destination": "Prospect Park",
         "direction": "Downtown & Brooklyn",
         "headline": "Downtown & Brooklyn",
         "detail": "Prospect Park",
+        "minutes": 2,
+        "arriving": false
+      },
+      {
+        "number": 5,
+        "route": "6",
+        "bullet": "6",
+        "destination": "Brooklyn Bridge-City Hall",
+        "direction": "Downtown & Brooklyn",
+        "headline": "Downtown",
+        "detail": "Brooklyn Bridge-City Hall",
+        "minutes": 11,
+        "arriving": false
+      }
+    ],
+    "stale": false,
+    "messages": [],
+    "message": "",
+    "groups": []
+  },
+  {
+    "now": 1791668857,
+    "style": "classic",
+    "rows": [
+      {
+        "number": 1,
+        "route": "Q",
+        "bullet": "Q",
+        "destination": "Prospect Park",
+        "direction": "Downtown & Brooklyn",
+        "headline": "Downtown & Brooklyn",
+        "detail": "Prospect Park",
+        "minutes": 2,
+        "arriving": false
+      },
+      {
+        "number": 2,
+        "route": "4",
+        "bullet": "4",
+        "destination": "Crown Hts-Utica Av",
+        "direction": "Downtown & Brooklyn",
+        "headline": "Downtown & Brooklyn",
+        "detail": "Crown Hts-Utica Av",
         "minutes": 2,
         "arriving": false
       }
@@ -165,17 +165,6 @@
     "rows": [
       {
         "number": 1,
-        "route": "6",
-        "bullet": "6",
-        "destination": "Brooklyn Bridge-City Hall",
-        "direction": "Downtown & Brooklyn",
-        "headline": "Downtown",
-        "detail": "Brooklyn Bridge-City Hall",
-        "minutes": 0,
-        "arriving": true
-      },
-      {
-        "number": 2,
         "route": "Q",
         "bullet": "Q",
         "destination": "Prospect Park",
@@ -183,6 +172,17 @@
         "headline": "Downtown & Brooklyn",
         "detail": "Prospect Park",
         "minutes": 1,
+        "arriving": false
+      },
+      {
+        "number": 2,
+        "route": "4",
+        "bullet": "4",
+        "destination": "Crown Hts-Utica Av",
+        "direction": "Downtown & Brooklyn",
+        "headline": "Downtown & Brooklyn",
+        "detail": "Crown Hts-Utica Av",
+        "minutes": 2,
         "arriving": false
       }
     ],
@@ -197,25 +197,25 @@
     "rows": [
       {
         "number": 1,
-        "route": "6",
-        "bullet": "6",
-        "destination": "Brooklyn Bridge-City Hall",
+        "route": "N",
+        "bullet": "N",
+        "destination": "Coney Island-Stillwell Av",
         "direction": "Downtown & Brooklyn",
-        "headline": "Downtown",
-        "detail": "Brooklyn Bridge-City Hall",
+        "headline": "Downtown & Brooklyn",
+        "detail": "Coney Island-Stillwell Av",
         "minutes": 0,
         "arriving": true
       },
       {
         "number": 2,
-        "route": "Q",
-        "bullet": "Q",
-        "destination": "Prospect Park",
+        "route": "R",
+        "bullet": "R",
+        "destination": "Bay Ridge-95 St",
         "direction": "Downtown & Brooklyn",
         "headline": "Downtown & Brooklyn",
-        "detail": "Prospect Park",
-        "minutes": 0,
-        "arriving": true
+        "detail": "Bay Ridge-95 St",
+        "minutes": 3,
+        "arriving": false
       }
     ],
     "stale": true,
@@ -229,25 +229,25 @@
     "rows": [
       {
         "number": 1,
-        "route": "Q",
-        "bullet": "Q",
-        "destination": "Prospect Park",
+        "route": "N",
+        "bullet": "N",
+        "destination": "Coney Island-Stillwell Av",
         "direction": "Downtown & Brooklyn",
         "headline": "Downtown & Brooklyn",
-        "detail": "Prospect Park",
+        "detail": "Coney Island-Stillwell Av",
         "minutes": 0,
         "arriving": true
       },
       {
         "number": 2,
-        "route": "4",
-        "bullet": "4",
-        "destination": "Crown Hts-Utica Av",
+        "route": "R",
+        "bullet": "R",
+        "destination": "Bay Ridge-95 St",
         "direction": "Downtown & Brooklyn",
         "headline": "Downtown & Brooklyn",
-        "detail": "Crown Hts-Utica Av",
-        "minutes": 0,
-        "arriving": true
+        "detail": "Bay Ridge-95 St",
+        "minutes": 2,
+        "arriving": false
       }
     ],
     "stale": false,
@@ -261,25 +261,25 @@
     "rows": [
       {
         "number": 1,
-        "route": "Q",
-        "bullet": "Q",
-        "destination": "Prospect Park",
+        "route": "R",
+        "bullet": "R",
+        "destination": "Bay Ridge-95 St",
         "direction": "Downtown & Brooklyn",
         "headline": "Downtown & Brooklyn",
-        "detail": "Prospect Park",
-        "minutes": 0,
-        "arriving": true
+        "detail": "Bay Ridge-95 St",
+        "minutes": 2,
+        "arriving": false
       },
       {
         "number": 2,
-        "route": "4",
-        "bullet": "4",
-        "destination": "Crown Hts-Utica Av",
+        "route": "6",
+        "bullet": "6",
+        "destination": "Brooklyn Bridge-City Hall",
         "direction": "Downtown & Brooklyn",
-        "headline": "Downtown & Brooklyn",
-        "detail": "Crown Hts-Utica Av",
-        "minutes": 0,
-        "arriving": true
+        "headline": "Downtown",
+        "detail": "Brooklyn Bridge-City Hall",
+        "minutes": 6,
+        "arriving": false
       }
     ],
     "stale": false,
@@ -293,25 +293,25 @@
     "rows": [
       {
         "number": 1,
-        "route": "Q",
-        "bullet": "Q",
-        "destination": "Prospect Park",
+        "route": "R",
+        "bullet": "R",
+        "destination": "Bay Ridge-95 St",
         "direction": "Downtown & Brooklyn",
         "headline": "Downtown & Brooklyn",
-        "detail": "Prospect Park",
+        "detail": "Bay Ridge-95 St",
         "minutes": 0,
         "arriving": true
       },
       {
         "number": 2,
-        "route": "4",
-        "bullet": "4",
-        "destination": "Crown Hts-Utica Av",
+        "route": "6",
+        "bullet": "6",
+        "destination": "Brooklyn Bridge-City Hall",
         "direction": "Downtown & Brooklyn",
-        "headline": "Downtown & Brooklyn",
-        "detail": "Crown Hts-Utica Av",
-        "minutes": 0,
-        "arriving": true
+        "headline": "Downtown",
+        "detail": "Brooklyn Bridge-City Hall",
+        "minutes": 5,
+        "arriving": false
       }
     ],
     "stale": true,

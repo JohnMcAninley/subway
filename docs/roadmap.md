@@ -46,7 +46,7 @@ Sizes are rough: S is an hour or two, M a day, L several days.
 
 | ID | Package | Size | Notes |
 |---|---|---|---|
-| A1 | **Drop trains that have left** | S | Arriving trains stay on the top line too long. Sampling the feeds on 2026-10-11 (4/5/6, 1/2/3, N/Q/R/W, L): a train stays in the feed for a median of 40 to 50 seconds after its arrival time, and up to 2 minutes. We also show "0 min" for the minute before, and refresh every 30 seconds. Plan: drop a train a fixed time after its arrival time, checked every time the board is drawn, and consider a shorter refresh now that one costs about 0.1 s. The vehicle "stopped at" reports aren't consistent between the numbered and lettered lines, so the rule shouldn't depend on them. |
+| A1 | **Drop trains that have left** | S | **Done.** A train now leaves the board 30 seconds after its arrival time, checked every time the board is drawn. Measured on 2026-10-11 (47 trains on the 1 to 6, N/Q/R/W and L): the feeds keep listing a train for a median of 39 to 51 seconds after its arrival time and up to 166. The vehicle "stopped at" reports aren't consistent between the numbered and lettered lines, so the rule doesn't use them. Still open: whether to refresh more often than every 30 seconds now that a refresh costs about 0.1 s, and whether 30 seconds feels right in use. |
 | A2 | **Headline override table** | M | A hand-made table for what the borough rule gets wrong or can't know: the F at 75 Av and the 2 at Franklin Av ("Manhattan", not "Manhattan & ..."), short terminal names ("Coney Island", "Whitehall St"), the JFK plane, "via Court Square", and the H train ending at Broad Channel. Needs photos (P1) for the uncertain cases. |
 | A3 | **Alerts, second pass** | M | Read the alert type so "no service" alerts can take the whole screen in the `new` style; pass the alert's title ("Delays", "Planned work") and age to the board; stop route-wide alerts for one direction showing on clocks for the other (the direction is only in the text). |
 | A4 | **Calibrate `max_minutes`** | S | Compare against real clocks: how far ahead do they list trains? Needs observation (P1). |
@@ -120,12 +120,11 @@ Blocked on hardware (H1) except where noted.
 
 ## Suggested order
 
-1. A1, since it is a visible fault and small.
-2. In parallel: A5 then D1 (home header); B1 and B2; C1; E1.
-3. A2 and A4 as photos come in. A3, then C2 and C3.
-4. E3, then E2.
-5. G1 to G4 whenever the repo is to go public; none depend on the rest.
-6. F once there is hardware; F4's PC-testable parts can start earlier.
+1. In parallel: A5 then D1 (home header); B1 and B2; C1; E1.
+2. A2 and A4 as photos come in. A3, then C2 and C3.
+3. E3, then E2.
+4. G1 to G4 whenever the repo is to go public; none depend on the rest.
+5. F once there is hardware; F4's PC-testable parts can start earlier.
 
 ## Waiting on John
 

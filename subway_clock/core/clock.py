@@ -13,9 +13,10 @@ from .headline import headline
 
 log = logging.getLogger(__name__)
 
-# Arriving trains stay on the board until the feed drops them. This only guards
-# against a feed that keeps a train long after it should have left.
-OVERDUE_SECONDS = 5 * 60
+# A train leaves the board this long after its arrival time. The feeds go on
+# listing a train for a while after that (a median of 40 to 50 seconds when
+# sampled, sometimes 2 minutes), by when it has usually gone.
+DEPARTED_SECONDS = 30
 
 # The board is marked stale once any feed it needs has failed for this many refreshes.
 STALE_REFRESHES = 3
@@ -63,7 +64,7 @@ class Clock:
         self.settings = settings
         self.static = static
         self.fetch_feed = fetch_feed
-        self.upcoming = []  # every train within max_minutes, soonest first
+        self.upcoming = []  # every train within max_minutes at the last fetch, soonest first
         self._lines = 2
         self.grouped = False
         self.rotation_index = 0  # position of the last line in what it rotates through
@@ -120,9 +121,8 @@ class Clock:
             self._alerts_at = result.fetched_at
 
         preds = [p for url in result.feeds if url in self._feeds for p in self._feeds[url][0]]
-        earliest = now - OVERDUE_SECONDS
         latest = now + self.settings.max_minutes * 60
-        self.upcoming = sorted([p for p in preds if earliest <= p.time <= latest], key=lambda p: p.time)
+        self.upcoming = sorted([p for p in preds if p.time <= latest], key=lambda p: p.time)
         self.rotation_index = 0  # Restart rotation
 
     @property
@@ -137,10 +137,14 @@ class Clock:
             self._lines = lines
             self.rotation_index = 0
 
-    @property
-    def predictions(self):
+    def _waiting(self, now):
+        """The upcoming trains that haven't left yet."""
+        return [p for p in self.upcoming if p.time >= now - DEPARTED_SECONDS]
+
+    def predictions(self, now=None):
         """The trains the board can show: max_trains, or more if there are more lines than that."""
-        trains = self.upcoming[:max(self.settings.max_trains, self.lines)]
+        now = time.time() if now is None else now
+        trains = self._waiting(now)[:max(self.settings.max_trains, self.lines)]
         rotation = self.settings.rotation
         if rotation == "unique" or rotation == "auto" and self.settings.style in UNIQUE_ROUTE_STYLES:
             # Stop after the last train that brings a new route, but still fill the lines.
@@ -169,19 +173,23 @@ class Clock:
         now = time.time() if now is None else now
         if not self.settings.show_alerts:
             return ()
-        relevant = [a for a in self.alerts if a.active(now) and self._affected(a)]
+        on_board = {p.route_id for p in self.predictions(now)}
+        relevant = [a for a in self.alerts if a.active(now) and self._affected(a, on_board)]
         by_text = {}  # Alerts are often repeated per route
         for alert in sorted(relevant, key=lambda a: a.planned):
             by_text.setdefault(alert.text, Message(alert.text, alert.planned))
         return tuple(by_text.values())[:MAX_MESSAGES]
 
-    def _affected(self, alert):
-        """True if alert names one of the stops (in a direction shown), or a whole route that serves them."""
+    def _affected(self, alert, on_board):
+        """True if alert names one of the stops (in a direction shown), or a whole route that serves them.
+
+        on_board: the routes of the trains the board can show, which may include rerouted ones
+        """
         parents = self.static.stop_parents
         # (parent stop, direction) pairs shown: one for a directional stop, both for a parent stop
         shown = {(parents.get(stop, stop), d) for stop in self.settings.stops
                  for d in ("NS" if parents.get(stop, stop) == stop else stop[-1])}
-        routes = set(self.static.routes_for(self.settings.stops)) | {p.route_id for p in self.predictions}
+        routes = set(self.static.routes_for(self.settings.stops)) | on_board
         for route, stop, direction in alert.affects:
             directions = direction or "NS"
             if stop:
@@ -193,15 +201,16 @@ class Clock:
 
     def _rotation(self, now):
         """What the last line rotates through: ("train", index) and ("message", text) entries."""
-        count = len(self.predictions)
+        predictions = self.predictions(now)
+        count = len(predictions)
         if self.lines < 2:
             return []
-        if count > self._fixed and (count <= self.lines or self._arriving(self._fixed, now)):
+        arriving = count > self._fixed and predictions[self._fixed].time - now < 60
+        if count > self._fixed and (count <= self.lines or arriving):
             trains = [self._fixed]  # Nothing else to show, or it is arriving and stays put
         else:
             trains = range(self._fixed, count)
         rotation = [("train", i) for i in trains]
-        arriving = count > self._fixed and self._arriving(self._fixed, now)
         if self.settings.style in MESSAGE_LINE_STYLES and not arriving:
             rotation += [("message", m.text) for m in self.messages(now) for _ in range(MESSAGE_ROTATIONS)]
         return rotation
@@ -221,7 +230,8 @@ class Clock:
             return self._grouped_board(now)
 
         # The fixed lines always show the next trains.
-        indexes = list(range(min(self._fixed, len(self.predictions))))
+        predictions = self.predictions(now)
+        indexes = list(range(min(self._fixed, len(predictions))))
 
         # The last line cycles through the rest.
         message = ""
@@ -233,19 +243,20 @@ class Clock:
             else:
                 message = value
 
-        rows = tuple(self._row(self.predictions[i], i + 1, now) for i in indexes)
+        rows = tuple(self._row(predictions[i], i + 1, now) for i in indexes)
         return Board(style=self.settings.style, rows=rows, stale=self.stale(now),
                      messages=self.messages(now), message=message)
 
     def _grouped_board(self, now):
         """Every line shows a train; with more than one direction, each gets an equal share of the lines."""
+        waiting = self._waiting(now)
         by_direction = {}  # direction label -> its trains, in order of each direction's next train
-        for pred in self.upcoming:
+        for pred in waiting:
             by_direction.setdefault(self.static.direction_label(pred.stop_id), []).append(pred)
         headings = list(by_direction)[:self.lines]
 
         if len(headings) < 2:
-            rows = tuple(self._row(pred, i + 1, now) for i, pred in enumerate(self.upcoming[:self.lines]))
+            rows = tuple(self._row(pred, i + 1, now) for i, pred in enumerate(waiting[:self.lines]))
             groups = ()
         else:
             share, extra = divmod(self.lines, len(headings))  # Spare lines go to the first directions
@@ -256,9 +267,6 @@ class Clock:
             rows = tuple(row for group in groups for row in group.rows)
         return Board(style=self.settings.style, rows=rows, stale=self.stale(now),
                      messages=self.messages(now), groups=groups)
-
-    def _arriving(self, index, now):
-        return self.predictions[index].time - now < 60
 
     def _row(self, pred, number, now):
         seconds = pred.time - now

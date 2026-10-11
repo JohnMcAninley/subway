@@ -26,14 +26,21 @@ def test_upcoming_trains_sorted():
     assert [r.minutes for r in rows] == [3, 9]
 
 
-def test_arriving_train_stays_until_the_feed_drops_it():
-    clock = make_clock(six("late", -2), six("next", 6))
+def test_train_stays_briefly_after_its_arrival_time():
+    clock = make_clock(six("here", -0.4), six("next", 6))
     first = clock.board(now=NOW).rows[0]
-    assert (first.destination, first.minutes, first.arriving) == ("Dest late", 0, True)
+    assert (first.destination, first.minutes, first.arriving) == ("Dest here", 0, True)
 
 
-def test_long_overdue_train_dropped():
-    clock = make_clock(six("stuck", -6), six("next", 6))
+def test_train_leaves_soon_after_its_arrival_time_without_a_refresh():
+    clock = make_clock(six("here", 0.2), six("next", 6), six("later", 9))
+    assert [r.number for r in clock.board(now=NOW + 42).rows] == [1, 2]
+    assert [r.destination for r in clock.board(now=NOW + 43).rows] == ["Dest next", "Dest later"]
+    assert [r.number for r in clock.board(now=NOW + 43).rows] == [1, 2]
+
+
+def test_train_left_before_the_fetch_is_not_shown():
+    clock = make_clock(six("gone", -1), six("next", 6))
     assert [r.destination for r in clock.board(now=NOW).rows] == ["Dest next"]
 
 
@@ -492,7 +499,7 @@ def test_failed_feed_keeps_its_last_good_data():
     responses[url("6")] = feed(trip("six2", "6", [("635S", 2)]))
     clock.refresh(now=NOW + 30)
     assert [r.route for r in clock.board(now=NOW + 30).rows] == ["6", "Q"]
-    assert clock.predictions[0].trip_id == "six2"
+    assert clock.predictions(NOW)[0].trip_id == "six2"
 
 
 def test_stale_after_three_failed_refreshes():

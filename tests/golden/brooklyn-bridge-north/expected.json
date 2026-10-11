@@ -197,17 +197,6 @@
     "rows": [
       {
         "number": 1,
-        "route": "6",
-        "bullet": "6",
-        "destination": "149 St-Hostos",
-        "direction": "Uptown & The Bronx",
-        "headline": "Uptown & The Bronx",
-        "detail": "149 St-Hostos",
-        "minutes": 0,
-        "arriving": true
-      },
-      {
-        "number": 2,
         "route": "4",
         "bullet": "4",
         "destination": "Woodlawn",
@@ -216,6 +205,17 @@
         "detail": "Woodlawn",
         "minutes": 0,
         "arriving": true
+      },
+      {
+        "number": 2,
+        "route": "5",
+        "bullet": "5",
+        "destination": "Eastchester-Dyre Av",
+        "direction": "Uptown & The Bronx",
+        "headline": "Uptown & The Bronx",
+        "detail": "Eastchester-Dyre Av",
+        "minutes": 5,
+        "arriving": false
       }
     ],
     "stale": true,
