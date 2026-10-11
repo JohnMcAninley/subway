@@ -69,7 +69,7 @@ Sizes are rough: S is an hour or two, M a day, L several days.
 
 | ID | Package | Size | Notes |
 |---|---|---|---|
-| C1 | **led: bullets and font** | M | Hand-drawn dot patterns for each route bullet so the route is readable; a true dot-matrix font in place of Roboto Condensed; the signs' own abbreviations for long terminals ("Flatbush Av-Bklyn Col"). Close-up photos would help (P1). |
+| C1 | **led: bullets and font** | M | Done, without photos: `LedFont.js` has a dot-matrix font, a dot pattern for each route bullet, and abbreviations for long terminals. Open until close-up photos come in (P1): the letter shapes, the size of the bullets (the 6 and the Q are hard to read on a small screen), and what the signs show for long terminals other than "Flatbush Av-Bklyn Col" (e.g. Van Cortlandt Park-242 St, which we show as "Van Cortlandt Park"). |
 | C2 | **new: portrait alerts panel** | S | Titles, small bullets with badges, and "Updated 15 mins ago", as on the real screens. After A3. |
 | C3 | **new: full-screen alert** | S | The card takes over the whole screen when service isn't running. After A3. |
 | C4 | **classic: weather in the strip** | S | The real strip shows the temperature beside the time. Needs a weather source with no key and a location setting; decide whether it is worth it. |
@@ -140,7 +140,7 @@ it and a product, as read on 2026-10-11; none of it is legal advice.
 
 ## Suggested order
 
-1. In parallel: A5 then D1 (home header); C1. (B1, B2 and E1 are done.)
+1. In parallel: A5 then D1 (home header). (B1, B2, C1 and E1 are done.)
 2. A2 and A4 as photos come in. A3, then C2 and C3.
 3. E3, then E2.
 4. S1 early if the clock is to be sold: the answer decides whether there is a
@@ -152,6 +152,6 @@ it and a product, as read on 2026-10-11; none of it is legal advice.
 | ID | What | Blocks |
 |---|---|---|
 | H1 | **Hardware.** The Pi Zero 2 W isn't available anywhere. John has an older Pi "Model B or something like that" to dig out. Which model matters a great deal: an original Model B or B+ (single core, 512 MB) is unlikely to run Qt Quick acceptably, while a Pi 2 or 3 Model B should. Also still open: which screen, which sets the shape that gets the most polish. | F |
-| P1 | **Photos**, collected over the next couple of weeks of riding: the newer clocks (especially an F at 75 Av and a 2 at Franklin Av), LED signs close up, anything showing an alert, and how far ahead the last train listed is. | A2, A4, C1 |
+| P1 | **Photos**, collected over the next couple of weeks of riding: the newer clocks (especially an F at 75 Av and a 2 at Franklin Av), LED signs close up (a line near enough to count the dots, a bullet, an express diamond if one turns up, and long terminals such as Van Cortlandt Park-242 St and Brooklyn Bridge-City Hall), anything showing an alert, and how far ahead the last train listed is. | A2, A4, C1 |
 | D2 | **What a home view should be**, beyond naming the station. | D2 |
 | S1 | **Whether to sell it**, and if so, writing to IMG Licensing or the Transit Museum. | S |

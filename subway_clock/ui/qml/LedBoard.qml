@@ -1,4 +1,5 @@
 import QtQuick
+import "LedFont.js" as LedFont
 import "Styles.js" as Styles
 
 // The LED signs on the numbered lines: a matrix of red, green and amber dots,
@@ -75,17 +76,17 @@ Rectangle {
                     width: matrix.width
                     height: root.lineDots
 
-                    LedRow.Dots {
+                    LedText {
                         x: 1
-                        width: parent.width - 2 - (value.width ? value.width + 3 : 0)
-                        text: modelData.text
-                        elide: Text.ElideRight
+                        y: 2
+                        text: LedFont.fit(modelData.text, parent.width - 2 - (value.width ? value.width + 3 : 0))
                         color: root.colors.text
                     }
 
-                    LedRow.Dots {
+                    LedText {
                         id: value
                         x: parent.width - 1 - width
+                        y: 2
                         text: modelData.value
                         color: root.colors.text
                     }

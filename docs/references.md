@@ -121,12 +121,19 @@ seconds of each other.
   2 lines, about 16 rows of dots each and roughly 192 dots across;
   mezzanine signs have 4 lines.
 - Each line: `1.` bullet, terminal, `2min` (no space). Letters are about 11
-  dots tall with strokes 2 dots wide.
+  dots tall with strokes 2 dots wide. Our font (`ui/qml/LedFont.js`) is drawn
+  to those measurements, not copied dot for dot: there is no close-up photo
+  yet.
 - Text is green. The bullet is a filled disc (a diamond for express) with
   the route unlit inside it: red for 1, 2 and 3, green for 4, 5 and 6.
 - **Arriving train**: `0min` and the whole line changes colour, to amber at
   Times Sq and to red at Nevins St. We use amber.
 - Line 2 rotates as on the classic clocks (photos show it numbered `3.`).
-- Long terminals are abbreviated ("Flatbush Av-Bklyn Col"); we cut them
-  short instead.
+- Long terminals are abbreviated ("Flatbush Av-Bklyn Col"). That is the only
+  one we have seen. For the rest we use the MTA's usual short forms ("Bklyn",
+  "Ctr", "Hts") only as far as needed, then drop a final "Av" or "St", then
+  the part after the last hyphen ("Whitehall St"). The table of real ones is
+  `terminals` in `LedFont.js`.
+- Our bullets are 15 dots across with the route 9 dots tall; the real ones'
+  size and the shape of the express diamond are guesses.
 - No messages. An idle sign shows the date and time.

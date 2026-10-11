@@ -1,7 +1,8 @@
 import QtQuick
+import "LedFont.js" as LedFont
 
 // One line of the LED sign, drawn one pixel per dot: "1.(bullet)Destination   3min"
-Item {
+Canvas {
     id: row
 
     required property var train
@@ -9,66 +10,38 @@ Item {
 
     // An arriving train's whole line changes colour; its bullet keeps the route's.
     readonly property color textColor: train.arriving ? colors.arriving : colors.text
-    readonly property bool diamond: train.bullet.length > 1 && train.bullet.endsWith("d")  // express
-    readonly property string letter: diamond ? train.bullet.slice(0, -1) : train.route
+    readonly property color bulletColor: colors.bullets[train.route] || colors.text
 
-    component Dots: Text {
-        // Without antialiasing every pixel is a dot fully on or off.
-        renderType: Text.NativeRendering
-        font.family: "Roboto"
-        font.styleName: "Condensed Bold"  // the signs' letters are narrow, with strokes two dots wide
-        font.pixelSize: 15
-        antialiasing: false
-        font.hintingPreference: Font.PreferFullHinting
-        y: 0
-        color: row.textColor
-    }
+    readonly property int textY: 2  // the top of a capital; descenders reach the line's last row
+    readonly property string number: train.number + "."
+    readonly property string minutes: train.minutes + "min"
+    // The bullets line up while the numbers have one digit, and the terminals always do.
+    readonly property int bulletX: 1 + Math.max(LedFont.width("0."), LedFont.width(number)) + 2
+    readonly property int destinationX: bulletX + LedFont.bulletSize + 3
+    // Room for the terminal beside two digits of minutes, so its name doesn't change as the train nears.
+    readonly property int destinationWidth: width - 1 - LedFont.width("00min") - 4 - destinationX
+    readonly property string destination: LedFont.fit(train.destination, destinationWidth)
 
-    Dots {
-        id: number
-        x: 1
-        text: row.train.number + "."
-    }
+    // Everything the line shows; the board is republished more often than that changes.
+    readonly property string content: [number, train.bullet, destination, minutes, textColor, bulletColor].join("|")
+    onContentChanged: requestPaint()
 
-    Item {
-        id: bullet
-        x: number.x + number.width + 1
-        y: 2
-        width: 13
-        height: 13
+    smooth: false
+    antialiasing: false
 
-        Rectangle {
-            anchors.centerIn: parent
-            width: row.diamond ? 10 : 13
-            height: width
-            radius: row.diamond ? 0 : width / 2
-            rotation: row.diamond ? 45 : 0
-            antialiasing: false
-            color: row.colors.bullets[row.train.route] || row.colors.text
+    onPaint: {
+        var ctx = getContext("2d")
+        ctx.clearRect(0, 0, width, height)
+
+        function draw(runs, x, y, color) {
+            ctx.fillStyle = color
+            for (var i = 0; i < runs.length; i++)
+                ctx.fillRect(x + runs[i][0], y + runs[i][1], runs[i][2], 1)
         }
 
-        Dots {
-            anchors.centerIn: parent
-            text: row.letter.length === 1 ? row.letter : row.train.bullet.charAt(0)
-            font.styleName: "Condensed SemiBold"
-            font.pixelSize: 11
-            color: row.colors.background
-        }
-    }
-
-    Dots {
-        anchors.left: bullet.right
-        anchors.leftMargin: 3
-        anchors.right: minutes.left
-        anchors.rightMargin: 3
-        text: row.train.destination
-        elide: Text.ElideRight
-    }
-
-    Dots {
-        id: minutes
-        anchors.right: parent.right
-        anchors.rightMargin: 1
-        text: row.train.minutes + "min"
+        draw(LedFont.runs(number), bulletX - 2 - LedFont.width(number), textY, textColor)
+        draw(LedFont.bulletRuns(train.bullet), bulletX, 0, bulletColor)
+        draw(LedFont.runs(destination), destinationX, textY, textColor)
+        draw(LedFont.runs(minutes), width - 1 - LedFont.width(minutes), textY, textColor)
     }
 }
