@@ -56,11 +56,11 @@ def alerts_feed(*alerts):
     return message
 
 
-def FakeStatic(stop_routes=None, headsigns=None, stop_names=None, direction_labels=None):
+def FakeStatic(stop_routes=None, headsigns=None, stop_names=None, direction_labels=None, stop_boroughs=None):
     """StaticTables for parent stops in stop_routes and their N/S platforms."""
     stop_routes = stop_routes or {"633": ["6", "6X"]}
     parents = {stop + direction: stop for stop in stop_routes for direction in ("", "N", "S")}
-    return StaticTables(stop_names or {}, parents, stop_routes, headsigns or {}, direction_labels)
+    return StaticTables(stop_names or {}, parents, stop_routes, headsigns or {}, direction_labels, stop_boroughs)
 
 
 def make_clock(*trips, static=None, feeds=None, **settings):

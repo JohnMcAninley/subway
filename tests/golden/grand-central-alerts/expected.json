@@ -9,6 +9,8 @@
         "bullet": "5",
         "destination": "Eastchester-Dyre Av",
         "direction": "Uptown & The Bronx",
+        "headline": "Uptown & The Bronx",
+        "detail": "Eastchester-Dyre Av",
         "minutes": 0,
         "arriving": true
       },
@@ -18,6 +20,8 @@
         "bullet": "4",
         "destination": "Crown Hts-Utica Av",
         "direction": "Downtown & Brooklyn",
+        "headline": "Downtown & Brooklyn",
+        "detail": "Crown Hts-Utica Av",
         "minutes": 1,
         "arriving": false
       }
@@ -50,6 +54,8 @@
         "bullet": "5",
         "destination": "Eastchester-Dyre Av",
         "direction": "Uptown & The Bronx",
+        "headline": "Uptown & The Bronx",
+        "detail": "Eastchester-Dyre Av",
         "minutes": 0,
         "arriving": true
       },
@@ -59,6 +65,8 @@
         "bullet": "6",
         "destination": "149 St-Hostos",
         "direction": "Uptown & The Bronx",
+        "headline": "Uptown & The Bronx",
+        "detail": "149 St-Hostos",
         "minutes": 1,
         "arriving": false
       }
@@ -91,6 +99,8 @@
         "bullet": "5",
         "destination": "Eastchester-Dyre Av",
         "direction": "Uptown & The Bronx",
+        "headline": "Uptown & The Bronx",
+        "detail": "Eastchester-Dyre Av",
         "minutes": 0,
         "arriving": true
       },
@@ -100,6 +110,8 @@
         "bullet": "4",
         "destination": "Woodlawn",
         "direction": "Uptown & The Bronx",
+        "headline": "Uptown & The Bronx",
+        "detail": "Woodlawn",
         "minutes": 2,
         "arriving": false
       }
@@ -132,6 +144,8 @@
         "bullet": "5",
         "destination": "Eastchester-Dyre Av",
         "direction": "Uptown & The Bronx",
+        "headline": "Uptown & The Bronx",
+        "detail": "Eastchester-Dyre Av",
         "minutes": 0,
         "arriving": true
       },
@@ -141,6 +155,8 @@
         "bullet": "5",
         "destination": "Bowling Green",
         "direction": "Downtown & Brooklyn",
+        "headline": "Downtown",
+        "detail": "Bowling Green",
         "minutes": 3,
         "arriving": false
       }
@@ -173,6 +189,8 @@
         "bullet": "5",
         "destination": "Eastchester-Dyre Av",
         "direction": "Uptown & The Bronx",
+        "headline": "Uptown & The Bronx",
+        "detail": "Eastchester-Dyre Av",
         "minutes": 0,
         "arriving": true
       },
@@ -182,6 +200,8 @@
         "bullet": "4",
         "destination": "Crown Hts-Utica Av",
         "direction": "Downtown & Brooklyn",
+        "headline": "Downtown & Brooklyn",
+        "detail": "Crown Hts-Utica Av",
         "minutes": 1,
         "arriving": false
       }
@@ -214,6 +234,8 @@
         "bullet": "5",
         "destination": "Eastchester-Dyre Av",
         "direction": "Uptown & The Bronx",
+        "headline": "Uptown & The Bronx",
+        "detail": "Eastchester-Dyre Av",
         "minutes": 0,
         "arriving": true
       },
@@ -223,6 +245,8 @@
         "bullet": "6",
         "destination": "149 St-Hostos",
         "direction": "Uptown & The Bronx",
+        "headline": "Uptown & The Bronx",
+        "detail": "149 St-Hostos",
         "minutes": 1,
         "arriving": false
       }
@@ -255,6 +279,8 @@
         "bullet": "5",
         "destination": "Eastchester-Dyre Av",
         "direction": "Uptown & The Bronx",
+        "headline": "Uptown & The Bronx",
+        "detail": "Eastchester-Dyre Av",
         "minutes": 0,
         "arriving": true
       },
@@ -264,6 +290,8 @@
         "bullet": "4",
         "destination": "Crown Hts-Utica Av",
         "direction": "Downtown & Brooklyn",
+        "headline": "Downtown & Brooklyn",
+        "detail": "Crown Hts-Utica Av",
         "minutes": 0,
         "arriving": true
       }
@@ -296,6 +324,8 @@
         "bullet": "5",
         "destination": "Eastchester-Dyre Av",
         "direction": "Uptown & The Bronx",
+        "headline": "Uptown & The Bronx",
+        "detail": "Eastchester-Dyre Av",
         "minutes": 0,
         "arriving": true
       },
@@ -305,6 +335,8 @@
         "bullet": "4",
         "destination": "Crown Hts-Utica Av",
         "direction": "Downtown & Brooklyn",
+        "headline": "Downtown & Brooklyn",
+        "detail": "Crown Hts-Utica Av",
         "minutes": 0,
         "arriving": true
       }
@@ -337,6 +369,8 @@
         "bullet": "5",
         "destination": "Eastchester-Dyre Av",
         "direction": "Uptown & The Bronx",
+        "headline": "Uptown & The Bronx",
+        "detail": "Eastchester-Dyre Av",
         "minutes": 0,
         "arriving": true
       },
@@ -346,6 +380,8 @@
         "bullet": "4",
         "destination": "Crown Hts-Utica Av",
         "direction": "Downtown & Brooklyn",
+        "headline": "Downtown & Brooklyn",
+        "detail": "Crown Hts-Utica Av",
         "minutes": 0,
         "arriving": true
       }
@@ -378,6 +414,8 @@
         "bullet": "5",
         "destination": "Eastchester-Dyre Av",
         "direction": "Uptown & The Bronx",
+        "headline": "Uptown & The Bronx",
+        "detail": "Eastchester-Dyre Av",
         "minutes": 0,
         "arriving": true
       },
@@ -387,6 +425,8 @@
         "bullet": "4",
         "destination": "Crown Hts-Utica Av",
         "direction": "Downtown & Brooklyn",
+        "headline": "Downtown & Brooklyn",
+        "detail": "Crown Hts-Utica Av",
         "minutes": 0,
         "arriving": true
       }
@@ -419,6 +459,8 @@
         "bullet": "5",
         "destination": "Eastchester-Dyre Av",
         "direction": "Uptown & The Bronx",
+        "headline": "Uptown & The Bronx",
+        "detail": "Eastchester-Dyre Av",
         "minutes": 0,
         "arriving": true
       },
@@ -428,6 +470,8 @@
         "bullet": "4",
         "destination": "Crown Hts-Utica Av",
         "direction": "Downtown & Brooklyn",
+        "headline": "Downtown & Brooklyn",
+        "detail": "Crown Hts-Utica Av",
         "minutes": 0,
         "arriving": true
       }
@@ -460,6 +504,8 @@
         "bullet": "5",
         "destination": "Eastchester-Dyre Av",
         "direction": "Uptown & The Bronx",
+        "headline": "Uptown & The Bronx",
+        "detail": "Eastchester-Dyre Av",
         "minutes": 0,
         "arriving": true
       },
@@ -469,6 +515,8 @@
         "bullet": "4",
         "destination": "Crown Hts-Utica Av",
         "direction": "Downtown & Brooklyn",
+        "headline": "Downtown & Brooklyn",
+        "detail": "Crown Hts-Utica Av",
         "minutes": 0,
         "arriving": true
       }

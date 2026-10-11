@@ -2,7 +2,7 @@ from pathlib import Path
 
 from subway_clock.core.board import bullet_id
 from subway_clock.core.feeds import ROUTE_FEEDS, feed_urls
-from subway_clock.core.gtfs import build_stop_routes, load_direction_labels
+from subway_clock.core.gtfs import build_stop_routes, load_stations
 
 # route_id column of routes.txt in the MTA subway GTFS
 ALL_ROUTES = "A C E B D F FX M G J Z L N Q R W GS FS H 1 2 3 4 5 6 6X 7 7X SI".split()
@@ -38,7 +38,8 @@ def test_build_stop_routes_groups_by_parent_across_schedules(tmp_path):
     assert build_stop_routes([base, supplemented], parents) == {"633": ["4", "6", "6X"], "631": ["4"]}
 
 
-def test_bundled_direction_labels():
-    labels = load_direction_labels()
+def test_bundled_stations():
+    labels, boroughs = load_stations()
+    assert (boroughs["635"], boroughs["R01"], boroughs["S31"]) == ("M", "Q", "SI")
     assert labels["635"] == {"N": "Uptown & The Bronx", "S": "Downtown & Brooklyn"}
     assert labels["A02"] == {"S": "Downtown & Brooklyn"}  # Inwood: no label northbound, where no trains go

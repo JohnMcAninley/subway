@@ -216,6 +216,7 @@ def capture(names):
                             if p in static.stop_routes},
             "headsigns": {t: static.headsigns[t] for t in sorted(trip_ids) if t in static.headsigns},
             "direction_labels": direction_labels(static, stops),
+            "stop_boroughs": stop_boroughs(static, stops | trip_stops),
         })
 
         steps = definition.get("steps", standard_steps)(captured_at)
@@ -234,6 +235,12 @@ def direction_labels(static, stops):
     """The static direction labels for a case's stops' parents."""
     parents = sorted({static.stop_parents.get(s, s) for s in stops})
     return {p: static.direction_labels[p] for p in parents if p in static.direction_labels}
+
+
+def stop_boroughs(static, stops):
+    """The boroughs of the parents of stops."""
+    parents = sorted({static.stop_parents.get(s, s) for s in stops})
+    return {p: static.stop_boroughs[p] for p in parents if p in static.stop_boroughs}
 
 
 def case_dirs():

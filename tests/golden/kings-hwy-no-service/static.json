@@ -15,5 +15,8 @@
       "N": "Manhattan",
       "S": "Brighton Beach & Coney Island"
     }
+  },
+  "stop_boroughs": {
+    "D35": "Bk"
   }
 }

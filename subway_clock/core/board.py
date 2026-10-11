@@ -12,7 +12,9 @@ class Row:
     route: str  # GTFS route_id, e.g. "6X"
     bullet: str  # bullet asset id, e.g. "6d" for the 6 express diamond
     destination: str
-    direction: str  # the platform's direction label, e.g. "Uptown" or "Brooklyn"; "" if there isn't one
+    direction: str  # the platform's direction label, e.g. "Uptown & The Bronx"; "" if there isn't one
+    headline: str  # how the newer clocks head the train, e.g. "Downtown & Brooklyn"
+    detail: str  # what they show under the headline, usually the destination; may be ""
     minutes: int
     arriving: bool
 

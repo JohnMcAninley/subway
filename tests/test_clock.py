@@ -205,6 +205,82 @@ def test_departure_only_first_stop_is_shown():
     assert [r.minutes for r in clock.board(now=NOW).rows] == [4]
 
 
+# Headlines, as on the newer clocks
+
+
+def headline_of(route, here, stops, label="", boroughs=None):
+    """(headline, detail) for a train at stop `here` with the stops it has left, ending at its terminal."""
+    names = {stop: f"{stop} name" for stop in stops}
+    static = FakeStatic(stop_routes={stop[:-1]: [route] for stop in [here] + stops}, stop_names=names,
+                        direction_labels={here[:-1]: {here[-1]: label}} if label else None, stop_boroughs=boroughs)
+    clock = make_clock(trip("t", route, [(here, 3)] + [(stop, 5 + i) for i, stop in enumerate(stops)]),
+                       static=static, stops=[here])
+    row = clock.board(now=NOW).rows[0]
+    return row.headline, row.detail
+
+
+BOROUGHS = {"M1": "M", "M2": "M", "B1": "Bk", "B2": "Bk", "Q1": "Q", "Q2": "Q", "X1": "Bx"}
+
+
+def test_headline_within_manhattan_is_the_direction():
+    assert headline_of("W", "M1S", ["M2S"], "Downtown & Brooklyn", BOROUGHS) == ("Downtown", "M2S name")
+
+
+def test_headline_leaving_manhattan_adds_the_next_borough():
+    assert headline_of("A", "M1S", ["M2S", "B1S", "Q1S"], "Downtown & Brooklyn", BOROUGHS) == (
+        "Downtown & Brooklyn", "Q1S name")
+    assert headline_of("4", "M1N", ["X1N"], "Uptown & The Bronx", BOROUGHS) == ("Uptown & The Bronx", "X1N name")
+
+
+def test_headline_heading_into_manhattan():
+    assert headline_of("W", "Q1S", ["Q2S", "M1S"], "Manhattan", BOROUGHS) == ("Manhattan", "M1S name")
+    assert headline_of("N", "Q1S", ["M1S", "B1S"], "Manhattan", BOROUGHS) == ("Manhattan & Brooklyn", "B1S name")
+
+
+def test_headline_elsewhere_is_the_terminal_over_its_borough():
+    assert headline_of("C", "B1S", ["B2S"], "Euclid - Lefferts", BOROUGHS) == ("B2S name", "Brooklyn")
+    assert headline_of("A", "B1S", ["B2S", "Q1S"], "Euclid - Lefferts", BOROUGHS) == ("Q1S name", "Queens")
+    assert headline_of("L", "M1S", ["B1S"], "Brooklyn", BOROUGHS) == ("B1S name", "Brooklyn")
+
+
+def test_headline_without_boroughs_is_the_platform_label():
+    assert headline_of("6", "M1S", ["M2S"], "Downtown") == ("Downtown", "M2S name")
+    assert headline_of("6", "M1S", ["M2S"]) == ("M2S name", "")
+
+
+def test_headline_at_the_last_stop_is_the_platform_label():
+    assert headline_of("6", "M1S", [], "Downtown", BOROUGHS) == ("Downtown", "Unknown")
+
+
+# The newer clocks stop rotating once every route has been shown
+
+
+def test_new_style_stops_after_the_last_new_route():
+    routes = ["W", "N", "R", "W", "R"]
+    clock = make_clock(*[trip(str(i), r, [("R20S", i * 3 + 3)]) for i, r in enumerate(routes)],
+                       static=FakeStatic(stop_routes={"R20": ["N", "R", "W"]}), stops=["R20S"], style="new")
+    states = [shown(clock)]
+    for _ in range(3):
+        clock.rotate(now=NOW)
+        states.append(shown(clock))
+    assert states == [[1, 2], [1, 3], [1, 2], [1, 3]]
+
+
+def test_new_style_with_one_route_still_fills_the_lines():
+    clock = make_clock(*[six(str(i), i * 3 + 3) for i in range(5)], style="new")
+    assert not clock.rotate(now=NOW)
+    assert shown(clock) == [1, 2]
+
+
+def test_classic_style_rotates_through_max_trains_whatever_the_routes():
+    clock = make_clock(*[six(str(i), i * 3 + 3) for i in range(5)])
+    states = []
+    for _ in range(4):
+        clock.rotate(now=NOW)
+        states.append(shown(clock))
+    assert states == [[1, 3], [1, 4], [1, 5], [1, 2]]
+
+
 # Grouped boards, for screens with room for a list
 
 
@@ -318,7 +394,7 @@ def fail_alerts(fetch):
 
 
 def test_new_style_shows_alerts_in_place_of_the_last_line():
-    trips = [six(str(i), i * 2 + 2) for i in range(3)]
+    trips = [six("a", 2), six("b", 4), trip("c", "6X", [("633S", 6)])]
     clock = alert_clock(alert("a", "[6] delays", ("6", "", None)), trips=trips, style="new")
     states = []
     for _ in range(5):

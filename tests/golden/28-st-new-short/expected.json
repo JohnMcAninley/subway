@@ -9,6 +9,8 @@
         "bullet": "6",
         "destination": "Brooklyn Bridge-City Hall",
         "direction": "Downtown",
+        "headline": "Downtown",
+        "detail": "Brooklyn Bridge-City Hall",
         "minutes": 9,
         "arriving": false
       },
@@ -18,6 +20,8 @@
         "bullet": "6",
         "destination": "Brooklyn Bridge-City Hall",
         "direction": "Downtown",
+        "headline": "Downtown",
+        "detail": "Brooklyn Bridge-City Hall",
         "minutes": 18,
         "arriving": false
       }
@@ -37,6 +41,8 @@
         "bullet": "6",
         "destination": "Brooklyn Bridge-City Hall",
         "direction": "Downtown",
+        "headline": "Downtown",
+        "detail": "Brooklyn Bridge-City Hall",
         "minutes": 9,
         "arriving": false
       },
@@ -46,6 +52,8 @@
         "bullet": "6",
         "destination": "Brooklyn Bridge-City Hall",
         "direction": "Downtown",
+        "headline": "Downtown",
+        "detail": "Brooklyn Bridge-City Hall",
         "minutes": 18,
         "arriving": false
       }
@@ -65,6 +73,8 @@
         "bullet": "6",
         "destination": "Brooklyn Bridge-City Hall",
         "direction": "Downtown",
+        "headline": "Downtown",
+        "detail": "Brooklyn Bridge-City Hall",
         "minutes": 9,
         "arriving": false
       },
@@ -74,6 +84,8 @@
         "bullet": "6",
         "destination": "Brooklyn Bridge-City Hall",
         "direction": "Downtown",
+        "headline": "Downtown",
+        "detail": "Brooklyn Bridge-City Hall",
         "minutes": 18,
         "arriving": false
       }
@@ -93,6 +105,8 @@
         "bullet": "6",
         "destination": "Brooklyn Bridge-City Hall",
         "direction": "Downtown",
+        "headline": "Downtown",
+        "detail": "Brooklyn Bridge-City Hall",
         "minutes": 9,
         "arriving": false
       },
@@ -102,6 +116,8 @@
         "bullet": "6",
         "destination": "Brooklyn Bridge-City Hall",
         "direction": "Downtown",
+        "headline": "Downtown",
+        "detail": "Brooklyn Bridge-City Hall",
         "minutes": 18,
         "arriving": false
       }
@@ -121,6 +137,8 @@
         "bullet": "6",
         "destination": "Brooklyn Bridge-City Hall",
         "direction": "Downtown",
+        "headline": "Downtown",
+        "detail": "Brooklyn Bridge-City Hall",
         "minutes": 9,
         "arriving": false
       },
@@ -130,6 +148,8 @@
         "bullet": "6",
         "destination": "Brooklyn Bridge-City Hall",
         "direction": "Downtown",
+        "headline": "Downtown",
+        "detail": "Brooklyn Bridge-City Hall",
         "minutes": 18,
         "arriving": false
       }
@@ -149,6 +169,8 @@
         "bullet": "6",
         "destination": "Brooklyn Bridge-City Hall",
         "direction": "Downtown",
+        "headline": "Downtown",
+        "detail": "Brooklyn Bridge-City Hall",
         "minutes": 8,
         "arriving": false
       },
@@ -158,6 +180,8 @@
         "bullet": "6",
         "destination": "Brooklyn Bridge-City Hall",
         "direction": "Downtown",
+        "headline": "Downtown",
+        "detail": "Brooklyn Bridge-City Hall",
         "minutes": 17,
         "arriving": false
       }
@@ -177,6 +201,8 @@
         "bullet": "6",
         "destination": "Brooklyn Bridge-City Hall",
         "direction": "Downtown",
+        "headline": "Downtown",
+        "detail": "Brooklyn Bridge-City Hall",
         "minutes": 5,
         "arriving": false
       },
@@ -186,6 +212,8 @@
         "bullet": "6",
         "destination": "Brooklyn Bridge-City Hall",
         "direction": "Downtown",
+        "headline": "Downtown",
+        "detail": "Brooklyn Bridge-City Hall",
         "minutes": 14,
         "arriving": false
       }

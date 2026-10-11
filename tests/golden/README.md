@@ -57,6 +57,7 @@ Only the entries the case can look up:
 - `headsigns`: realtime trip ID to scheduled headsign
 - `direction_labels`: parent stop ID to its direction labels, e.g.
   `{"N": "Uptown", "S": "Downtown"}`. Either direction may be missing.
+- `stop_boroughs`: parent stop ID to borough code: `M`, `Bk`, `Q`, `Bx` or `SI`
 
 ### feeds/*.pb
 
@@ -74,7 +75,8 @@ One entry per `board` step:
   "style": "classic",
   "rows": [
     {"number": 1, "route": "6", "bullet": "6", "destination": "Brooklyn Bridge-City Hall",
-     "direction": "Downtown", "minutes": 0, "arriving": true}
+     "direction": "Downtown & Brooklyn", "headline": "Downtown", "detail": "Brooklyn Bridge-City Hall",
+     "minutes": 0, "arriving": true}
   ],
   "stale": false,
   "messages": [{"text": "Downtown [4][6] trains are running with delays after ...", "planned": false}],
@@ -103,6 +105,9 @@ What the cases test, for anyone implementing the core:
   on `refresh`, with that step's `now`.
 - The board shows the first `max(max_trains, lines)` of those: `max_trains`,
   or more if the screen has more lines than that.
+- In the `new` style, that list is then cut after the last train whose route
+  hasn't appeared earlier in it, but never to fewer than `lines` trains. (So
+  the last line stops rotating once every route has been shown.)
 
 **Rows**
 - `minutes` is `floor((time - now) / 60)`, but never below 0. `arriving` is
@@ -116,6 +121,24 @@ What the cases test, for anyone implementing the core:
   character of the matched stop time's stop ID (`N` or `S`) and `parent` is
   that stop ID without it; or `""` if there is no such label.
 - `number` is the train's 1-based position in the kept list.
+- `headline` and `detail` are how the newer clocks describe the train. Let
+  `here` be the borough of the matched stop's parent. Take the trip's stop
+  time updates after the matched one, up to and including the destination
+  stop (the last with a name); `ahead` is their parents' boroughs in order,
+  leaving out stops with no borough. If `here` is unknown, the destination
+  stop has no borough, or there are no such stops: `headline` is `direction`
+  and `detail` is `destination`; or, with no `direction`, `headline` is
+  `destination` and `detail` is `""`. Otherwise, with `crossing` the distinct
+  boroughs in `ahead` other than `here`, in order of first appearance, and
+  borough names Manhattan, Brooklyn, Queens, The Bronx and Staten Island:
+  - if the first word of `direction` is `Uptown` or `Downtown`: `headline`
+    is that word, plus ` & ` and the name of the first borough in `crossing`
+    if there is one; `detail` is `destination`;
+  - else if `crossing` includes Manhattan: `headline` is `Manhattan`, plus
+    ` & ` and the name of the last borough in `ahead` unless that is
+    Manhattan; `detail` is `destination`;
+  - else `headline` is `destination` and `detail` is the name of the last
+    borough in `ahead`.
 
 **The lines**
 

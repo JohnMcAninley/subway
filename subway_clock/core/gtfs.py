@@ -14,8 +14,8 @@ import requests
 SUBWAY_URL = "https://rrgtfsfeeds.s3.amazonaws.com/gtfs_subway.zip"
 SUPPLEMENTED_URL = "https://rrgtfsfeeds.s3.amazonaws.com/gtfs_supplemented.zip"
 
-# Generated from the MTA's station list by scripts/update_direction_labels.py
-DIRECTION_LABELS_PATH = Path(__file__).resolve().parent.parent / "assets" / "direction_labels.json"
+# Generated from the MTA's station list by scripts/update_stations.py
+STATIONS_PATH = Path(__file__).resolve().parent.parent / "assets" / "stations.json"
 
 log = logging.getLogger(__name__)
 
@@ -116,10 +116,18 @@ def load_headsigns(gtfs_path, headsigns=None):
     return headsigns
 
 
-def load_direction_labels(path=DIRECTION_LABELS_PATH):
-    """Parent stop ID -> {"N": label, "S": label}; see StaticTables."""
+def load_stations(path=STATIONS_PATH):
+    """The bundled station list as (direction_labels, stop_boroughs); see StaticTables."""
     with open(path, encoding="utf-8") as f:
-        return json.load(f)
+        stations = json.load(f)
+    labels = {stop: {d: station[d] for d in "NS" if d in station} for stop, station in stations.items()}
+    boroughs = {stop: station["borough"] for stop, station in stations.items()}
+    return {stop: directions for stop, directions in labels.items() if directions}, boroughs
+
+
+def terminal(stop_names, trip_stops):
+    """The stop ID where a realtime trip ends for riders: the last of its stops with a name, or None."""
+    return next((stop_id for stop_id in reversed(trip_stops) if stop_id in stop_names), None)
 
 
 def destination(stop_names, headsigns, trip_stops, trip_id):
@@ -129,10 +137,8 @@ def destination(stop_names, headsigns, trip_stops, trip_id):
     past Broad Channel), so skip those. Fall back to the schedule's headsign,
     which only exists for scheduled trips, not added or rerouted ones.
     """
-    for stop_id in reversed(trip_stops):
-        if stop_id in stop_names:
-            return stop_names[stop_id]
-    return headsigns.get(trip_id, "Unknown")
+    last = terminal(stop_names, trip_stops)
+    return stop_names[last] if last else headsigns.get(trip_id, "Unknown")
 
 
 def build_station_complexes(stops_path, transfers_path):
@@ -186,14 +192,17 @@ class StaticTables:
     headsigns: realtime-style trip ID -> scheduled headsign
     direction_labels: parent stop ID -> {"N": label, "S": label}, the MTA's names for
         each platform direction, e.g. {"N": "Uptown", "S": "Downtown"}
+    stop_boroughs: parent stop ID -> "M", "Bk", "Q", "Bx" or "SI"
     """
 
-    def __init__(self, stop_names, stop_parents, stop_routes, headsigns, direction_labels=None):
+    def __init__(self, stop_names, stop_parents, stop_routes, headsigns, direction_labels=None,
+                 stop_boroughs=None):
         self.stop_names = stop_names
         self.stop_parents = stop_parents
         self.stop_routes = stop_routes
         self.headsigns = headsigns
         self.direction_labels = direction_labels or {}
+        self.stop_boroughs = stop_boroughs or {}
 
     def refresh(self):
         """Fixed tables never change."""
@@ -201,6 +210,10 @@ class StaticTables:
     def direction_label(self, stop_id):
         """The direction label for a directional stop ID like "633S", or "" if there isn't one."""
         return self.direction_labels.get(stop_id[:-1], {}).get(stop_id[-1:], "")
+
+    def borough(self, stop_id):
+        """The borough code for a stop ID (directional or parent), or "" if unknown."""
+        return self.stop_boroughs.get(self.stop_parents.get(stop_id, stop_id), "")
 
     def routes_for(self, stops):
         """Sorted route IDs scheduled at any of stops (directional or parent stop IDs)."""
@@ -251,7 +264,7 @@ class StaticData(StaticTables):
         for name, _ in self.SOURCES:
             load_headsigns(self.data_dir / name / "trips.txt", headsigns)
         stop_routes = self._cached_stop_routes(stop_parents)
-        super().__init__(stop_names, stop_parents, stop_routes, headsigns, load_direction_labels())
+        super().__init__(stop_names, stop_parents, stop_routes, headsigns, *load_stations())
 
     def _cached_stop_routes(self, stop_parents):
         """build_stop_routes takes seconds (millions of stop_times rows), so cache it until the GTFS changes."""

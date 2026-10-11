@@ -9,6 +9,8 @@
         "bullet": "R",
         "destination": "Bay Ridge-95 St",
         "direction": "Downtown & Brooklyn",
+        "headline": "Downtown & Brooklyn",
+        "detail": "Bay Ridge-95 St",
         "minutes": 0,
         "arriving": true
       },
@@ -18,6 +20,8 @@
         "bullet": "6",
         "destination": "Brooklyn Bridge-City Hall",
         "direction": "Downtown & Brooklyn",
+        "headline": "Downtown",
+        "detail": "Brooklyn Bridge-City Hall",
         "minutes": 3,
         "arriving": false
       }
@@ -50,6 +54,8 @@
         "bullet": "R",
         "destination": "Bay Ridge-95 St",
         "direction": "Downtown & Brooklyn",
+        "headline": "Downtown & Brooklyn",
+        "detail": "Bay Ridge-95 St",
         "minutes": 0,
         "arriving": true
       },
@@ -59,6 +65,8 @@
         "bullet": "Q",
         "destination": "Prospect Park",
         "direction": "Downtown & Brooklyn",
+        "headline": "Downtown & Brooklyn",
+        "detail": "Prospect Park",
         "minutes": 5,
         "arriving": false
       }
@@ -91,6 +99,8 @@
         "bullet": "R",
         "destination": "Bay Ridge-95 St",
         "direction": "Downtown & Brooklyn",
+        "headline": "Downtown & Brooklyn",
+        "detail": "Bay Ridge-95 St",
         "minutes": 0,
         "arriving": true
       },
@@ -100,6 +110,8 @@
         "bullet": "N",
         "destination": "Coney Island-Stillwell Av",
         "direction": "Downtown & Brooklyn",
+        "headline": "Downtown & Brooklyn",
+        "detail": "Coney Island-Stillwell Av",
         "minutes": 6,
         "arriving": false
       }
@@ -132,17 +144,10 @@
         "bullet": "R",
         "destination": "Bay Ridge-95 St",
         "direction": "Downtown & Brooklyn",
+        "headline": "Downtown & Brooklyn",
+        "detail": "Bay Ridge-95 St",
         "minutes": 0,
         "arriving": true
-      },
-      {
-        "number": 5,
-        "route": "R",
-        "bullet": "R",
-        "destination": "Bay Ridge-95 St",
-        "direction": "Downtown & Brooklyn",
-        "minutes": 10,
-        "arriving": false
       }
     ],
     "stale": false,
@@ -160,7 +165,7 @@
         "planned": true
       }
     ],
-    "message": "",
+    "message": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
     "groups": []
   },
   {
@@ -173,6 +178,8 @@
         "bullet": "R",
         "destination": "Bay Ridge-95 St",
         "direction": "Downtown & Brooklyn",
+        "headline": "Downtown & Brooklyn",
+        "detail": "Bay Ridge-95 St",
         "minutes": 0,
         "arriving": true
       }
@@ -205,6 +212,8 @@
         "bullet": "R",
         "destination": "Bay Ridge-95 St",
         "direction": "Downtown & Brooklyn",
+        "headline": "Downtown & Brooklyn",
+        "detail": "Bay Ridge-95 St",
         "minutes": 0,
         "arriving": true
       }
@@ -224,7 +233,7 @@
         "planned": true
       }
     ],
-    "message": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
+    "message": "Downtown [N][R] trains are running with delays after we removed a train with a door problem from service at 57 St/7 Av.",
     "groups": []
   },
   {
@@ -237,6 +246,8 @@
         "bullet": "R",
         "destination": "Bay Ridge-95 St",
         "direction": "Downtown & Brooklyn",
+        "headline": "Downtown & Brooklyn",
+        "detail": "Bay Ridge-95 St",
         "minutes": 0,
         "arriving": true
       }
@@ -269,6 +280,8 @@
         "bullet": "R",
         "destination": "Bay Ridge-95 St",
         "direction": "Downtown & Brooklyn",
+        "headline": "Downtown & Brooklyn",
+        "detail": "Bay Ridge-95 St",
         "minutes": 0,
         "arriving": true
       }
@@ -288,7 +301,7 @@
         "planned": true
       }
     ],
-    "message": "Downtown [N][R] trains are running with delays after we removed a train with a door problem from service at 57 St/7 Av.",
+    "message": "No [L] between Lorimer St, Brooklyn and 8 Av, Manhattan",
     "groups": []
   },
   {
@@ -301,6 +314,8 @@
         "bullet": "R",
         "destination": "Bay Ridge-95 St",
         "direction": "Downtown & Brooklyn",
+        "headline": "Downtown & Brooklyn",
+        "detail": "Bay Ridge-95 St",
         "minutes": 0,
         "arriving": true
       }
@@ -333,8 +348,21 @@
         "bullet": "R",
         "destination": "Bay Ridge-95 St",
         "direction": "Downtown & Brooklyn",
+        "headline": "Downtown & Brooklyn",
+        "detail": "Bay Ridge-95 St",
         "minutes": 0,
         "arriving": true
+      },
+      {
+        "number": 2,
+        "route": "6",
+        "bullet": "6",
+        "destination": "Brooklyn Bridge-City Hall",
+        "direction": "Downtown & Brooklyn",
+        "headline": "Downtown",
+        "detail": "Brooklyn Bridge-City Hall",
+        "minutes": 2,
+        "arriving": false
       }
     ],
     "stale": false,
@@ -352,7 +380,7 @@
         "planned": true
       }
     ],
-    "message": "No [L] between Lorimer St, Brooklyn and 8 Av, Manhattan",
+    "message": "",
     "groups": []
   },
   {
@@ -365,16 +393,20 @@
         "bullet": "R",
         "destination": "Bay Ridge-95 St",
         "direction": "Downtown & Brooklyn",
+        "headline": "Downtown & Brooklyn",
+        "detail": "Bay Ridge-95 St",
         "minutes": 0,
         "arriving": true
       },
       {
-        "number": 2,
-        "route": "6",
-        "bullet": "6",
-        "destination": "Brooklyn Bridge-City Hall",
+        "number": 3,
+        "route": "Q",
+        "bullet": "Q",
+        "destination": "Prospect Park",
         "direction": "Downtown & Brooklyn",
-        "minutes": 2,
+        "headline": "Downtown & Brooklyn",
+        "detail": "Prospect Park",
+        "minutes": 4,
         "arriving": false
       }
     ],
@@ -406,6 +438,8 @@
         "bullet": "R",
         "destination": "Bay Ridge-95 St",
         "direction": "Downtown & Brooklyn",
+        "headline": "Downtown & Brooklyn",
+        "detail": "Bay Ridge-95 St",
         "minutes": 0,
         "arriving": true
       },
@@ -415,6 +449,8 @@
         "bullet": "6",
         "destination": "Brooklyn Bridge-City Hall",
         "direction": "Downtown & Brooklyn",
+        "headline": "Downtown",
+        "detail": "Brooklyn Bridge-City Hall",
         "minutes": 1,
         "arriving": false
       }

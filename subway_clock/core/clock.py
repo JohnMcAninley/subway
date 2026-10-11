@@ -7,7 +7,8 @@ from google.protobuf.message import DecodeError
 
 from .board import Board, Group, Message, Row, bullet_id
 from .feeds import ALERTS_URL, ALL_FEED_URLS, feed_urls, fetch_feed, get_alerts, get_predictions
-from .gtfs import destination
+from .gtfs import destination, terminal
+from .headline import headline
 
 log = logging.getLogger(__name__)
 
@@ -26,6 +27,10 @@ MAX_MESSAGES = 5
 # Each alert stays for MESSAGE_ROTATIONS rotations, as it takes longer to read than a train.
 MESSAGE_LINE_STYLES = ("new",)
 MESSAGE_ROTATIONS = 2
+
+# Styles that stop the rotation once every route among the trains has been shown, so
+# the next few trains come round more often. The others always go through max_trains.
+UNIQUE_ROUTE_STYLES = ("new",)
 
 
 @dataclass(frozen=True)
@@ -128,7 +133,13 @@ class Clock:
     @property
     def predictions(self):
         """The trains the board can show: max_trains, or more if there are more lines than that."""
-        return self.upcoming[:max(self.settings.max_trains, self.lines)]
+        trains = self.upcoming[:max(self.settings.max_trains, self.lines)]
+        if self.settings.style in UNIQUE_ROUTE_STYLES:
+            # Stop after the last train that brings a new route, but still fill the lines.
+            routes = [p.route_id for p in trains]
+            last_new = max((routes.index(route) for route in routes), default=0)
+            trains = trains[:max(last_new + 1, self.lines)]
+        return trains
 
     @property
     def _fixed(self):
@@ -243,12 +254,25 @@ class Clock:
 
     def _row(self, pred, number, now):
         seconds = pred.time - now
+        static = self.static
+        name = destination(static.stop_names, static.headsigns, pred.trip_stops, pred.trip_id)
+        label = static.direction_label(pred.stop_id)
+
+        # Boroughs of the stops after this one, up to where the trip ends for riders
+        last = terminal(static.stop_names, pred.trip_stops)
+        stops = pred.trip_stops[:pred.trip_stops.index(last) + 1] if last else ()
+        ahead = [static.borough(s) for s in stops[stops.index(pred.stop_id) + 1:]] if pred.stop_id in stops else []
+        # Without the terminal's borough there is nothing to say; other gaps (unnamed stops) don't matter.
+        ahead = [b for b in ahead if b] if ahead and ahead[-1] else []
+        head, detail = headline(label, static.borough(pred.stop_id), ahead, name)
         return Row(
             number=number,
             route=pred.route_id,
             bullet=bullet_id(pred.route_id),
-            destination=destination(self.static.stop_names, self.static.headsigns, pred.trip_stops, pred.trip_id),
-            direction=self.static.direction_label(pred.stop_id),
+            destination=name,
+            direction=label,
+            headline=head,
+            detail=detail,
             minutes=max(0, int(seconds / 60.0)),
             arriving=seconds < 60,
         )
