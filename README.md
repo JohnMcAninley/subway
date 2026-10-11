@@ -3,20 +3,47 @@
 A recreation of the MTA platform countdown clocks, driven by the MTA's live
 GTFS-realtime feeds.
 
-> Prototype. Currently hardcoded to 28 St (6), southbound (`633S`).
+It draws three of the MTA's clocks, for any station or group of stations:
 
-## Setup
+| `classic` | `new` |
+|---|---|
+| ![The classic style: two numbered lines and a time strip](docs/images/classic.png) | ![The new style: a card for each train](docs/images/new.png) |
+| **`led`** | **`new`, on a portrait screen** |
+| ![The LED style: green dot-matrix text](docs/images/led.png) | <img src="docs/images/new-portrait.png" alt="The new style in portrait: trains above service alerts" width="300"> |
 
-Requires Python 3.10+.
+It runs on a PC today. The aim is a small screen driven by a Raspberry Pi; see
+the [roadmap](docs/roadmap.md) for what is left.
+
+## Quick start
+
+Requires Python 3.10+ and git.
 
 ```sh
+git clone https://github.com/JohnMcAninley/subway.git
+cd subway
 python -m venv venv
 # Windows: venv\Scripts\activate    macOS/Linux: source venv/bin/activate
-pip install -r requirements-dev.txt
+pip install -r requirements.txt
+python -m subway_clock --dev
 ```
 
-PySide6 is pinned to 6.8.2.1 to match the version Debian (and so Raspberry Pi
-OS) packages.
+The first run downloads the MTA's schedules into `data/` and indexes them,
+which takes about a minute with nothing on screen. After that a window opens
+showing downtown 6 trains at 28 St. Press S to switch styles, 1-5 to try
+screen shapes, and Esc to quit.
+
+To show your own station, make a `settings.json` in the directory you run
+from, with the stop IDs from `data/gtfs_subway/stops.txt`:
+
+```json
+{
+    "stops": ["635S", "R20S", "L03S"],
+    "style": "new"
+}
+```
+
+That is Union Sq, downtown: the 4/5/6, the N/Q/R/W and the L. See
+[Settings](#settings) for the rest. No API key or account is needed.
 
 ## Run
 
@@ -24,8 +51,8 @@ OS) packages.
 python -m subway_clock [--settings settings.json] [--dev | --fullscreen | --size 1920x600 | --width 1920]
 ```
 
-On first run the static GTFS is downloaded into `data/` and indexed, which takes
-about a minute. It is refreshed automatically when the MTA publishes a new version.
+The schedules in `data/` are refreshed automatically when the MTA publishes a
+new version.
 
 By default the window is frameless at the top left of the screen, the screen's
 width at a 3.2:1 ratio. `--fullscreen` is for the device. Press Esc to quit.
@@ -58,9 +85,15 @@ left out uses its default, and the file is optional:
 }
 ```
 
-- `stops`: GTFS stop IDs (listed in `data/gtfs_subway/stops.txt`). A directional ID like `633S` is one
-  direction; a parent ID like `633` is both. List several for a whole station complex or nearby
-  stations, e.g. Union Sq southbound is `["635S", "R20S", "L03S"]`.
+- `stops`: GTFS stop IDs (listed in `data/gtfs_subway/stops.txt`). What you list decides what kind
+  of clock it is:
+  - One direction at one stop, like the clock over a side platform: a directional ID,
+    `["633S"]`.
+  - Both directions, like the clock on an island platform: a parent ID, `["633"]`.
+  - A whole station complex: the IDs of each of its platforms, e.g. Union Sq downtown is
+    `["635S", "R20S", "L03S"]`.
+  - Several stations at once, which no real clock does: the stops nearest a home or office,
+    e.g. `["633S", "R18S"]` for downtown trains from either 28 St station.
 - `style`: which MTA clock to look like. `classic` is the LCD clocks with a white screen and a
   time strip; `new` is the newer clocks with a card per train, headed by its direction
   (e.g. "Downtown & Brooklyn") over the destination. In portrait it becomes the screens in station
@@ -89,6 +122,20 @@ left out uses its default, and the file is optional:
   last line.
 - `data_dir`: static GTFS cache. Relative paths are relative to the settings file.
 
+## Development
+
+```sh
+pip install -r requirements-dev.txt
+pytest
+```
+
+PySide6 is pinned to 6.8.2.1 to match the version Debian (and so Raspberry Pi
+OS) packages.
+
+`scripts/capture.py` draws a golden case to a PNG, in any style and size,
+without the live feeds; the pictures above were made with it. Qt only prints
+QML warnings to the terminal with `QT_FORCE_STDERR_LOGGING=1` set.
+
 ## Layout
 
 - `subway_clock/core/`: data and display logic, with no UI code. `Clock` produces a `Board` (the screen description) that renderers draw as-is.
@@ -102,9 +149,9 @@ left out uses its default, and the file is optional:
 
 ## Design
 
-See [docs/design.md](docs/design.md) for display modes, display logic, and themes (now styles).
 [docs/references.md](docs/references.md) records how the real clocks look and behave, and where
-each fact comes from.
+each fact comes from. [tests/golden/README.md](tests/golden/README.md) is the spec for which
+trains the board shows and when.
 
 ## Data sources
 
@@ -112,6 +159,16 @@ each fact comes from.
 - Alerts: `https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/camsys%2Fsubway-alerts`
 - Static: `https://rrgtfsfeeds.s3.amazonaws.com/gtfs_subway.zip` and `gtfs_supplemented.zip`
 - Direction labels: the MTA's station list, `http://web.mta.info/developers/data/nyct/subway/Stations.csv`
+
+The feeds are used under the MTA's
+[terms for its data feeds](https://www.mta.info/developers/terms-and-conditions). This project
+isn't affiliated with, licensed by or endorsed by the MTA, and the times it shows may not be
+accurate, complete or timely.
+
+## Licence
+
+Copyright John McAninley. Licensed under the GNU General Public License, version 3; see
+[LICENSE](LICENSE). The bundled bullets and font keep their own terms, below.
 
 ## Credits
 

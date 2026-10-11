@@ -110,12 +110,27 @@ Blocked on hardware (H1) except where noted.
 
 ### G. Making the repo public
 
+The repo on GitHub is already public. The README now starts from "clone and
+run" with a picture of each style (`docs/images/`, made with
+`scripts/capture.py`), and the history was checked on 2026-10-11: no keys,
+addresses, local paths or personal settings in any commit, and every commit
+uses the GitHub noreply address. `docs/design.md`, the original notes, is
+gone: the README's `stops` setting now describes the kinds of clock it listed.
+The code is under the GPL, version 3 (`LICENSE`). It may be loosened to a
+permissive licence later; that stays possible as long as outside
+contributions are either not taken or come with permission to relicense.
+
+### S. Selling a prebuilt clock
+
+Nothing here is needed for the open-source project. It is what stands between
+it and a product, as read on 2026-10-11; none of it is legal advice.
+
 | ID | Package | Size | Notes |
 |---|---|---|---|
-| G1 | **Licence and credits** | S | Choose a licence; attribution for the bullets (public domain, Wikimedia Commons) and Roboto (Apache 2.0 or OFL, check the bundled file). John chooses the licence. |
-| G2 | **README for a newcomer** | S | Start from "clone and run", with screenshots of each style. |
-| G3 | **History check** | S | Look through the git history for anything that shouldn't be published before the first push. |
-| G4 | **`docs/design.md`** | S | Still John's original notes. Keep, fold into the README, or drop. John decides. |
+| S1 | **MTA licence for the bullets and the look** | ? | The subway route symbols are registered MTA trademarks, and the product imitates the MTA's signs. Product licences go through the MTA's agent, IMG Licensing (`MTALicensingInquiries@img.com`); the MTA charges a fee and may refuse. The Transit Museum is a division of the MTA and sells licensed products, so it is a possible partner, but the licence itself comes through IMG. |
+| S2 | **Relay server for the feeds** | M | The [feed terms](https://www.mta.info/developers/terms-and-conditions) say to download the data and host it on a non-MTA server, and prohibit an app that gives the data to others directly from the MTA's servers. One person's clock fetching for itself is one thing; a product whose every unit polls the MTA every 10 seconds looks like what the clause is aimed at. A sold clock should fetch from a server of ours that fetches from the MTA. That server could also trim the feeds to a device's stops, which would help the Pi and the ESP32. Ask the MTA if in doubt. |
+| S3 | **Stale data notice** | S | The terms ask that users be told when the data lags real time by more than a minute. `classic` and `new` show this; `led` doesn't until B3. |
+| S4 | **Qt's LGPL on a device** | S | Ship the LGPL text and where to get Qt's source, and leave the buyer able to replace the Qt libraries. Using the Pi OS packages on a card the buyer can reach should do. Goes with F2. |
 
 ### Later
 
@@ -127,7 +142,8 @@ Blocked on hardware (H1) except where noted.
 1. In parallel: A5 then D1 (home header); B1 and B2; C1; E1.
 2. A2 and A4 as photos come in. A3, then C2 and C3.
 3. E3, then E2.
-4. G1 to G4 whenever the repo is to go public; none depend on the rest.
+4. S1 early if the clock is to be sold: the answer decides whether there is a
+   product, and it may take a while.
 5. F once there is hardware; F4's PC-testable parts can start earlier.
 
 ## Waiting on John
@@ -137,4 +153,4 @@ Blocked on hardware (H1) except where noted.
 | H1 | **Hardware.** The Pi Zero 2 W isn't available anywhere. John has an older Pi "Model B or something like that" to dig out. Which model matters a great deal: an original Model B or B+ (single core, 512 MB) is unlikely to run Qt Quick acceptably, while a Pi 2 or 3 Model B should. Also still open: which screen, which sets the shape that gets the most polish. | F |
 | P1 | **Photos**, collected over the next couple of weeks of riding: the newer clocks (especially an F at 75 Av and a 2 at Franklin Av), LED signs close up, anything showing an alert, and how far ahead the last train listed is. | A2, A4, C1 |
 | D2 | **What a home view should be**, beyond naming the station. | D2 |
-| G1, G4 | **Licence**, and what to do with `docs/design.md`. | G |
+| S1 | **Whether to sell it**, and if so, writing to IMG Licensing or the Transit Museum. | S |
