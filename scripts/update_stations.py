@@ -1,6 +1,7 @@
 """Regenerate subway_clock/assets/stations.json from the MTA's subway station list.
 
-The MTA's developer station list gives each station's borough and its
+The MTA's developer station list gives each station's borough, the complex
+it belongs to (stations joined by a free transfer share one), and its
 direction labels, e.g. "Uptown & The Bronx" and "Downtown & Brooklyn", as
 shown on its platform signs. (The MTA Subway Stations dataset on data.ny.gov
 has the same stations with plainer labels, like "Uptown".) From the repo root:
@@ -29,7 +30,8 @@ def main():
         directions = {d: station[f"{name} Direction Label"].strip() for d, name in (("N", "North"), ("S", "South"))}
         directions = {d: label for d, label in directions.items() if label not in NOT_LABELS}
         # Boroughs are M, Bk, Q, Bx and SI
-        stations[station["GTFS Stop ID"]] = {"borough": station["Borough"].strip(), **directions}
+        stations[station["GTFS Stop ID"]] = {"borough": station["Borough"].strip(),
+                                             "complex": station["Complex ID"].strip(), **directions}
     # One station per line, so updates diff readably
     lines = [f"  {json.dumps(stop)}: {json.dumps(stations[stop], ensure_ascii=False)}" for stop in sorted(stations)]
     OUTPUT.write_text("{\n" + ",\n".join(lines) + "\n}\n", encoding="utf-8", newline="\n")

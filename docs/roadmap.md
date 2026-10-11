@@ -16,7 +16,8 @@ Last updated 2026-10-11.
   portrait) and `led`.
 - Development is on a PC for now. The intended device, a Pi Zero 2 W, can't
   be bought at the moment; see H1.
-- Settings are a JSON file. There is no settings screen,
+- Settings are a JSON file; `scripts/find_station.py` finds a station's stop
+  IDs by name. There is no settings screen,
   device image or update mechanism yet.
 
 ## Working in parallel
@@ -93,7 +94,7 @@ D2 wants a sketch or a description first.
 
 | ID | Package | Size | Notes |
 |---|---|---|---|
-| E1 | **Station picker (core)** | M | Search stations by name and return stop IDs, with directions and the complex's other platforms. Used by E2 and later by the phone page. Pure Python, no UI. |
+| E1 | **Station picker (core)** | done | `core/stations.py`: `StationPicker.search` narrows the station list as words are typed (each word starts a word of the name or is a route; abbreviations and ordinals understood; no spelling correction) and returns whole complexes, each stop with its routes and its directions' stop IDs and labels. `station_for` goes from a stop ID back to its station. `scripts/find_station.py` is the same search from the command line. For E2 and the phone page. Whether this is the right behaviour is to be seen in use. |
 | E2 | **Keyboard settings overlay** | L | A QML overlay, opened with a key, for style, rotation, stops (using E1), and the toggles. Saves `settings.json` and applies without a restart. |
 | E3 | **Apply settings live** | S | Changing the stops or the refresh interval at run time: restart timers, refetch, clear old trains. E2 depends on it. |
 
@@ -139,7 +140,7 @@ it and a product, as read on 2026-10-11; none of it is legal advice.
 
 ## Suggested order
 
-1. In parallel: A5 then D1 (home header); C1; E1. (B1 and B2 are done.)
+1. In parallel: A5 then D1 (home header); C1. (B1, B2 and E1 are done.)
 2. A2 and A4 as photos come in. A3, then C2 and C3.
 3. E3, then E2.
 4. S1 early if the clock is to be sold: the answer decides whether there is a
