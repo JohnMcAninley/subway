@@ -34,7 +34,11 @@ The split between the core and the renderers is what makes this possible.
   `settings.py`, `README.md`.
 - **Done means:** tests pass, the README and the references or golden spec
   are updated where behaviour changed, and UI changes were checked with
-  captures at the `--dev` presets (keys 1 to 5).
+  captures at the `--dev` preset sizes (1920x600, 1920x480, 1280x720,
+  608x1080, 360x1080). `scripts/capture.py` draws a golden case to a PNG
+  without the live feeds.
+- **Seeing QML errors:** Qt only prints QML warnings and `console.log` to
+  the terminal with `QT_FORCE_STDERR_LOGGING=1` set.
 - **Standing rule:** nothing personal goes to outside services. Requests use
   a plain User-Agent.
 
