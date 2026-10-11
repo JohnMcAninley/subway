@@ -11,6 +11,7 @@ Rectangle {
     required property var board
     required property url bulletsUrl
     required property string staleMessage
+    required property var startup
 
     readonly property var colors: Styles.colors.new
 
@@ -45,6 +46,14 @@ Rectangle {
                 animated: root.lines > 1 && line.index === root.lines - 1
             }
         }
+    }
+
+    // Before there are trains to show: what the clock is doing, on a card in the first line
+    Loader {
+        active: root.startup.state !== "ready"
+        width: root.width
+        height: root.rowHeight
+        sourceComponent: NewStartup { startup: root.startup; colors: root.colors }
     }
 
     // A service alert in place of the last line: a white card with a yellow bar where the number was

@@ -9,6 +9,7 @@ Rectangle {
     required property var board
     required property url bulletsUrl
     required property string staleMessage
+    required property var startup
 
     readonly property var colors: Styles.colors.classic
 
@@ -51,6 +52,50 @@ Rectangle {
             width: root.width
             height: Math.max(1, root.fontSize * 0.02)
             color: root.colors.separator
+        }
+    }
+
+    // Before there are trains to show: what the clock is doing on the first line, with how
+    // far along it is where the minutes go, and a second line under it
+    Repeater {
+        model: root.startup.state === "ready" ? [] : [
+            { text: root.startup.title,
+              value: root.startup.state === "loading" && root.startup.progress >= 0
+                     ? Math.round(root.startup.progress * 100) + "%" : "" },
+            { text: root.startup.detail, value: "" },
+        ].slice(0, root.lines)
+
+        Item {
+            required property var modelData
+            required property int index
+
+            y: index * root.rowHeight
+            width: root.width
+            height: root.rowHeight
+
+            Text {
+                anchors.left: parent.left
+                anchors.leftMargin: root.fontSize * 0.3
+                anchors.right: value.left
+                anchors.rightMargin: root.fontSize * 0.3
+                anchors.verticalCenter: parent.verticalCenter
+                text: modelData.text
+                elide: Text.ElideRight
+                font.family: "Roboto"
+                font.pixelSize: root.fontSize
+                color: root.colors.text
+            }
+
+            Text {
+                id: value
+                anchors.right: parent.right
+                anchors.rightMargin: root.fontSize * 0.3
+                anchors.verticalCenter: parent.verticalCenter
+                text: modelData.value
+                font.family: "Roboto"
+                font.pixelSize: root.fontSize
+                color: root.colors.text
+            }
         }
     }
 

@@ -4,6 +4,7 @@ import logging
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
+import requests
 from PySide6.QtCore import Property, QFileSystemWatcher, QObject, QSize, Qt, QTimer, QUrl, Signal, Slot
 from PySide6.QtGui import QFontDatabase
 from PySide6.QtQuick import QQuickView
@@ -24,28 +25,50 @@ PRESETS = {
     Qt.Key_5: QSize(360, 1080),  # 1:3 tall portrait
 }
 
+# How long to wait before trying again when the schedules can't be fetched at startup.
+RETRY_SECONDS = 15
+
 
 def load_fonts():
     if QFontDatabase.addApplicationFont(str(ASSETS_DIR / "fonts" / "Roboto.ttf")) < 0:
         log.warning("Couldn't load the bundled Roboto font; falling back to a system font")
 
 
+class Closing(Exception):
+    """Raised on the worker thread to abandon fetching the schedules when the window closes."""
+
+
 class Display(QObject):
-    """Owns the clock's timers and exposes its Board to QML as clock.board."""
+    """Owns the clock's timers and exposes its Board to QML as clock.board.
+
+    There is no board to show until the first trains have been fetched, and a
+    first run has to fetch the schedules before that. Until then clock.startup
+    says what to show in its place.
+    """
 
     # Carries a FetchResult from the worker thread back to the UI thread.
     fetched = Signal(object)
+    # From the worker thread fetching the schedules: what it is doing and how far along it is,
+    # then how it ended (None, or the exception).
+    progressed = Signal(str, float)
+    prepared = Signal(object)
     boardChanged = Signal()
+    startupChanged = Signal()
 
     def __init__(self, clock, dev=False):
         super().__init__()
         self.clock = clock
         self.dev = dev
         self._board = self._to_qml(clock.board())
+        self._startup = {"state": "ready", "title": "", "detail": "", "progress": 0.0}
+        self._reported = None
+        self.closing = False
 
         self.executor = ThreadPoolExecutor(max_workers=1)
         self.fetching = None
         self.fetched.connect(self.apply_predictions)
+        self.progressed.connect(self.show_progress)
+        self.prepared.connect(self.finish_preparing)
 
         self.view = ClockWindow(self)
         self.view.setTitle("NYC Subway Countdown Clock")
@@ -60,17 +83,76 @@ class Display(QObject):
 
         self.update_timer = QTimer()
         self.update_timer.timeout.connect(self.update_predictions)
-        self.update_timer.start(clock.settings.refresh_seconds * 1000)
-
         self.rotation_timer = QTimer()
         self.rotation_timer.timeout.connect(self.rotate_last_line)
-        self.rotation_timer.start(clock.settings.rotation_seconds * 1000)
 
+        if clock.static.ready:
+            self.start()
+        else:
+            self.prepare()
+
+    def start(self):
+        self.set_startup("loading", "Loading train times", progress=-1)
+        self.update_timer.start(self.clock.settings.refresh_seconds * 1000)
+        self.rotation_timer.start(self.clock.settings.rotation_seconds * 1000)
         self.update_predictions()
 
     @Property("QVariant", notify=boardChanged)
     def board(self):
         return self._board
+
+    @Property("QVariant", notify=startupChanged)
+    def startup(self):
+        """What to show while there is no board yet.
+
+        state: "ready" (show the board), "loading" or "failed" (waiting to try again)
+        title, detail: a line saying what is going on, and a lesser one under it
+        progress: how far along loading is, 0 to 1, or -1 if there is no telling
+        """
+        return self._startup
+
+    def set_startup(self, state, title="", detail="", progress=0.0):
+        self._startup = {"state": state, "title": title, "detail": detail, "progress": progress}
+        self.startupChanged.emit()
+
+    def prepare(self):
+        """Fetch the schedules on the worker thread, with the loading screen up meanwhile."""
+        if self.closing:
+            return
+        self.show_progress("Loading schedules", 0)
+        self.executor.submit(self.prepare_static)
+
+    def prepare_static(self):
+        try:
+            self.clock.static.prepare(self.report_progress)
+        except Exception as e:
+            self.prepared.emit(e)
+        else:
+            self.prepared.emit(None)
+
+    def report_progress(self, stage, fraction):
+        if self.closing:
+            raise Closing
+        # A download reports every few kilobytes; only whole percents are worth redrawing for.
+        report = (stage, int(fraction * 100) / 100)
+        if report != self._reported:
+            self._reported = report
+            self.progressed.emit(*report)
+
+    def show_progress(self, stage, fraction):
+        self.set_startup("loading", stage, "This can take a minute", fraction)
+
+    def finish_preparing(self, error):
+        if self.closing:
+            return
+        if error is None:
+            self.start()
+            return
+        offline = isinstance(error, requests.RequestException)
+        log.warning("Fetching the schedules failed, trying again in %s seconds: %r", RETRY_SECONDS, error,
+                    exc_info=None if offline else error)
+        self.set_startup("failed", "No connection" if offline else "Can't read the schedules", "Trying again shortly")
+        QTimer.singleShot(RETRY_SECONDS * 1000, self.prepare)
 
     @Slot(int, bool)
     def setLayout(self, lines, grouped):
@@ -124,9 +206,14 @@ class Display(QObject):
             self.fetched.emit(self.clock.fetch())
         except Exception:
             log.exception("Fetching predictions failed")
+            self.fetched.emit(None)
 
     def apply_predictions(self, result):
-        self.clock.apply(result)
+        if result is not None:
+            self.clock.apply(result)
+        if self._startup["state"] != "ready":
+            # The first fetch is back. If it failed, the board says so itself (it is stale).
+            self.set_startup("ready")
         self.publish()
 
     def rotate_last_line(self):
@@ -140,6 +227,7 @@ class Display(QObject):
         self.publish()
 
     def close(self):
+        self.closing = True
         self.executor.shutdown(wait=False, cancel_futures=True)
 
 

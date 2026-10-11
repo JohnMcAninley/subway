@@ -16,7 +16,7 @@ Last updated 2026-10-11.
   portrait) and `led`.
 - Development is on a PC for now. The intended device, a Pi Zero 2 W, can't
   be bought at the moment; see H1.
-- Settings are a JSON file. There is no settings screen, loading screen,
+- Settings are a JSON file. There is no settings screen,
   device image or update mechanism yet.
 
 ## Working in parallel
@@ -60,8 +60,8 @@ Sizes are rough: S is an hour or two, M a day, L several days.
 
 | ID | Package | Size | Notes |
 |---|---|---|---|
-| B1 | **Loading screen** | S | A first run downloads the schedules, about a minute with nothing on screen. Show progress, in every style. Needs a "loading" state from `display.py`. |
-| B2 | **Recover from bad downloads** | S | A zip that fails to extract isn't retried, and a first run with no network just exits. Retry, and show a "no connection" screen instead of quitting. |
+| B1 | **Loading screen** | done | The window opens at once, and a first run fetches the schedules on the worker thread (`StaticData.prepare`). Meanwhile `clock.startup` in `display.py` tells the QML what to show (it is not part of the `Board`): a title, a lesser line and a percentage, drawn by each style as it draws a train, with the percentage where the minutes go. A start with the schedules already in `data/` shows "Loading train times", with no percentage, for the second or two until the first trains are in (`--loading-trains`); the check for newer schedules, and the indexing if there are some, runs on a thread of its own in `Clock`, so the trains don't wait for it. `scripts/capture.py --loading 42` pictures the first run. The percentage gives the downloads 60% and the indexing 40%, a guess from a PC with a fast connection; adjust once it has run on a Pi. |
+| B2 | **Recover from bad downloads** | done | A zip that can't be read is deleted, so it is downloaded again; a zip is extracted beside the old copy and swapped in, with a marker (`.extracted`) saying which zip it came from, so an extraction that was cut short is redone; an unreadable `stop_routes.json` is rebuilt. A first run that can't fetch the schedules shows "No connection" (or "Can't read the schedules" if the trouble isn't the network) and tries again every 15 seconds. `scripts/capture.py --no-connection` pictures it. Not covered: losing the network later, which the stale warning already shows. |
 | B3 | **Stale indicator for `led`** | S | The other styles show when data is out of date; the LED style doesn't. |
 
 ### C. Style polish (one package per style, can run side by side)
@@ -139,7 +139,7 @@ it and a product, as read on 2026-10-11; none of it is legal advice.
 
 ## Suggested order
 
-1. In parallel: A5 then D1 (home header); B1 and B2; C1; E1.
+1. In parallel: A5 then D1 (home header); C1; E1. (B1 and B2 are done.)
 2. A2 and A4 as photos come in. A3, then C2 and C3.
 3. E3, then E2.
 4. S1 early if the clock is to be sold: the answer decides whether there is a

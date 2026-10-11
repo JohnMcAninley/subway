@@ -27,9 +27,10 @@ pip install -r requirements.txt
 python -m subway_clock --dev
 ```
 
-The first run downloads the MTA's schedules into `data/` and indexes them,
-which takes about a minute with nothing on screen. After that a window opens
-showing downtown 6 trains at 28 St. Press S to switch styles, 1-5 to try
+A window opens straight away. The first run downloads the MTA's schedules
+into `data/` and indexes them, which can take a minute; the window shows how
+far along that is, and "No connection" if they can't be fetched, trying again
+every 15 seconds. After that it shows downtown 6 trains at 28 St. Press S to switch styles, 1-5 to try
 screen shapes, and Esc to quit.
 
 To show your own station, make a `settings.json` in the directory you run
@@ -52,7 +53,8 @@ python -m subway_clock [--settings settings.json] [--dev | --fullscreen | --size
 ```
 
 The schedules in `data/` are refreshed automatically when the MTA publishes a
-new version.
+new version, in the background while the clock runs. Each start shows "Loading
+train times" for the second or two until the first trains are in.
 
 By default the window is frameless at the top left of the screen, the screen's
 width at a 3.2:1 ratio. `--fullscreen` is for the device. Press Esc to quit.
@@ -133,7 +135,8 @@ PySide6 is pinned to 6.8.2.1 to match the version Debian (and so Raspberry Pi
 OS) packages.
 
 `scripts/capture.py` draws a golden case to a PNG, in any style and size,
-without the live feeds; the pictures above were made with it. Qt only prints
+without the live feeds, and with `--loading 42`,
+`--no-connection` or `--loading-trains` what a start shows before it has trains; the pictures above were made with it. Qt only prints
 QML warnings to the terminal with `QT_FORCE_STDERR_LOGGING=1` set.
 
 ## Layout

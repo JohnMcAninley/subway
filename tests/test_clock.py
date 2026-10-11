@@ -1,4 +1,5 @@
 import json
+import threading
 
 import pytest
 import requests
@@ -528,6 +529,26 @@ def test_static_refresh_failure_still_fetches_live_data():
     clock.static.refresh = offline
     clock.refresh(now=NOW)
     assert [r.route for r in clock.board(now=NOW).rows] == ["6"]
+
+
+def test_fetch_doesnt_wait_for_new_static_gtfs():
+    # Downloading and indexing a new copy takes seconds; the trains shouldn't wait for it.
+    clock, _ = union_sq_clock({url("6"): feed(trip("six", "6", [("635S", 4)])), url("Q"): feed()})
+    release = threading.Event()
+    checks = []
+    finished = []
+
+    def slow():
+        checks.append(1)
+        release.wait(10)
+        finished.append(1)
+
+    clock.static.refresh = slow
+    clock.refresh(now=NOW)
+    clock.refresh(now=NOW + 10)
+    assert [r.route for r in clock.board(now=NOW + 10).rows] == ["6"]
+    assert len(checks) == 1 and not finished  # and one check at a time
+    release.set()
 
 
 def test_all_feeds_show_unscheduled_reroutes():

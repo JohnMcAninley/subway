@@ -3,7 +3,9 @@ import QtQuick
 // Draws a Board from the core (clock.board) in its style. No train logic here:
 // which trains appear on which line is decided in Python. Each style's board
 // works out how many lines fit the screen (and whether to group them by
-// direction), and that goes back to the core.
+// direction), and that goes back to the core. Until there is a board to draw
+// (the first trains are still being fetched, or a first run is downloading
+// the schedules), each style shows clock.startup.
 Item {
     id: root
 
@@ -21,22 +23,34 @@ Item {
 
     Component {
         id: classicBoard
-        ClassicBoard { board: root.clock.board; bulletsUrl: root.clock.bulletsUrl; staleMessage: root.stale }
+        ClassicBoard {
+            board: root.clock.board; bulletsUrl: root.clock.bulletsUrl; staleMessage: root.stale
+            startup: root.clock.startup
+        }
     }
 
     Component {
         id: newBoard
-        NewBoard { board: root.clock.board; bulletsUrl: root.clock.bulletsUrl; staleMessage: root.stale }
+        NewBoard {
+            board: root.clock.board; bulletsUrl: root.clock.bulletsUrl; staleMessage: root.stale
+            startup: root.clock.startup
+        }
     }
 
     Component {
         id: ledBoard
-        LedBoard { board: root.clock.board; bulletsUrl: root.clock.bulletsUrl; staleMessage: root.stale }
+        LedBoard {
+            board: root.clock.board; bulletsUrl: root.clock.bulletsUrl; staleMessage: root.stale
+            startup: root.clock.startup
+        }
     }
 
     Component {
         id: newPortraitBoard
-        NewPortraitBoard { board: root.clock.board; bulletsUrl: root.clock.bulletsUrl; staleMessage: root.stale }
+        NewPortraitBoard {
+            board: root.clock.board; bulletsUrl: root.clock.bulletsUrl; staleMessage: root.stale
+            startup: root.clock.startup
+        }
     }
 
     // Tell the core the layout whenever the style's board is replaced or resized.

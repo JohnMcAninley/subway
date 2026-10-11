@@ -10,6 +10,7 @@ Rectangle {
     required property var board
     required property url bulletsUrl
     required property string staleMessage  // these signs have nowhere to show messages
+    required property var startup
 
     readonly property var colors: Styles.colors.led
 
@@ -53,6 +54,41 @@ Rectangle {
                     height: root.lineDots
                     train: modelData
                     colors: root.colors
+                }
+            }
+
+            // Before there are trains to show: what the clock is doing on the first line, with
+            // how far along it is where the minutes go, and a second line under it
+            Repeater {
+                model: root.startup.state === "ready" ? [] : [
+                    { text: root.startup.title,
+                      value: root.startup.state === "loading" && root.startup.progress >= 0
+                             ? Math.round(root.startup.progress * 100) + "%" : "" },
+                    { text: root.startup.detail, value: "" },
+                ].slice(0, root.lines)
+
+                Item {
+                    required property var modelData
+                    required property int index
+
+                    y: index * root.lineDots
+                    width: matrix.width
+                    height: root.lineDots
+
+                    LedRow.Dots {
+                        x: 1
+                        width: parent.width - 2 - (value.width ? value.width + 3 : 0)
+                        text: modelData.text
+                        elide: Text.ElideRight
+                        color: root.colors.text
+                    }
+
+                    LedRow.Dots {
+                        id: value
+                        x: parent.width - 1 - width
+                        text: modelData.value
+                        color: root.colors.text
+                    }
                 }
             }
         }

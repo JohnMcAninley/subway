@@ -1,11 +1,14 @@
 """Static GTFS: download, unzip, and load the tables the clock needs."""
 import collections
 import csv
+import io
 import json
 import logging
 import os
+import shutil
 import time
 import zipfile
+import zlib
 from email.utils import formatdate, parsedate_to_datetime
 from pathlib import Path
 
@@ -17,10 +20,14 @@ SUPPLEMENTED_URL = "https://rrgtfsfeeds.s3.amazonaws.com/gtfs_supplemented.zip"
 # Generated from the MTA's station list by scripts/update_stations.py
 STATIONS_PATH = Path(__file__).resolve().parent.parent / "assets" / "stations.json"
 
+# Written into an extracted directory once it is complete: the mtime of the zip it came from.
+EXTRACTED_MARKER = ".extracted"
+
 log = logging.getLogger(__name__)
 
 
-def download_if_newer_zip(url, local_zip_path):
+def download_if_newer_zip(url, local_zip_path, progress=None):
+    """Download url if it is newer than the local copy. progress, if given, is called with 0 to 1."""
     headers = {}
 
     if os.path.exists(local_zip_path):
@@ -31,44 +38,83 @@ def download_if_newer_zip(url, local_zip_path):
     if response.status_code == 304:
         log.debug("%s is up to date", url)
         return False
-    elif response.status_code == 200:
-        # Download beside the old copy and swap it in once complete, so an
-        # interrupted download can't leave a truncated zip that looks current.
-        part_path = f"{local_zip_path}.part"
-        with open(part_path, 'wb') as f:
-            for chunk in response.iter_content(chunk_size=8192):
-                f.write(chunk)
+    response.raise_for_status()
 
-        # Update mtime based on Last-Modified header if present
-        last_modified = response.headers.get('Last-Modified')
-        if last_modified:
-            remote_mtime = parsedate_to_datetime(last_modified).timestamp()
-            os.utime(part_path, (remote_mtime, remote_mtime))
-        os.replace(part_path, local_zip_path)
+    # Download beside the old copy and swap it in once complete, so an
+    # interrupted download can't leave a truncated zip that looks current.
+    part_path = f"{local_zip_path}.part"
+    total = int(response.headers.get('Content-Length', 0))
+    done = 0
+    with open(part_path, 'wb') as f:
+        for chunk in response.iter_content(chunk_size=8192):
+            f.write(chunk)
+            done += len(chunk)
+            if progress and total:
+                progress(min(1, done / total))
 
-        log.info("Downloaded %s", url)
-        return True
-    else:
-        log.warning("Downloading %s failed with status %s", url, response.status_code)
-        return False
+    # Update mtime based on Last-Modified header if present
+    last_modified = response.headers.get('Last-Modified')
+    if last_modified:
+        remote_mtime = parsedate_to_datetime(last_modified).timestamp()
+        os.utime(part_path, (remote_mtime, remote_mtime))
+    os.replace(part_path, local_zip_path)
 
-
-def unzip_and_replace(zip_path, extract_to):
-    if not zipfile.is_zipfile(zip_path):
-        log.warning("%s is not a valid ZIP archive", zip_path)
-        return False
-
-    log.info("Extracting %s to %s", zip_path, extract_to)
-    with zipfile.ZipFile(zip_path, 'r') as zip_ref:
-        zip_ref.extractall(extract_to)
+    log.info("Downloaded %s", url)
     return True
 
 
-def update(url, data_dir, name):
-    """Download data_dir/name.zip if the remote copy is newer and extract it to data_dir/name/."""
+def unzip_and_replace(zip_path, extract_to, progress=None):
+    """Replace extract_to with the zip's contents. progress, if given, is called with 0 to 1.
+
+    A zip that can't be read is deleted, so the next update downloads it again.
+    """
+    extract_to = Path(extract_to)
+    # Extract beside the old copy and swap it in once complete, as for the download.
+    part_path = extract_to.with_name(f"{extract_to.name}.part")
+    shutil.rmtree(part_path, ignore_errors=True)
+
+    log.info("Extracting %s to %s", zip_path, extract_to)
+    try:
+        with zipfile.ZipFile(zip_path, 'r') as zip_ref:
+            members = zip_ref.infolist()
+            total = sum(member.file_size for member in members)
+            done = 0
+            for member in members:
+                zip_ref.extract(member, part_path)
+                done += member.file_size
+                if progress and total:
+                    progress(done / total)
+    except (zipfile.BadZipFile, zlib.error, EOFError) as e:
+        log.warning("%s is not a valid ZIP archive (%s), so it will be downloaded again", zip_path, e)
+        shutil.rmtree(part_path, ignore_errors=True)
+        os.remove(zip_path)
+        return False
+
+    (part_path / EXTRACTED_MARKER).write_text(repr(os.path.getmtime(zip_path)))
+    shutil.rmtree(extract_to, ignore_errors=True)
+    os.replace(part_path, extract_to)
+    return True
+
+
+def extracted(zip_path, extract_to):
+    """True if extract_to holds everything in zip_path as it is now."""
+    try:
+        return float((Path(extract_to) / EXTRACTED_MARKER).read_text()) == os.path.getmtime(zip_path)
+    except (OSError, ValueError):
+        return False
+
+
+def update(url, data_dir, name, downloading=None, extracting=None):
+    """Download data_dir/name.zip if the remote copy is newer and extract it to data_dir/name/.
+
+    downloading and extracting, if given, are each called with 0 to 1 as that part goes.
+    """
     zip_path = Path(data_dir) / f"{name}.zip"
-    if download_if_newer_zip(url, zip_path):
-        return unzip_and_replace(zip_path, Path(data_dir) / name)
+    extract_to = Path(data_dir) / name
+    downloaded = download_if_newer_zip(url, zip_path, downloading)
+    # Also extract a zip from an earlier run that never finished extracting.
+    if downloaded or zip_path.exists() and not extracted(zip_path, extract_to):
+        return unzip_and_replace(zip_path, extract_to, extracting)
     return False
 
 
@@ -86,16 +132,29 @@ def load_stops(gtfs_path):
     return names, parents
 
 
-def build_stop_routes(gtfs_dirs, parents):
-    """Map each parent stop ID to the sorted route IDs scheduled to stop there in any of gtfs_dirs."""
+def build_stop_routes(gtfs_dirs, parents, progress=None):
+    """Map each parent stop ID to the sorted route IDs scheduled to stop there in any of gtfs_dirs.
+
+    progress, if given, is called with 0 to 1.
+    """
     stop_routes = collections.defaultdict(set)
+    total = sum(os.path.getsize(Path(gtfs_dir) / "stop_times.txt") for gtfs_dir in gtfs_dirs)
+    done = 0
     for gtfs_dir in gtfs_dirs:
         with open(Path(gtfs_dir) / "trips.txt", newline='', encoding='utf-8') as f:
             trip_routes = {row['trip_id']: row['route_id'] for row in csv.DictReader(f)}
-        with open(Path(gtfs_dir) / "stop_times.txt", newline='', encoding='utf-8') as f:
-            for row in csv.DictReader(f):
-                stop_id = row['stop_id']
-                stop_routes[parents.get(stop_id, stop_id)].add(trip_routes[row['trip_id']])
+        # Opened as bytes underneath, which can say how far through the file the rows are.
+        with open(Path(gtfs_dir) / "stop_times.txt", 'rb') as raw:
+            # By column number: a dict for each of millions of rows takes twice as long.
+            rows = csv.reader(io.TextIOWrapper(raw, newline='', encoding='utf-8'))
+            header = next(rows)
+            trip_column, stop_column = header.index('trip_id'), header.index('stop_id')
+            for count, row in enumerate(rows):
+                stop_id = row[stop_column]
+                stop_routes[parents.get(stop_id, stop_id)].add(trip_routes[row[trip_column]])
+                if progress and count % 20000 == 0:
+                    progress((done + raw.tell()) / total)
+            done += raw.tell()
     return {stop: sorted(routes) for stop, routes in stop_routes.items()}
 
 
@@ -195,6 +254,8 @@ class StaticTables:
     stop_boroughs: parent stop ID -> "M", "Bk", "Q", "Bx" or "SI"
     """
 
+    ready = True  # False while the tables are still to be fetched; see StaticData.prepare
+
     def __init__(self, stop_names, stop_parents, stop_routes, headsigns, direction_labels=None,
                  stop_boroughs=None):
         self.stop_names = stop_names
@@ -233,17 +294,47 @@ class StaticData(StaticTables):
     SOURCES = (("gtfs_subway", SUBWAY_URL), ("gtfs_supplemented", SUPPLEMENTED_URL))
     CHECK_SECONDS = 60 * 60  # The supplemented GTFS is republished about hourly
 
+    # What a cached copy that is missing, incomplete or damaged fails to load with.
+    LOAD_ERRORS = (OSError, LookupError, ValueError)
+
+    # The share of prepare()'s time that goes on the downloads, and on each download rather than
+    # extracting it. Indexing the stop routes takes the rest.
+    DOWNLOADS_SHARE = 0.6
+    DOWNLOAD_SHARE = 0.8
+
     def __init__(self, data_dir):
+        super().__init__({}, {}, {}, {})
         self.data_dir = Path(data_dir)
         self.data_dir.mkdir(parents=True, exist_ok=True)
         self._checked_at = 0
         try:
-            # Start from the cached copy if there is one; the first refresh() checks for a newer one.
-            self._load()
-        except (OSError, KeyError, ValueError):
-            log.info("No usable static GTFS in %s, downloading it", self.data_dir)
-            self._update_sources()
-            self._load()
+            # Start from the cached copy if it is all there; the first refresh() checks for a newer one.
+            self._load(build=False)
+        except self.LOAD_ERRORS:
+            # A first run, most likely. It is up to the caller to call prepare().
+            self.ready = False
+
+    def prepare(self, progress=None):
+        """Download and index the static GTFS, when there was no usable cached copy to start from.
+
+        This takes about a minute. progress, if given, is called with what is
+        going on ("Downloading schedules") and how far along the whole is, 0 to
+        1. Raises requests.RequestException if a download fails, or one of
+        LOAD_ERRORS if what there is still can't be loaded; either way it can be
+        called again.
+        """
+        log.info("No usable static GTFS in %s, downloading it", self.data_dir)
+        try:
+            self._update_sources(progress)
+        except requests.RequestException as e:
+            # No network, but an earlier download may only have been waiting to be indexed.
+            try:
+                self._load(progress)
+            except self.LOAD_ERRORS:
+                raise e from None
+        else:
+            self._load(progress)
+        self.ready = True
 
     def refresh(self):
         """Pick up new static GTFS if the MTA has published it, checking at most every CHECK_SECONDS."""
@@ -252,33 +343,52 @@ class StaticData(StaticTables):
         if self._update_sources():
             self._load()
 
-    def _update_sources(self):
+    def _update_sources(self, progress=None):
         """Download any static GTFS that has changed. Returns True if anything did."""
         self._checked_at = time.time()
-        updated = [update(url, self.data_dir, name) for name, url in self.SOURCES]
+        share = self.DOWNLOADS_SHARE / len(self.SOURCES)
+        updated = []
+        for i, (name, url) in enumerate(self.SOURCES):
+            split = (i + self.DOWNLOAD_SHARE) * share
+            updated.append(update(url, self.data_dir, name,
+                                  _stage(progress, "Downloading schedules", i * share, split),
+                                  _stage(progress, "Unpacking schedules", split, (i + 1) * share)))
         return any(updated)
 
-    def _load(self):
+    def _load(self, progress=None, build=True):
+        """Load the tables from data_dir. With build false, fail rather than spend seconds indexing."""
         # Build into locals and assign at the end, so readers never see half-loaded tables.
         stop_names, stop_parents = load_stops(self.data_dir / "gtfs_subway" / "stops.txt")
         headsigns = {}
         for name, _ in self.SOURCES:
             load_headsigns(self.data_dir / name / "trips.txt", headsigns)
-        stop_routes = self._cached_stop_routes(stop_parents)
+        stop_routes = self._cached_stop_routes(stop_parents, build,
+                                               _stage(progress, "Reading schedules", self.DOWNLOADS_SHARE, 1))
         super().__init__(stop_names, stop_parents, stop_routes, headsigns, *load_stations())
 
-    def _cached_stop_routes(self, stop_parents):
+    def _cached_stop_routes(self, stop_parents, build, progress):
         """build_stop_routes takes seconds (millions of stop_times rows), so cache it until the GTFS changes."""
         cache_path = self.data_dir / "stop_routes.json"
         sources = {name: os.path.getmtime(self.data_dir / f"{name}.zip") for name, _ in self.SOURCES}
-        if cache_path.exists():
+        try:
             with open(cache_path, encoding="utf-8") as f:
                 cache = json.load(f)
             if cache["sources"] == sources:
                 return cache["stop_routes"]
+        except self.LOAD_ERRORS:
+            pass  # No cache yet, or not one that can be read: build it again
+        if not build:
+            raise LookupError(f"{cache_path} isn't up to date")
 
         log.info("Building stop routes from GTFS schedules")
-        stop_routes = build_stop_routes([self.data_dir / name for name, _ in self.SOURCES], stop_parents)
+        stop_routes = build_stop_routes([self.data_dir / name for name, _ in self.SOURCES], stop_parents, progress)
         with open(cache_path, "w", encoding="utf-8") as f:
             json.dump({"sources": sources, "stop_routes": stop_routes}, f)
         return stop_routes
+
+
+def _stage(progress, name, start, end):
+    """A 0-to-1 progress callback for one stage of a whole: it reports name and start to end to progress."""
+    if progress is None:
+        return None
+    return lambda fraction: progress(name, start + (end - start) * fraction)

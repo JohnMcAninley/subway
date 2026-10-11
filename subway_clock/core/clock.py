@@ -1,4 +1,5 @@
 import logging
+import threading
 import time
 from concurrent.futures import ThreadPoolExecutor
 from dataclasses import dataclass
@@ -67,6 +68,7 @@ class Clock:
         self._alerts_at = None  # when the alerts were last fetched successfully
         self._feeds = {}  # feed URL -> (predictions, fetched_at) from the last successful fetch
         self._scheduled = []  # feed URLs for routes scheduled at the chosen stops
+        self._static_refresh = None  # the thread checking for new static GTFS, while there is one
 
     def refresh(self, now=None):
         self.apply(self.fetch(now), now)
@@ -87,22 +89,33 @@ class Clock:
                 log.warning("Fetching %s failed: %s", url, e)
                 return None
 
-        def refresh_static():
-            try:
-                self.static.refresh()
-            except (requests.RequestException, OSError) as e:
-                log.warning("Checking for new static GTFS failed, using the cached copy: %s", e)
-
-        # All at once: one after another, the feeds take several seconds. New
-        # static GTFS, checked for meanwhile, takes effect from the next fetch.
+        self._refresh_static()
+        # All at once: one after another, the feeds take several seconds.
         wanted = urls + [ALERTS_URL] * alerts_due
-        with ThreadPoolExecutor(max_workers=len(wanted) + 1) as pool:
-            pool.submit(refresh_static)
+        with ThreadPoolExecutor(max_workers=len(wanted)) as pool:
             fetched = dict(zip(wanted, pool.map(fetch, wanted)))
 
         feeds = {url: None if fetched[url] is None else get_predictions(fetched[url], stops) for url in urls}
         alerts = get_alerts(fetched[ALERTS_URL]) if fetched.get(ALERTS_URL) is not None else None
         return FetchResult(now, feeds, tuple(scheduled), alerts)
+
+    def _refresh_static(self):
+        """Check for new static GTFS on a thread of its own, to take effect from a later fetch.
+
+        The trains don't wait for it: a new copy takes seconds to download and
+        index, and the MTA publishes one about every hour.
+        """
+        if self._static_refresh is not None and self._static_refresh.is_alive():
+            return
+
+        def refresh():
+            try:
+                self.static.refresh()
+            except (requests.RequestException, OSError) as e:
+                log.warning("Checking for new static GTFS failed, using the cached copy: %s", e)
+
+        self._static_refresh = threading.Thread(target=refresh, name="static-gtfs", daemon=True)
+        self._static_refresh.start()
 
     def apply(self, result, now=None):
         """Update the upcoming trains from a fetch(). Feeds that failed keep their last good data."""

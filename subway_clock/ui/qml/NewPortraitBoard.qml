@@ -11,6 +11,7 @@ Rectangle {
     required property var board
     required property url bulletsUrl
     required property string staleMessage
+    required property var startup
 
     readonly property var colors: Styles.colors.new
     readonly property real unit: width / 1080  // the real screens are 1080x1920
@@ -110,6 +111,15 @@ Rectangle {
                 }
             }
         }
+    }
+
+    // Before there are trains to show: what the clock is doing, on a card where the first would be
+    Loader {
+        active: root.startup.state !== "ready"
+        anchors.top: header.bottom
+        width: root.width
+        height: root.rowHeight
+        sourceComponent: NewStartup { startup: root.startup; colors: root.colors; numbered: false }
     }
 
     // Service alerts, from the bottom up to where the trains end
