@@ -12,13 +12,14 @@ class Row:
     route: str  # GTFS route_id, e.g. "6X"
     bullet: str  # bullet asset id, e.g. "6d" for the 6 express diamond
     destination: str
+    direction: str  # the platform's direction label, e.g. "Uptown" or "Brooklyn"; "" if there isn't one
     minutes: int
     arriving: bool
 
 
 @dataclass(frozen=True)
 class Board:
-    theme: str
+    style: str
     rows: tuple[Row, ...]
     stale: bool = False  # live data is out of date, e.g. the network is down
 

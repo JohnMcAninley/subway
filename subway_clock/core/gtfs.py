@@ -14,6 +14,9 @@ import requests
 SUBWAY_URL = "https://rrgtfsfeeds.s3.amazonaws.com/gtfs_subway.zip"
 SUPPLEMENTED_URL = "https://rrgtfsfeeds.s3.amazonaws.com/gtfs_supplemented.zip"
 
+# Generated from the MTA's station list by scripts/update_direction_labels.py
+DIRECTION_LABELS_PATH = Path(__file__).resolve().parent.parent / "assets" / "direction_labels.json"
+
 log = logging.getLogger(__name__)
 
 
@@ -113,6 +116,12 @@ def load_headsigns(gtfs_path, headsigns=None):
     return headsigns
 
 
+def load_direction_labels(path=DIRECTION_LABELS_PATH):
+    """Parent stop ID -> {"N": label, "S": label}; see StaticTables."""
+    with open(path, encoding="utf-8") as f:
+        return json.load(f)
+
+
 def destination(stop_names, headsigns, trip_stops, trip_id):
     """Where a realtime trip is headed: the last of its stops with a name.
 
@@ -175,16 +184,23 @@ class StaticTables:
     stop_parents: stop ID -> parent stop ID (parents map to themselves)
     stop_routes: parent stop ID -> sorted route IDs scheduled there
     headsigns: realtime-style trip ID -> scheduled headsign
+    direction_labels: parent stop ID -> {"N": label, "S": label}, the MTA's names for
+        each platform direction, e.g. {"N": "Uptown", "S": "Downtown"}
     """
 
-    def __init__(self, stop_names, stop_parents, stop_routes, headsigns):
+    def __init__(self, stop_names, stop_parents, stop_routes, headsigns, direction_labels=None):
         self.stop_names = stop_names
         self.stop_parents = stop_parents
         self.stop_routes = stop_routes
         self.headsigns = headsigns
+        self.direction_labels = direction_labels or {}
 
     def refresh(self):
         """Fixed tables never change."""
+
+    def direction_label(self, stop_id):
+        """The direction label for a directional stop ID like "633S", or "" if there isn't one."""
+        return self.direction_labels.get(stop_id[:-1], {}).get(stop_id[-1:], "")
 
     def routes_for(self, stops):
         """Sorted route IDs scheduled at any of stops (directional or parent stop IDs)."""
@@ -235,7 +251,7 @@ class StaticData(StaticTables):
         for name, _ in self.SOURCES:
             load_headsigns(self.data_dir / name / "trips.txt", headsigns)
         stop_routes = self._cached_stop_routes(stop_parents)
-        super().__init__(stop_names, stop_parents, stop_routes, headsigns)
+        super().__init__(stop_names, stop_parents, stop_routes, headsigns, load_direction_labels())
 
     def _cached_stop_routes(self, stop_parents):
         """build_stop_routes takes seconds (millions of stop_times rows), so cache it until the GTFS changes."""

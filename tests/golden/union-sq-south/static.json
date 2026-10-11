@@ -319,5 +319,19 @@
     "111600_N..S36R": "Coney Island-Stillwell Av",
     "112100_Q..S16X023": "Prospect Park",
     "112200_R..S71R": "Bay Ridge-95 St"
+  },
+  "direction_labels": {
+    "635": {
+      "N": "Uptown",
+      "S": "Downtown"
+    },
+    "L03": {
+      "N": "West Side",
+      "S": "Brooklyn"
+    },
+    "R20": {
+      "N": "Uptown",
+      "S": "Downtown"
+    }
   }
 }

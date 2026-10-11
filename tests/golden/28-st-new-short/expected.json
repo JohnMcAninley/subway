@@ -1,13 +1,14 @@
 [
   {
     "now": 1791668837,
-    "theme": "dark",
+    "style": "new",
     "rows": [
       {
         "number": 1,
         "route": "6",
         "bullet": "6",
         "destination": "Brooklyn Bridge-City Hall",
+        "direction": "Downtown",
         "minutes": 9,
         "arriving": false
       },
@@ -16,6 +17,7 @@
         "route": "6",
         "bullet": "6",
         "destination": "Brooklyn Bridge-City Hall",
+        "direction": "Downtown",
         "minutes": 18,
         "arriving": false
       }
@@ -24,13 +26,14 @@
   },
   {
     "now": 1791668842,
-    "theme": "dark",
+    "style": "new",
     "rows": [
       {
         "number": 1,
         "route": "6",
         "bullet": "6",
         "destination": "Brooklyn Bridge-City Hall",
+        "direction": "Downtown",
         "minutes": 9,
         "arriving": false
       },
@@ -39,6 +42,7 @@
         "route": "6",
         "bullet": "6",
         "destination": "Brooklyn Bridge-City Hall",
+        "direction": "Downtown",
         "minutes": 18,
         "arriving": false
       }
@@ -47,13 +51,14 @@
   },
   {
     "now": 1791668847,
-    "theme": "dark",
+    "style": "new",
     "rows": [
       {
         "number": 1,
         "route": "6",
         "bullet": "6",
         "destination": "Brooklyn Bridge-City Hall",
+        "direction": "Downtown",
         "minutes": 9,
         "arriving": false
       },
@@ -62,6 +67,7 @@
         "route": "6",
         "bullet": "6",
         "destination": "Brooklyn Bridge-City Hall",
+        "direction": "Downtown",
         "minutes": 18,
         "arriving": false
       }
@@ -70,13 +76,14 @@
   },
   {
     "now": 1791668852,
-    "theme": "dark",
+    "style": "new",
     "rows": [
       {
         "number": 1,
         "route": "6",
         "bullet": "6",
         "destination": "Brooklyn Bridge-City Hall",
+        "direction": "Downtown",
         "minutes": 9,
         "arriving": false
       },
@@ -85,6 +92,7 @@
         "route": "6",
         "bullet": "6",
         "destination": "Brooklyn Bridge-City Hall",
+        "direction": "Downtown",
         "minutes": 18,
         "arriving": false
       }
@@ -93,13 +101,14 @@
   },
   {
     "now": 1791668857,
-    "theme": "dark",
+    "style": "new",
     "rows": [
       {
         "number": 1,
         "route": "6",
         "bullet": "6",
         "destination": "Brooklyn Bridge-City Hall",
+        "direction": "Downtown",
         "minutes": 9,
         "arriving": false
       },
@@ -108,6 +117,7 @@
         "route": "6",
         "bullet": "6",
         "destination": "Brooklyn Bridge-City Hall",
+        "direction": "Downtown",
         "minutes": 18,
         "arriving": false
       }
@@ -116,13 +126,14 @@
   },
   {
     "now": 1791668897,
-    "theme": "dark",
+    "style": "new",
     "rows": [
       {
         "number": 1,
         "route": "6",
         "bullet": "6",
         "destination": "Brooklyn Bridge-City Hall",
+        "direction": "Downtown",
         "minutes": 8,
         "arriving": false
       },
@@ -131,6 +142,7 @@
         "route": "6",
         "bullet": "6",
         "destination": "Brooklyn Bridge-City Hall",
+        "direction": "Downtown",
         "minutes": 17,
         "arriving": false
       }
@@ -139,13 +151,14 @@
   },
   {
     "now": 1791669077,
-    "theme": "dark",
+    "style": "new",
     "rows": [
       {
         "number": 1,
         "route": "6",
         "bullet": "6",
         "destination": "Brooklyn Bridge-City Hall",
+        "direction": "Downtown",
         "minutes": 5,
         "arriving": false
       },
@@ -154,6 +167,7 @@
         "route": "6",
         "bullet": "6",
         "destination": "Brooklyn Bridge-City Hall",
+        "direction": "Downtown",
         "minutes": 14,
         "arriving": false
       }

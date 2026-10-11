@@ -4,10 +4,10 @@ import QtQuick
 Rectangle {
     id: strip
 
-    required property var theme
+    required property var colors
     property string message
 
-    color: theme.statusBackground
+    color: colors.statusBackground
 
     Rectangle {
         id: timeBox
@@ -15,14 +15,14 @@ Rectangle {
         anchors.top: parent.top
         anchors.bottom: parent.bottom
         width: time.implicitWidth + strip.height * 0.8
-        color: strip.theme.statusAccent
+        color: strip.colors.statusAccent
 
         Text {
             id: time
             anchors.centerIn: parent
             font.family: "Roboto"
             font.pixelSize: strip.height * 0.6
-            color: strip.theme.statusText
+            color: strip.colors.statusText
 
             function update() { text = Qt.formatTime(new Date(), "h:mm AP") }
             Component.onCompleted: update()
@@ -39,6 +39,6 @@ Rectangle {
         elide: Text.ElideRight
         font.family: "Roboto"
         font.pixelSize: strip.height * 0.6
-        color: strip.theme.statusText
+        color: strip.colors.statusText
     }
 }

@@ -138,5 +138,11 @@
     "109200_4..N06X004": "Woodlawn",
     "109300_5..N73X009": "Eastchester-Dyre Av",
     "109450_6..N04X001": "149 St-Hostos"
+  },
+  "direction_labels": {
+    "640": {
+      "N": "Uptown",
+      "S": "Downtown"
+    }
   }
 }

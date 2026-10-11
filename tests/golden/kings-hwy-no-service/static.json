@@ -9,5 +9,11 @@
       "Q"
     ]
   },
-  "headsigns": {}
+  "headsigns": {},
+  "direction_labels": {
+    "D35": {
+      "N": "Manhattan",
+      "S": "Southbound"
+    }
+  }
 }

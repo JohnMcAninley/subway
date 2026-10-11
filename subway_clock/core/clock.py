@@ -27,20 +27,24 @@ class FetchResult:
 
 
 class Clock:
-    """Upcoming trains for the chosen stops and the rotating second line, independent of any UI.
+    """Upcoming trains for the chosen stops and the rotating last line, independent of any UI.
 
     The caller drives timing: every settings.refresh_seconds, run fetch() (which
     blocks on the network, so off the UI thread if there is one) and pass its
     result to apply(); every settings.rotation_seconds call rotate(); then draw
     board(). refresh() does fetch and apply in one step.
+
+    The board has `lines` lines, set by the renderer to fit its screen. Lines
+    1 to lines-1 show the next trains; the last line rotates through the rest.
     """
 
     def __init__(self, settings, static, fetch_feed=fetch_feed):
         self.settings = settings
         self.static = static
         self.fetch_feed = fetch_feed
-        self.predictions = []
-        self.rotation_index = 1
+        self.upcoming = []  # every train within max_minutes, soonest first
+        self._lines = 2
+        self.rotation_index = 1  # the train on the last line
         self._feeds = {}  # feed URL -> (predictions, fetched_at) from the last successful fetch
         self._scheduled = []  # feed URLs for routes scheduled at the chosen stops
 
@@ -77,10 +81,30 @@ class Clock:
         preds = [p for url in result.feeds if url in self._feeds for p in self._feeds[url][0]]
         earliest = now - OVERDUE_SECONDS
         latest = now + self.settings.max_minutes * 60
-        upcoming = sorted([p for p in preds if earliest <= p.time <= latest], key=lambda p: p.time)
+        self.upcoming = sorted([p for p in preds if earliest <= p.time <= latest], key=lambda p: p.time)
+        self.rotation_index = self._fixed  # Restart rotation
 
-        self.predictions = upcoming[:self.settings.max_trains]
-        self.rotation_index = 1  # Reset rotation to 2nd train
+    @property
+    def lines(self):
+        return self._lines
+
+    @lines.setter
+    def lines(self, lines):
+        if lines < 1:
+            raise ValueError(f"lines must be at least 1, not {lines}")
+        if lines != self._lines:
+            self._lines = lines
+            self.rotation_index = self._fixed
+
+    @property
+    def predictions(self):
+        """The trains the board can show: max_trains, or more if there are more lines than that."""
+        return self.upcoming[:max(self.settings.max_trains, self.lines)]
+
+    @property
+    def _fixed(self):
+        """How many lines always show the same train: every line but the rotating last one."""
+        return max(1, self.lines - 1)
 
     def stale(self, now=None):
         """True if any feed for the stops' scheduled routes hasn't been fetched successfully for a while.
@@ -93,29 +117,30 @@ class Clock:
         return any(url not in self._feeds or now - self._feeds[url][1] > limit for url in self._scheduled)
 
     def rotate(self, now=None):
-        """Advance the second line to the next train. Returns False if there is nothing to rotate."""
+        """Advance the last line to the next train. Returns False if there is nothing to rotate."""
         now = time.time() if now is None else now
-        if len(self.predictions) <= 2 or self._arriving(1, now):
+        count = len(self.predictions)
+        if self.lines < 2 or count <= self.lines or self._arriving(self._fixed, now):
             return False
         self.rotation_index += 1
-        if self.rotation_index >= len(self.predictions):
-            self.rotation_index = 1
+        if self.rotation_index >= count:
+            self.rotation_index = self._fixed
         return True
 
     def board(self, now=None):
         now = time.time() if now is None else now
-        rows = []
+        count = len(self.predictions)
 
-        # First train (always static)
-        if self.predictions:
-            rows.append(self._row(0, now))
+        # The fixed lines always show the next trains.
+        indexes = list(range(min(self._fixed, count)))
 
-        # Second train: cycles through the rest, unless it is also arriving
-        if len(self.predictions) > 1:
-            index = 1 if self._arriving(1, now) else self.rotation_index % len(self.predictions)
-            rows.append(self._row(index, now))
+        # The last line cycles through the rest, unless its first train is arriving.
+        if self.lines > 1 and count > self._fixed:
+            rotating = count > self.lines and not self._arriving(self._fixed, now)
+            indexes.append(self.rotation_index if rotating and self.rotation_index < count else self._fixed)
 
-        return Board(theme=self.settings.theme, rows=tuple(rows), stale=self.stale(now))
+        rows = tuple(self._row(i, now) for i in indexes)
+        return Board(style=self.settings.style, rows=rows, stale=self.stale(now))
 
     def _minutes(self, index, now):
         return (self.predictions[index].time - now) / 60.0
@@ -130,6 +155,7 @@ class Clock:
             route=pred.route_id,
             bullet=bullet_id(pred.route_id),
             destination=destination(self.static.stop_names, self.static.headsigns, pred.trip_stops, pred.trip_id),
+            direction=self.static.direction_label(pred.stop_id),
             minutes=max(0, int(self._minutes(index, now))),
             arriving=self._arriving(index, now),
         )

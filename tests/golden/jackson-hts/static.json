@@ -545,5 +545,15 @@
     "112200_R..S71R": "Bay Ridge-95 St",
     "112250_R..N93R": "Forest Hills-71 Av",
     "112500_E..N72R": "Jamaica Center-Parsons/Archer"
+  },
+  "direction_labels": {
+    "710": {
+      "N": "Outbound",
+      "S": "Manhattan"
+    },
+    "G14": {
+      "N": "Outbound",
+      "S": "Manhattan"
+    }
   }
 }

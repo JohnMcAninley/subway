@@ -27,7 +27,7 @@ def main():
                         help="window size (default: the primary screen's width at 3.2:1)")
     window.add_argument("--width", type=int, help="window width in pixels, at 3.2:1")
     parser.add_argument("--dev", action="store_true",
-                        help="resizable window, live QML reload, keys 1-4 for screen shapes and T for theme")
+                        help="resizable window, live QML reload, keys 1-5 for screen shapes and S for style")
     args = parser.parse_args()
     logging.basicConfig(level=logging.INFO, format="%(asctime)s %(levelname)s %(name)s: %(message)s")
 

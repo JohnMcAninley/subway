@@ -1,13 +1,14 @@
 [
   {
     "now": 1791668837,
-    "theme": "light",
+    "style": "classic",
     "rows": [
       {
         "number": 1,
         "route": "6",
         "bullet": "6",
         "destination": "149 St-Hostos",
+        "direction": "Uptown",
         "minutes": 3,
         "arriving": false
       },
@@ -16,6 +17,7 @@
         "route": "4",
         "bullet": "4",
         "destination": "Woodlawn",
+        "direction": "Uptown",
         "minutes": 4,
         "arriving": false
       }
@@ -24,13 +26,14 @@
   },
   {
     "now": 1791668842,
-    "theme": "light",
+    "style": "classic",
     "rows": [
       {
         "number": 1,
         "route": "6",
         "bullet": "6",
         "destination": "149 St-Hostos",
+        "direction": "Uptown",
         "minutes": 3,
         "arriving": false
       },
@@ -39,6 +42,7 @@
         "route": "5",
         "bullet": "5",
         "destination": "Eastchester-Dyre Av",
+        "direction": "Uptown",
         "minutes": 9,
         "arriving": false
       }
@@ -47,13 +51,14 @@
   },
   {
     "now": 1791668847,
-    "theme": "light",
+    "style": "classic",
     "rows": [
       {
         "number": 1,
         "route": "6",
         "bullet": "6",
         "destination": "149 St-Hostos",
+        "direction": "Uptown",
         "minutes": 3,
         "arriving": false
       },
@@ -62,6 +67,7 @@
         "route": "6",
         "bullet": "6",
         "destination": "149 St-Hostos",
+        "direction": "Uptown",
         "minutes": 11,
         "arriving": false
       }
@@ -70,13 +76,14 @@
   },
   {
     "now": 1791668852,
-    "theme": "light",
+    "style": "classic",
     "rows": [
       {
         "number": 1,
         "route": "6",
         "bullet": "6",
         "destination": "149 St-Hostos",
+        "direction": "Uptown",
         "minutes": 2,
         "arriving": false
       },
@@ -85,6 +92,7 @@
         "route": "4",
         "bullet": "4",
         "destination": "Woodlawn",
+        "direction": "Uptown",
         "minutes": 11,
         "arriving": false
       }
@@ -93,13 +101,14 @@
   },
   {
     "now": 1791668857,
-    "theme": "light",
+    "style": "classic",
     "rows": [
       {
         "number": 1,
         "route": "6",
         "bullet": "6",
         "destination": "149 St-Hostos",
+        "direction": "Uptown",
         "minutes": 2,
         "arriving": false
       },
@@ -108,6 +117,7 @@
         "route": "4",
         "bullet": "4",
         "destination": "Woodlawn",
+        "direction": "Uptown",
         "minutes": 4,
         "arriving": false
       }
@@ -116,13 +126,14 @@
   },
   {
     "now": 1791668897,
-    "theme": "light",
+    "style": "classic",
     "rows": [
       {
         "number": 1,
         "route": "6",
         "bullet": "6",
         "destination": "149 St-Hostos",
+        "direction": "Uptown",
         "minutes": 2,
         "arriving": false
       },
@@ -131,6 +142,7 @@
         "route": "4",
         "bullet": "4",
         "destination": "Woodlawn",
+        "direction": "Uptown",
         "minutes": 3,
         "arriving": false
       }
@@ -139,13 +151,14 @@
   },
   {
     "now": 1791669077,
-    "theme": "light",
+    "style": "classic",
     "rows": [
       {
         "number": 1,
         "route": "6",
         "bullet": "6",
         "destination": "149 St-Hostos",
+        "direction": "Uptown",
         "minutes": 0,
         "arriving": true
       },
@@ -154,6 +167,7 @@
         "route": "4",
         "bullet": "4",
         "destination": "Woodlawn",
+        "direction": "Uptown",
         "minutes": 0,
         "arriving": true
       }

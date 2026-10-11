@@ -45,6 +45,16 @@ def failing_feed_steps(t, feed):
             {"action": "refresh", "now": t + 420, "fail": [feed]}, {"action": "board", "now": t + 420}]
 
 
+def more_lines_steps(t):
+    """Boards for taller screens: 4 lines with the last rotating, then 7, more than max_trains (5)."""
+    steps = [{"action": "lines", "lines": 4}, {"action": "board", "now": t + 60}]
+    for k in range(1, 4):
+        steps += [{"action": "rotate", "now": t + 60 + 5 * k}, {"action": "board", "now": t + 60 + 5 * k}]
+    steps += [{"action": "lines", "lines": 7}, {"action": "board", "now": t + 80},
+              {"action": "rotate", "now": t + 85}, {"action": "board", "now": t + 85}]
+    return steps
+
+
 CASES = {
     "union-sq-south": {
         "description": "14 St-Union Sq complex southbound: three feeds (4/5/6, N/Q/R/W, L) and second-line "
@@ -62,12 +72,14 @@ CASES = {
         "settings": {"stops": ["H04"]},
     },
     "jackson-hts": {
-        "description": "Jackson Hts-Roosevelt Av complex, both directions: E/F/M/R and 7 across four feeds.",
+        "description": "Jackson Hts-Roosevelt Av complex, both directions: E/F/M/R and 7 across four feeds, "
+                       "then on taller screens with 4 and 7 lines.",
         "settings": {"stops": ["G14", "710"]},
+        "extra_steps": more_lines_steps,
     },
-    "28-st-dark-short": {
-        "description": "28 St (6) southbound in the dark theme, limited to 3 trains within 20 minutes.",
-        "settings": {"stops": ["633S"], "theme": "dark", "max_trains": 3, "max_minutes": 20},
+    "28-st-new-short": {
+        "description": "28 St (6) southbound in the new style, limited to 3 trains within 20 minutes.",
+        "settings": {"stops": ["633S"], "style": "new", "max_trains": 3, "max_minutes": 20},
     },
     "kings-hwy-no-service": {
         "description": "Kings Hwy (B/Q) southbound, captured on a weekend with the Q cut short by planned "
@@ -103,6 +115,8 @@ def run_case(case_dir):
         if step["action"] == "refresh":
             failing = set(step.get("fail", []))
             clock.refresh(now=step["now"])
+        elif step["action"] == "lines":
+            clock.lines = step["lines"]
         elif step["action"] == "rotate":
             clock.rotate(now=step["now"])
         elif step["action"] == "board":
@@ -156,6 +170,7 @@ def capture(names):
             "stop_routes": {p: static.stop_routes[p] for p in sorted({static.stop_parents.get(s, s) for s in stops})
                             if p in static.stop_routes},
             "headsigns": {t: static.headsigns[t] for t in sorted(trip_ids) if t in static.headsigns},
+            "direction_labels": direction_labels(static, stops),
         })
 
         steps = standard_steps(captured_at) + definition.get("extra_steps", lambda t: [])(captured_at)
@@ -167,6 +182,12 @@ def capture(names):
         })
         regenerate(case_dir)
         print(f"captured {name}: {len(trip_ids)} trips")
+
+
+def direction_labels(static, stops):
+    """The static direction labels for a case's stops' parents."""
+    parents = sorted({static.stop_parents.get(s, s) for s in stops})
+    return {p: static.direction_labels[p] for p in parents if p in static.direction_labels}
 
 
 def case_dirs():

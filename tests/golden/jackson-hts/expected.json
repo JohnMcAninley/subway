@@ -1,13 +1,14 @@
 [
   {
     "now": 1791668837,
-    "theme": "light",
+    "style": "classic",
     "rows": [
       {
         "number": 1,
         "route": "7",
         "bullet": "7",
         "destination": "Flushing-Main St",
+        "direction": "Outbound",
         "minutes": 0,
         "arriving": true
       },
@@ -16,6 +17,7 @@
         "route": "F",
         "bullet": "F",
         "destination": "Jamaica-179 St",
+        "direction": "Outbound",
         "minutes": 0,
         "arriving": true
       }
@@ -24,13 +26,14 @@
   },
   {
     "now": 1791668842,
-    "theme": "light",
+    "style": "classic",
     "rows": [
       {
         "number": 1,
         "route": "7",
         "bullet": "7",
         "destination": "Flushing-Main St",
+        "direction": "Outbound",
         "minutes": 0,
         "arriving": true
       },
@@ -39,6 +42,7 @@
         "route": "F",
         "bullet": "F",
         "destination": "Jamaica-179 St",
+        "direction": "Outbound",
         "minutes": 0,
         "arriving": true
       }
@@ -47,13 +51,14 @@
   },
   {
     "now": 1791668847,
-    "theme": "light",
+    "style": "classic",
     "rows": [
       {
         "number": 1,
         "route": "7",
         "bullet": "7",
         "destination": "Flushing-Main St",
+        "direction": "Outbound",
         "minutes": 0,
         "arriving": true
       },
@@ -62,6 +67,7 @@
         "route": "F",
         "bullet": "F",
         "destination": "Jamaica-179 St",
+        "direction": "Outbound",
         "minutes": 0,
         "arriving": true
       }
@@ -70,13 +76,14 @@
   },
   {
     "now": 1791668852,
-    "theme": "light",
+    "style": "classic",
     "rows": [
       {
         "number": 1,
         "route": "7",
         "bullet": "7",
         "destination": "Flushing-Main St",
+        "direction": "Outbound",
         "minutes": 0,
         "arriving": true
       },
@@ -85,6 +92,7 @@
         "route": "F",
         "bullet": "F",
         "destination": "Jamaica-179 St",
+        "direction": "Outbound",
         "minutes": 0,
         "arriving": true
       }
@@ -93,13 +101,14 @@
   },
   {
     "now": 1791668857,
-    "theme": "light",
+    "style": "classic",
     "rows": [
       {
         "number": 1,
         "route": "7",
         "bullet": "7",
         "destination": "Flushing-Main St",
+        "direction": "Outbound",
         "minutes": 0,
         "arriving": true
       },
@@ -108,6 +117,7 @@
         "route": "F",
         "bullet": "F",
         "destination": "Jamaica-179 St",
+        "direction": "Outbound",
         "minutes": 0,
         "arriving": true
       }
@@ -116,13 +126,14 @@
   },
   {
     "now": 1791668897,
-    "theme": "light",
+    "style": "classic",
     "rows": [
       {
         "number": 1,
         "route": "7",
         "bullet": "7",
         "destination": "Flushing-Main St",
+        "direction": "Outbound",
         "minutes": 0,
         "arriving": true
       },
@@ -131,6 +142,7 @@
         "route": "F",
         "bullet": "F",
         "destination": "Jamaica-179 St",
+        "direction": "Outbound",
         "minutes": 0,
         "arriving": true
       }
@@ -139,13 +151,14 @@
   },
   {
     "now": 1791669077,
-    "theme": "light",
+    "style": "classic",
     "rows": [
       {
         "number": 1,
         "route": "7",
         "bullet": "7",
         "destination": "Flushing-Main St",
+        "direction": "Outbound",
         "minutes": 0,
         "arriving": true
       },
@@ -154,10 +167,323 @@
         "route": "F",
         "bullet": "F",
         "destination": "Jamaica-179 St",
+        "direction": "Outbound",
         "minutes": 0,
         "arriving": true
       }
     ],
     "stale": true
+  },
+  {
+    "now": 1791668897,
+    "style": "classic",
+    "rows": [
+      {
+        "number": 1,
+        "route": "7",
+        "bullet": "7",
+        "destination": "Flushing-Main St",
+        "direction": "Outbound",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
+        "route": "F",
+        "bullet": "F",
+        "destination": "Jamaica-179 St",
+        "direction": "Outbound",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 3,
+        "route": "7",
+        "bullet": "7",
+        "destination": "Flushing-Main St",
+        "direction": "Outbound",
+        "minutes": 1,
+        "arriving": false
+      },
+      {
+        "number": 4,
+        "route": "R",
+        "bullet": "R",
+        "destination": "Bay Ridge-95 St",
+        "direction": "Manhattan",
+        "minutes": 3,
+        "arriving": false
+      }
+    ],
+    "stale": false
+  },
+  {
+    "now": 1791668902,
+    "style": "classic",
+    "rows": [
+      {
+        "number": 1,
+        "route": "7",
+        "bullet": "7",
+        "destination": "Flushing-Main St",
+        "direction": "Outbound",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
+        "route": "F",
+        "bullet": "F",
+        "destination": "Jamaica-179 St",
+        "direction": "Outbound",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 3,
+        "route": "7",
+        "bullet": "7",
+        "destination": "Flushing-Main St",
+        "direction": "Outbound",
+        "minutes": 1,
+        "arriving": false
+      },
+      {
+        "number": 5,
+        "route": "F",
+        "bullet": "F",
+        "destination": "Coney Island-Stillwell Av",
+        "direction": "Manhattan",
+        "minutes": 3,
+        "arriving": false
+      }
+    ],
+    "stale": false
+  },
+  {
+    "now": 1791668907,
+    "style": "classic",
+    "rows": [
+      {
+        "number": 1,
+        "route": "7",
+        "bullet": "7",
+        "destination": "Flushing-Main St",
+        "direction": "Outbound",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
+        "route": "F",
+        "bullet": "F",
+        "destination": "Jamaica-179 St",
+        "direction": "Outbound",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 3,
+        "route": "7",
+        "bullet": "7",
+        "destination": "Flushing-Main St",
+        "direction": "Outbound",
+        "minutes": 1,
+        "arriving": false
+      },
+      {
+        "number": 4,
+        "route": "R",
+        "bullet": "R",
+        "destination": "Bay Ridge-95 St",
+        "direction": "Manhattan",
+        "minutes": 3,
+        "arriving": false
+      }
+    ],
+    "stale": false
+  },
+  {
+    "now": 1791668912,
+    "style": "classic",
+    "rows": [
+      {
+        "number": 1,
+        "route": "7",
+        "bullet": "7",
+        "destination": "Flushing-Main St",
+        "direction": "Outbound",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
+        "route": "F",
+        "bullet": "F",
+        "destination": "Jamaica-179 St",
+        "direction": "Outbound",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 3,
+        "route": "7",
+        "bullet": "7",
+        "destination": "Flushing-Main St",
+        "direction": "Outbound",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 5,
+        "route": "F",
+        "bullet": "F",
+        "destination": "Coney Island-Stillwell Av",
+        "direction": "Manhattan",
+        "minutes": 3,
+        "arriving": false
+      }
+    ],
+    "stale": false
+  },
+  {
+    "now": 1791668917,
+    "style": "classic",
+    "rows": [
+      {
+        "number": 1,
+        "route": "7",
+        "bullet": "7",
+        "destination": "Flushing-Main St",
+        "direction": "Outbound",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
+        "route": "F",
+        "bullet": "F",
+        "destination": "Jamaica-179 St",
+        "direction": "Outbound",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 3,
+        "route": "7",
+        "bullet": "7",
+        "destination": "Flushing-Main St",
+        "direction": "Outbound",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 4,
+        "route": "R",
+        "bullet": "R",
+        "destination": "Bay Ridge-95 St",
+        "direction": "Manhattan",
+        "minutes": 2,
+        "arriving": false
+      },
+      {
+        "number": 5,
+        "route": "F",
+        "bullet": "F",
+        "destination": "Coney Island-Stillwell Av",
+        "direction": "Manhattan",
+        "minutes": 3,
+        "arriving": false
+      },
+      {
+        "number": 6,
+        "route": "7",
+        "bullet": "7",
+        "destination": "34 St-Hudson Yards",
+        "direction": "Manhattan",
+        "minutes": 3,
+        "arriving": false
+      },
+      {
+        "number": 7,
+        "route": "E",
+        "bullet": "E",
+        "destination": "Jamaica Center-Parsons/Archer",
+        "direction": "Outbound",
+        "minutes": 3,
+        "arriving": false
+      }
+    ],
+    "stale": false
+  },
+  {
+    "now": 1791668922,
+    "style": "classic",
+    "rows": [
+      {
+        "number": 1,
+        "route": "7",
+        "bullet": "7",
+        "destination": "Flushing-Main St",
+        "direction": "Outbound",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
+        "route": "F",
+        "bullet": "F",
+        "destination": "Jamaica-179 St",
+        "direction": "Outbound",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 3,
+        "route": "7",
+        "bullet": "7",
+        "destination": "Flushing-Main St",
+        "direction": "Outbound",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 4,
+        "route": "R",
+        "bullet": "R",
+        "destination": "Bay Ridge-95 St",
+        "direction": "Manhattan",
+        "minutes": 2,
+        "arriving": false
+      },
+      {
+        "number": 5,
+        "route": "F",
+        "bullet": "F",
+        "destination": "Coney Island-Stillwell Av",
+        "direction": "Manhattan",
+        "minutes": 3,
+        "arriving": false
+      },
+      {
+        "number": 6,
+        "route": "7",
+        "bullet": "7",
+        "destination": "34 St-Hudson Yards",
+        "direction": "Manhattan",
+        "minutes": 3,
+        "arriving": false
+      },
+      {
+        "number": 7,
+        "route": "E",
+        "bullet": "E",
+        "destination": "Jamaica Center-Parsons/Archer",
+        "direction": "Outbound",
+        "minutes": 3,
+        "arriving": false
+      }
+    ],
+    "stale": false
   }
 ]

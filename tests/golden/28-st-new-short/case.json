@@ -1,11 +1,11 @@
 {
-  "description": "28 St (6) southbound in the dark theme, limited to 3 trains within 20 minutes.",
+  "description": "28 St (6) southbound in the new style, limited to 3 trains within 20 minutes.",
   "captured_at": "2026-10-10T21:47:17+00:00",
   "settings": {
     "stops": [
       "633S"
     ],
-    "theme": "dark",
+    "style": "new",
     "max_trains": 3,
     "max_minutes": 20
   },

@@ -1,13 +1,14 @@
 [
   {
     "now": 1791668837,
-    "theme": "light",
+    "style": "classic",
     "rows": [
       {
         "number": 1,
         "route": "A",
         "bullet": "A",
         "destination": "Inwood-207 St",
+        "direction": "Inbound",
         "minutes": 0,
         "arriving": true
       },
@@ -16,6 +17,7 @@
         "route": "H",
         "bullet": "SR",
         "destination": "Rockaway Park-Beach 116 St",
+        "direction": "Rockaways",
         "minutes": 7,
         "arriving": false
       }
@@ -24,13 +26,14 @@
   },
   {
     "now": 1791668842,
-    "theme": "light",
+    "style": "classic",
     "rows": [
       {
         "number": 1,
         "route": "A",
         "bullet": "A",
         "destination": "Inwood-207 St",
+        "direction": "Inbound",
         "minutes": 0,
         "arriving": true
       },
@@ -39,6 +42,7 @@
         "route": "A",
         "bullet": "A",
         "destination": "Far Rockaway-Mott Av",
+        "direction": "Rockaways",
         "minutes": 10,
         "arriving": false
       }
@@ -47,13 +51,14 @@
   },
   {
     "now": 1791668847,
-    "theme": "light",
+    "style": "classic",
     "rows": [
       {
         "number": 1,
         "route": "A",
         "bullet": "A",
         "destination": "Inwood-207 St",
+        "direction": "Inbound",
         "minutes": 0,
         "arriving": true
       },
@@ -62,6 +67,7 @@
         "route": "H",
         "bullet": "SR",
         "destination": "Broad Channel",
+        "direction": "Inbound",
         "minutes": 12,
         "arriving": false
       }
@@ -70,13 +76,14 @@
   },
   {
     "now": 1791668852,
-    "theme": "light",
+    "style": "classic",
     "rows": [
       {
         "number": 1,
         "route": "A",
         "bullet": "A",
         "destination": "Inwood-207 St",
+        "direction": "Inbound",
         "minutes": 0,
         "arriving": true
       },
@@ -85,6 +92,7 @@
         "route": "A",
         "bullet": "A",
         "destination": "Inwood-207 St",
+        "direction": "Inbound",
         "minutes": 15,
         "arriving": false
       }
@@ -93,13 +101,14 @@
   },
   {
     "now": 1791668857,
-    "theme": "light",
+    "style": "classic",
     "rows": [
       {
         "number": 1,
         "route": "A",
         "bullet": "A",
         "destination": "Inwood-207 St",
+        "direction": "Inbound",
         "minutes": 0,
         "arriving": true
       },
@@ -108,6 +117,7 @@
         "route": "H",
         "bullet": "SR",
         "destination": "Rockaway Park-Beach 116 St",
+        "direction": "Rockaways",
         "minutes": 6,
         "arriving": false
       }
@@ -116,13 +126,14 @@
   },
   {
     "now": 1791668897,
-    "theme": "light",
+    "style": "classic",
     "rows": [
       {
         "number": 1,
         "route": "A",
         "bullet": "A",
         "destination": "Inwood-207 St",
+        "direction": "Inbound",
         "minutes": 0,
         "arriving": true
       },
@@ -131,6 +142,7 @@
         "route": "H",
         "bullet": "SR",
         "destination": "Rockaway Park-Beach 116 St",
+        "direction": "Rockaways",
         "minutes": 6,
         "arriving": false
       }
@@ -139,13 +151,14 @@
   },
   {
     "now": 1791669077,
-    "theme": "light",
+    "style": "classic",
     "rows": [
       {
         "number": 1,
         "route": "A",
         "bullet": "A",
         "destination": "Inwood-207 St",
+        "direction": "Inbound",
         "minutes": 0,
         "arriving": true
       },
@@ -154,6 +167,7 @@
         "route": "H",
         "bullet": "SR",
         "destination": "Rockaway Park-Beach 116 St",
+        "direction": "Rockaways",
         "minutes": 3,
         "arriving": false
       }

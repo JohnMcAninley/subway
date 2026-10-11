@@ -8,17 +8,20 @@ from PySide6.QtCore import Property, QFileSystemWatcher, QObject, QSize, Qt, QTi
 from PySide6.QtGui import QFontDatabase
 from PySide6.QtQuick import QQuickView
 
+from ..core.settings import STYLES
+
 ASSETS_DIR = Path(__file__).resolve().parent.parent / "assets"
 QML_DIR = Path(__file__).resolve().parent / "qml"
 
 log = logging.getLogger(__name__)
 
-# Window sizes to preview with keys 1-4 in --dev mode
+# Window sizes to preview with keys 1-5 in --dev mode
 PRESETS = {
     Qt.Key_1: QSize(1920, 600),  # 3.2:1 ultra-wide bar
     Qt.Key_2: QSize(1920, 480),  # 4:1 bar
     Qt.Key_3: QSize(1280, 720),  # 16:9 TV or monitor
-    Qt.Key_4: QSize(480, 1440),  # 1:3 portrait
+    Qt.Key_4: QSize(608, 1080),  # 9:16 portrait TV or monitor
+    Qt.Key_5: QSize(360, 1080),  # 1:3 tall portrait, like the screens in station entrances
 }
 
 
@@ -33,6 +36,7 @@ class Display(QObject):
     # Carries a FetchResult from the worker thread back to the UI thread.
     fetched = Signal(object)
     boardChanged = Signal()
+    linesChanged = Signal()
 
     def __init__(self, clock, dev=False):
         super().__init__()
@@ -60,7 +64,7 @@ class Display(QObject):
         self.update_timer.start(clock.settings.refresh_seconds * 1000)
 
         self.rotation_timer = QTimer()
-        self.rotation_timer.timeout.connect(self.rotate_second_train)
+        self.rotation_timer.timeout.connect(self.rotate_last_line)
         self.rotation_timer.start(clock.settings.rotation_seconds * 1000)
 
         self.update_predictions()
@@ -68,6 +72,18 @@ class Display(QObject):
     @Property("QVariant", notify=boardChanged)
     def board(self):
         return self._board
+
+    def get_lines(self):
+        return self.clock.lines
+
+    def set_lines(self, lines):
+        # Each style's QML works out how many lines fit the screen.
+        if lines != self.clock.lines:
+            self.clock.lines = lines
+            self.linesChanged.emit()
+            self.publish()
+
+    lines = Property(int, get_lines, set_lines, notify=linesChanged)
 
     @Property(str, constant=True)
     def bulletsUrl(self):
@@ -115,14 +131,14 @@ class Display(QObject):
         self.clock.apply(result)
         self.publish()
 
-    def rotate_second_train(self):
+    def rotate_last_line(self):
         # Publish even if nothing rotated, so the minutes keep counting down.
         self.clock.rotate()
         self.publish()
 
-    def toggle_theme(self):
+    def next_style(self):
         settings = self.clock.settings
-        settings.theme = "dark" if settings.theme == "light" else "light"
+        settings.style = STYLES[(STYLES.index(settings.style) + 1) % len(STYLES)]
         self.publish()
 
     def close(self):
@@ -130,7 +146,7 @@ class Display(QObject):
 
 
 class ClockWindow(QQuickView):
-    """Esc quits. In --dev mode, 1-4 resize to preview screen shapes and T toggles the theme."""
+    """Esc quits. In --dev mode, 1-5 resize to preview screen shapes and S switches style."""
 
     def __init__(self, display):
         super().__init__()
@@ -142,8 +158,8 @@ class ClockWindow(QQuickView):
             self.close()
         elif self.display.dev and key in PRESETS:
             self.resize(PRESETS[key])
-        elif self.display.dev and key == Qt.Key_T:
-            self.display.toggle_theme()
+        elif self.display.dev and key == Qt.Key_S:
+            self.display.next_style()
         else:
             super().keyPressEvent(event)
 

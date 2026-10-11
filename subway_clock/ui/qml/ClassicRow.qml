@@ -1,20 +1,20 @@
 import QtQuick
 
-// One line of the clock: "1. (bullet) Destination      3 min"
+// One line of the classic clock: "1. (bullet) Destination      3 min"
 Item {
     id: row
 
     required property var train
-    required property var theme
+    required property var colors
     required property real fontSize
     required property url bulletsUrl
 
-    readonly property color textColor: train.arriving ? theme.arrivingText : theme.text
+    readonly property color textColor: train.arriving ? colors.arrivingText : colors.text
     readonly property real margin: fontSize * 0.3
 
     Rectangle {
         anchors.fill: parent
-        color: row.train.arriving ? row.theme.arrivingBackground : "transparent"
+        color: row.train.arriving ? row.colors.arrivingBackground : "transparent"
     }
 
     Text {

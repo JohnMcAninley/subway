@@ -78,6 +78,59 @@ def test_max_trains_limits_rotation():
     assert shown(clock) == [1, 2]
 
 
+# More lines, for taller screens
+
+
+def test_last_line_rotates_and_the_others_are_fixed():
+    clock = make_clock(*[six(str(i), i * 2 + 2) for i in range(6)])
+    clock.lines = 4
+    states = [shown(clock)]
+    for _ in range(3):
+        assert clock.rotate(now=NOW)
+        states.append(shown(clock))
+    assert states == [[1, 2, 3, 4], [1, 2, 3, 5], [1, 2, 3, 4], [1, 2, 3, 5]]
+
+
+def test_arriving_train_is_fixed_on_the_last_line():
+    clock = make_clock(six("a", 0), six("b", 0.2), six("c", 0.5), six("d", 5), six("e", 9))
+    clock.lines = 3
+    assert not clock.rotate(now=NOW)
+    assert shown(clock) == [1, 2, 3]
+
+
+def test_lines_beyond_max_trains_show_more_trains():
+    clock = make_clock(*[six(str(i), i + 2) for i in range(10)], max_trains=3)
+    clock.lines = 6
+    assert not clock.rotate(now=NOW)
+    assert shown(clock) == [1, 2, 3, 4, 5, 6]
+
+
+def test_changing_lines_restarts_rotation():
+    clock = make_clock(*[six(str(i), i * 2 + 2) for i in range(5)])
+    clock.rotate(now=NOW)
+    clock.lines = 3
+    assert shown(clock) == [1, 2, 3]
+
+
+def test_one_line_shows_only_the_next_train():
+    clock = make_clock(six("a", 2), six("b", 4), six("c", 6))
+    clock.lines = 1
+    assert not clock.rotate(now=NOW)
+    assert shown(clock) == [1]
+
+
+def test_direction_labels():
+    static = FakeStatic(headsigns={"down": "Dest down", "up": "Dest up"},
+                        direction_labels={"633": {"N": "Uptown", "S": "Downtown"}})
+    clock = make_clock(six("down", 3, "633S"), six("up", 4, "633N"), stops=["633"], static=static)
+    assert [r.direction for r in clock.board(now=NOW).rows] == ["Downtown", "Uptown"]
+
+
+def test_missing_direction_label_is_empty():
+    clock = make_clock(six("a", 3))
+    assert clock.board(now=NOW).rows[0].direction == ""
+
+
 def test_arriving_under_one_minute():
     clock = make_clock(six("a", 0.5), six("b", 1))
     assert [r.arriving for r in clock.board(now=NOW).rows] == [True, False]
@@ -160,11 +213,11 @@ def test_settings_defaults_when_file_missing(tmp_path):
 
 def test_settings_round_trip_and_unknown_keys_ignored(tmp_path):
     path = tmp_path / "settings.json"
-    Settings(stops=["R20N"], theme="dark").save(path)
+    Settings(stops=["R20N"], style="new").save(path)
     values = json.loads(path.read_text())
     values["future_setting"] = True
     path.write_text(json.dumps(values))
-    assert Settings.load(path) == Settings(stops=["R20N"], theme="dark")
+    assert Settings.load(path) == Settings(stops=["R20N"], style="new")
 
 
 def test_settings_single_stop_id_still_loads(tmp_path):
@@ -173,9 +226,16 @@ def test_settings_single_stop_id_still_loads(tmp_path):
     assert Settings.load(path).stops == ["R20N"]
 
 
-def test_settings_rejects_unknown_theme():
+@pytest.mark.parametrize("theme, style", [("light", "classic"), ("dark", "new")])
+def test_settings_old_themes_load_as_styles(tmp_path, theme, style):
+    path = tmp_path / "settings.json"
+    path.write_text(json.dumps({"theme": theme}))
+    assert Settings.load(path).style == style
+
+
+def test_settings_rejects_unknown_style():
     with pytest.raises(ValueError):
-        Settings(theme="neon")
+        Settings(style="neon")
 
 
 # Network failures

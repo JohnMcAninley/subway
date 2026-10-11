@@ -192,5 +192,11 @@
     "111100_A..N55R": "Inwood-207 St",
     "111100_H..S21R": "Rockaway Park-Beach 116 St",
     "112100_H..S21R": "Rockaway Park-Beach 116 St"
+  },
+  "direction_labels": {
+    "H04": {
+      "N": "Inbound",
+      "S": "Rockaways"
+    }
   }
 }

@@ -62,5 +62,11 @@
     "107450_6..S04X001": "Brooklyn Bridge-City Hall",
     "108450_6..S04X001": "Brooklyn Bridge-City Hall",
     "109050_6..S04X001": "Brooklyn Bridge-City Hall"
+  },
+  "direction_labels": {
+    "633": {
+      "N": "Uptown",
+      "S": "Downtown"
+    }
   }
 }

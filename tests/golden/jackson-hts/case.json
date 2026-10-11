@@ -1,5 +1,5 @@
 {
-  "description": "Jackson Hts-Roosevelt Av complex, both directions: E/F/M/R and 7 across four feeds.",
+  "description": "Jackson Hts-Roosevelt Av complex, both directions: E/F/M/R and 7 across four feeds, then on taller screens with 4 and 7 lines.",
   "captured_at": "2026-10-10T21:47:17+00:00",
   "settings": {
     "stops": [
@@ -59,6 +59,54 @@
     {
       "action": "board",
       "now": 1791669077
+    },
+    {
+      "action": "lines",
+      "lines": 4
+    },
+    {
+      "action": "board",
+      "now": 1791668897
+    },
+    {
+      "action": "rotate",
+      "now": 1791668902
+    },
+    {
+      "action": "board",
+      "now": 1791668902
+    },
+    {
+      "action": "rotate",
+      "now": 1791668907
+    },
+    {
+      "action": "board",
+      "now": 1791668907
+    },
+    {
+      "action": "rotate",
+      "now": 1791668912
+    },
+    {
+      "action": "board",
+      "now": 1791668912
+    },
+    {
+      "action": "lines",
+      "lines": 7
+    },
+    {
+      "action": "board",
+      "now": 1791668917
+    },
+    {
+      "action": "rotate",
+      "now": 1791668922
+    },
+    {
+      "action": "board",
+      "now": 1791668922
     }
   ]
 }

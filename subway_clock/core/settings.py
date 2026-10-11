@@ -4,7 +4,13 @@ import json
 from dataclasses import dataclass, field
 from pathlib import Path
 
-THEMES = ("light", "dark")
+# The looks of the MTA's platform clocks, each with its own layout:
+#   classic: the LCD clocks with a pale blue screen and a time and message strip
+#   new: the newer clocks with a card per train, direction labels and terminals
+STYLES = ("classic", "new")
+
+# Settings files from before styles called them themes.
+OLD_THEMES = {"light": "classic", "dark": "new"}
 
 
 @dataclass
@@ -13,7 +19,7 @@ class Settings:
     # direction; a parent ID ("633") is both directions. One stop, a whole
     # station, or several stations are all just a list of stops.
     stops: list[str] = field(default_factory=lambda: ["633S"])
-    theme: str = "light"
+    style: str = "classic"
     # Show up to max_trains trains, and only those within max_minutes.
     # TODO: calibrate both defaults against the real countdown clocks.
     max_trains: int = 5
@@ -28,8 +34,8 @@ class Settings:
     data_dir: str = "data"  # static GTFS cache; relative paths are relative to the settings file
 
     def __post_init__(self):
-        if self.theme not in THEMES:
-            raise ValueError(f"theme must be one of {THEMES}, not {self.theme!r}")
+        if self.style not in STYLES:
+            raise ValueError(f"style must be one of {STYLES}, not {self.style!r}")
 
     @classmethod
     def load(cls, path):
@@ -41,6 +47,8 @@ class Settings:
             values = json.load(f)
         if "stop_id" in values:  # Before multiple stops were supported
             values.setdefault("stops", [values.pop("stop_id")])
+        if "theme" in values:  # Before styles
+            values.setdefault("style", OLD_THEMES.get(values.pop("theme"), "classic"))
         known = {field.name for field in dataclasses.fields(cls)}
         return cls(**{k: v for k, v in values.items() if k in known})
 

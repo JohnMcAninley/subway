@@ -39,7 +39,8 @@ anything left out. `now` is POSIX seconds. Steps run in order:
   `feeds/<name>.pb`, where the name is the end of its URL (`gtfs`, `gtfs-ace`,
   `gtfs-bdfm`, `gtfs-g`, `gtfs-jz`, `gtfs-l`, `gtfs-nqrw`, `gtfs-si`). Feeds
   listed in `fail` fail to fetch for this step.
-- `rotate`: advance the second line.
+- `lines`: set how many lines the board has (`"lines": 4`). Cases start with 2.
+- `rotate`: advance the last line.
 - `board`: record the board at `now`.
 
 ### static.json
@@ -50,6 +51,8 @@ Only the entries the case can look up:
 - `stop_parents`: stop ID to parent stop ID
 - `stop_routes`: parent stop ID to the sorted routes scheduled there
 - `headsigns`: realtime trip ID to scheduled headsign
+- `direction_labels`: parent stop ID to its direction labels, e.g.
+  `{"N": "Uptown", "S": "Downtown"}`. Either direction may be missing.
 
 ### feeds/*.pb
 
@@ -63,10 +66,10 @@ One entry per `board` step:
 ```json
 {
   "now": 1791668837,
-  "theme": "light",
+  "style": "classic",
   "rows": [
     {"number": 1, "route": "6", "bullet": "6", "destination": "Brooklyn Bridge-City Hall",
-     "minutes": 0, "arriving": true}
+     "direction": "Downtown", "minutes": 0, "arriving": true}
   ],
   "stale": false
 }
@@ -85,8 +88,10 @@ What the cases test, for anyone implementing the core:
   the feeds carrying the routes in `stop_routes` for the stops' parents.
   Feeds are processed in sorted URL order.
 - Keep trains with `now - 300 <= time <= now + max_minutes * 60`, sorted by
-  time (ties keep feed order, then entity order within a feed), and take the
-  first `max_trains`. This happens on `refresh`, with that step's `now`.
+  time (ties keep feed order, then entity order within a feed). This happens
+  on `refresh`, with that step's `now`.
+- The board shows the first `max(max_trains, lines)` of those: `max_trains`,
+  or more if the screen has more lines than that.
 
 **Rows**
 - `minutes` is `floor((time - now) / 60)`, but never below 0. `arriving` is
@@ -96,14 +101,20 @@ What the cases test, for anyone implementing the core:
 - `bullet`: `GS` is `S`, `FS` is `SF`, `H` is `SR`, `SI` is `SIR`; otherwise
   routes ending in `X` (express) end in `d` instead (`6X` is `6d`); otherwise
   the route ID.
+- `direction` is `direction_labels[parent][d]`, where `d` is the last
+  character of the matched stop time's stop ID (`N` or `S`) and `parent` is
+  that stop ID without it; or `""` if there is no such label.
 - `number` is the train's 1-based position in the kept list.
 
-**The two lines**
-- Line 1 is always the first train.
-- Line 2 shows train 2, unless there are more than 2 trains and train 2 isn't
-  arriving, in which case `rotate` advances it through trains 2 to n and back
-  to 2. `refresh` resets it to train 2. If train 2 is arriving, line 2 shows
-  train 2 and `rotate` does nothing.
+**The lines**
+
+With `lines` = L and n trains shown:
+- Lines 1 to L-1 always show trains 1 to L-1 (as many as there are).
+- Line L shows train L, unless there are more than L trains and train L
+  isn't arriving, in which case `rotate` advances it through trains L to n
+  and back to L. `refresh`, and a `lines` step that changes L, reset it to train L. If train L is
+  arriving, line L shows train L and `rotate` does nothing.
+- With L = 1, the board shows train 1 only, and `rotate` does nothing.
 
 **Failures and staleness**
 - A feed that fails keeps its trains from its last successful fetch.
