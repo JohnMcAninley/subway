@@ -99,6 +99,12 @@ Blocked on hardware (H1) except where noted.
 | F3 | **Wi-Fi setup and phone settings** | L | Provisioning for a device with no keyboard, then a settings page at `subway.local` (reusing `core/stations.py`). |
 | F4 | **Updates** | L | From GitHub Releases, with rollback if the new version fails to start. The update check and version logic can be written and tested on a PC now. |
 
+### G. Web version
+
+| ID | Package | Size | Notes |
+|---|---|---|---|
+| G1 | **Draw the clock in a browser** | L | The same `Board`, drawn with HTML and CSS instead of QML, in the three styles. The golden cases are the shared spec: each one drawn in the browser should match the Qt capture at the `--dev` preset sizes. To decide first: whether the Python core stays and serves the `Board` as JSON to the page, or the core is ported to JavaScript and checked against the golden cases; and, if the page is to fetch the feeds itself, whether the MTA's servers allow that from a browser (if not, it needs S2's relay). Settings should follow the settings menu (`subway_clock/ui/menu.py`), and the page is a starting point for F3's phone settings. |
+
 ### S. Selling a prebuilt clock
 
 Nothing here is needed for the open-source project. It is what stands between
@@ -113,16 +119,16 @@ it and a product, as read on 2026-10-11; none of it is legal advice.
 
 ### Later
 
-- **Web port**, checked against the golden cases as the shared spec.
 - **ESP32.**
 
 ## Suggested order
 
 1. B3: small, and nothing blocks it.
-2. A1, A2, A4 and C1 as photos and station visits come in.
-3. S1 early if the clock is to be sold: the answer decides whether there is a
+2. G1, the web version.
+3. A1, A2, A4 and C1 as photos and station visits come in.
+4. S1 early if the clock is to be sold: the answer decides whether there is a
    product, and it may take a while.
-4. F once there is hardware; F4's PC-testable parts can start earlier.
+5. F once there is hardware; F4's PC-testable parts can start earlier.
 
 ## Waiting on John
 
