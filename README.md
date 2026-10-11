@@ -51,7 +51,8 @@ left out uses its default, and the file is optional:
     "rotation": "auto",
     "fetch_all_feeds": true,
     "show_alerts": true,
-    "refresh_seconds": 30,
+    "departed_seconds": 300,
+    "refresh_seconds": 10,
     "rotation_seconds": 5,
     "data_dir": "data"
 }
@@ -70,6 +71,12 @@ left out uses its default, and the file is optional:
   `max_minutes`. The board fits as many lines as the screen's shape allows (2 on a wide bar, 4 at
   16:9, up to 10 in portrait); the last line rotates through the trains that don't fit. A screen
   with more lines than `max_trains` shows more trains.
+- `departed_seconds`: an arriving train stays at "0 min" until the feed stops listing it at the
+  stop (the nearest thing the data has to "it has left"), or until this long after its arrival
+  time if that comes first. The default of 300 just guards against a train stuck in the feed.
+  Away from the station, 30 makes room for the next train sooner.
+- `refresh_seconds`: how often to fetch the feeds. The MTA republishes them about every 10
+  seconds.
 - `rotation`: which trains the last line rotates through. `all` is every train up to
   `max_trains`, as the classic and LED clocks do. `unique` stops once every route among them has
   been shown, as the newer clocks do, so the next few trains come round more often. `auto` (the

@@ -69,17 +69,49 @@
     "rows": [
       {
         "number": 1,
-        "route": "Q",
-        "bullet": "Q",
-        "destination": "Prospect Park",
+        "route": "6",
+        "bullet": "6",
+        "destination": "Brooklyn Bridge-City Hall",
         "direction": "Downtown & Brooklyn",
-        "headline": "Downtown & Brooklyn",
-        "detail": "Prospect Park",
-        "minutes": 2,
-        "arriving": false
+        "headline": "Downtown",
+        "detail": "Brooklyn Bridge-City Hall",
+        "minutes": 0,
+        "arriving": true
       },
       {
         "number": 4,
+        "route": "N",
+        "bullet": "N",
+        "destination": "Coney Island-Stillwell Av",
+        "direction": "Downtown & Brooklyn",
+        "headline": "Downtown & Brooklyn",
+        "detail": "Coney Island-Stillwell Av",
+        "minutes": 4,
+        "arriving": false
+      }
+    ],
+    "stale": false,
+    "messages": [],
+    "message": "",
+    "groups": []
+  },
+  {
+    "now": 1791668852,
+    "style": "classic",
+    "rows": [
+      {
+        "number": 1,
+        "route": "6",
+        "bullet": "6",
+        "destination": "Brooklyn Bridge-City Hall",
+        "direction": "Downtown & Brooklyn",
+        "headline": "Downtown",
+        "detail": "Brooklyn Bridge-City Hall",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 5,
         "route": "R",
         "bullet": "R",
         "destination": "Bay Ridge-95 St",
@@ -96,60 +128,28 @@
     "groups": []
   },
   {
-    "now": 1791668852,
+    "now": 1791668857,
     "style": "classic",
     "rows": [
       {
         "number": 1,
-        "route": "Q",
-        "bullet": "Q",
-        "destination": "Prospect Park",
-        "direction": "Downtown & Brooklyn",
-        "headline": "Downtown & Brooklyn",
-        "detail": "Prospect Park",
-        "minutes": 2,
-        "arriving": false
-      },
-      {
-        "number": 5,
         "route": "6",
         "bullet": "6",
         "destination": "Brooklyn Bridge-City Hall",
         "direction": "Downtown & Brooklyn",
         "headline": "Downtown",
         "detail": "Brooklyn Bridge-City Hall",
-        "minutes": 11,
-        "arriving": false
-      }
-    ],
-    "stale": false,
-    "messages": [],
-    "message": "",
-    "groups": []
-  },
-  {
-    "now": 1791668857,
-    "style": "classic",
-    "rows": [
+        "minutes": 0,
+        "arriving": true
+      },
       {
-        "number": 1,
+        "number": 2,
         "route": "Q",
         "bullet": "Q",
         "destination": "Prospect Park",
         "direction": "Downtown & Brooklyn",
         "headline": "Downtown & Brooklyn",
         "detail": "Prospect Park",
-        "minutes": 2,
-        "arriving": false
-      },
-      {
-        "number": 2,
-        "route": "4",
-        "bullet": "4",
-        "destination": "Crown Hts-Utica Av",
-        "direction": "Downtown & Brooklyn",
-        "headline": "Downtown & Brooklyn",
-        "detail": "Crown Hts-Utica Av",
         "minutes": 2,
         "arriving": false
       }
@@ -165,6 +165,17 @@
     "rows": [
       {
         "number": 1,
+        "route": "6",
+        "bullet": "6",
+        "destination": "Brooklyn Bridge-City Hall",
+        "direction": "Downtown & Brooklyn",
+        "headline": "Downtown",
+        "detail": "Brooklyn Bridge-City Hall",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
         "route": "Q",
         "bullet": "Q",
         "destination": "Prospect Park",
@@ -172,17 +183,6 @@
         "headline": "Downtown & Brooklyn",
         "detail": "Prospect Park",
         "minutes": 1,
-        "arriving": false
-      },
-      {
-        "number": 2,
-        "route": "4",
-        "bullet": "4",
-        "destination": "Crown Hts-Utica Av",
-        "direction": "Downtown & Brooklyn",
-        "headline": "Downtown & Brooklyn",
-        "detail": "Crown Hts-Utica Av",
-        "minutes": 2,
         "arriving": false
       }
     ],
@@ -197,25 +197,25 @@
     "rows": [
       {
         "number": 1,
-        "route": "N",
-        "bullet": "N",
-        "destination": "Coney Island-Stillwell Av",
+        "route": "6",
+        "bullet": "6",
+        "destination": "Brooklyn Bridge-City Hall",
         "direction": "Downtown & Brooklyn",
-        "headline": "Downtown & Brooklyn",
-        "detail": "Coney Island-Stillwell Av",
+        "headline": "Downtown",
+        "detail": "Brooklyn Bridge-City Hall",
         "minutes": 0,
         "arriving": true
       },
       {
         "number": 2,
-        "route": "R",
-        "bullet": "R",
-        "destination": "Bay Ridge-95 St",
+        "route": "Q",
+        "bullet": "Q",
+        "destination": "Prospect Park",
         "direction": "Downtown & Brooklyn",
         "headline": "Downtown & Brooklyn",
-        "detail": "Bay Ridge-95 St",
-        "minutes": 3,
-        "arriving": false
+        "detail": "Prospect Park",
+        "minutes": 0,
+        "arriving": true
       }
     ],
     "stale": true,
@@ -229,25 +229,25 @@
     "rows": [
       {
         "number": 1,
-        "route": "N",
-        "bullet": "N",
-        "destination": "Coney Island-Stillwell Av",
+        "route": "Q",
+        "bullet": "Q",
+        "destination": "Prospect Park",
         "direction": "Downtown & Brooklyn",
         "headline": "Downtown & Brooklyn",
-        "detail": "Coney Island-Stillwell Av",
+        "detail": "Prospect Park",
         "minutes": 0,
         "arriving": true
       },
       {
         "number": 2,
-        "route": "R",
-        "bullet": "R",
-        "destination": "Bay Ridge-95 St",
+        "route": "4",
+        "bullet": "4",
+        "destination": "Crown Hts-Utica Av",
         "direction": "Downtown & Brooklyn",
         "headline": "Downtown & Brooklyn",
-        "detail": "Bay Ridge-95 St",
-        "minutes": 2,
-        "arriving": false
+        "detail": "Crown Hts-Utica Av",
+        "minutes": 0,
+        "arriving": true
       }
     ],
     "stale": false,
@@ -261,25 +261,25 @@
     "rows": [
       {
         "number": 1,
-        "route": "R",
-        "bullet": "R",
-        "destination": "Bay Ridge-95 St",
+        "route": "Q",
+        "bullet": "Q",
+        "destination": "Prospect Park",
         "direction": "Downtown & Brooklyn",
         "headline": "Downtown & Brooklyn",
-        "detail": "Bay Ridge-95 St",
-        "minutes": 2,
-        "arriving": false
+        "detail": "Prospect Park",
+        "minutes": 0,
+        "arriving": true
       },
       {
         "number": 2,
-        "route": "6",
-        "bullet": "6",
-        "destination": "Brooklyn Bridge-City Hall",
+        "route": "4",
+        "bullet": "4",
+        "destination": "Crown Hts-Utica Av",
         "direction": "Downtown & Brooklyn",
-        "headline": "Downtown",
-        "detail": "Brooklyn Bridge-City Hall",
-        "minutes": 6,
-        "arriving": false
+        "headline": "Downtown & Brooklyn",
+        "detail": "Crown Hts-Utica Av",
+        "minutes": 0,
+        "arriving": true
       }
     ],
     "stale": false,
@@ -293,25 +293,25 @@
     "rows": [
       {
         "number": 1,
-        "route": "R",
-        "bullet": "R",
-        "destination": "Bay Ridge-95 St",
+        "route": "Q",
+        "bullet": "Q",
+        "destination": "Prospect Park",
         "direction": "Downtown & Brooklyn",
         "headline": "Downtown & Brooklyn",
-        "detail": "Bay Ridge-95 St",
+        "detail": "Prospect Park",
         "minutes": 0,
         "arriving": true
       },
       {
         "number": 2,
-        "route": "6",
-        "bullet": "6",
-        "destination": "Brooklyn Bridge-City Hall",
+        "route": "4",
+        "bullet": "4",
+        "destination": "Crown Hts-Utica Av",
         "direction": "Downtown & Brooklyn",
-        "headline": "Downtown",
-        "detail": "Brooklyn Bridge-City Hall",
-        "minutes": 5,
-        "arriving": false
+        "headline": "Downtown & Brooklyn",
+        "detail": "Crown Hts-Utica Av",
+        "minutes": 0,
+        "arriving": true
       }
     ],
     "stale": true,

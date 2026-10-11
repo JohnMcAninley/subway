@@ -40,7 +40,14 @@ class Settings:
     fetch_all_feeds: bool = True
     # Show the MTA's service alerts for the stops and their routes (another 500 KB every 2 minutes).
     show_alerts: bool = True
-    refresh_seconds: int = 30
+    # An arriving train stays on the board until the feed stops listing it at
+    # the stop, which is the nearest thing there is to "it has left", or until
+    # this long after its arrival time if that comes first. The default only
+    # guards against a train stuck in the feed; a clock away from the station
+    # might use 30, as a train that arrived 30 seconds ago can't be caught.
+    departed_seconds: int = 300
+    # The feeds are republished about every 10 seconds.
+    refresh_seconds: int = 10
     rotation_seconds: int = 5  # how long each train stays on the second line
     data_dir: str = "data"  # static GTFS cache; relative paths are relative to the settings file
 

@@ -69,24 +69,24 @@
     "rows": [
       {
         "number": 1,
-        "route": "H",
-        "bullet": "SR",
-        "destination": "Rockaway Park-Beach 116 St",
-        "direction": "Rockaways",
-        "headline": "Rockaway Park-Beach 116 St",
-        "detail": "Queens",
-        "minutes": 7,
-        "arriving": false
-      },
-      {
-        "number": 4,
         "route": "A",
         "bullet": "A",
         "destination": "Inwood-207 St",
         "direction": "Manhattan",
         "headline": "Manhattan",
         "detail": "Inwood-207 St",
-        "minutes": 16,
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 4,
+        "route": "H",
+        "bullet": "SR",
+        "destination": "Broad Channel",
+        "direction": "Manhattan",
+        "headline": "Manhattan",
+        "detail": "Broad Channel",
+        "minutes": 12,
         "arriving": false
       }
     ],
@@ -101,24 +101,24 @@
     "rows": [
       {
         "number": 1,
-        "route": "H",
-        "bullet": "SR",
-        "destination": "Rockaway Park-Beach 116 St",
-        "direction": "Rockaways",
-        "headline": "Rockaway Park-Beach 116 St",
-        "detail": "Queens",
-        "minutes": 6,
-        "arriving": false
+        "route": "A",
+        "bullet": "A",
+        "destination": "Inwood-207 St",
+        "direction": "Manhattan",
+        "headline": "Manhattan",
+        "detail": "Inwood-207 St",
+        "minutes": 0,
+        "arriving": true
       },
       {
         "number": 5,
-        "route": "H",
-        "bullet": "SR",
-        "destination": "Rockaway Park-Beach 116 St",
-        "direction": "Rockaways",
-        "headline": "Rockaway Park-Beach 116 St",
-        "detail": "Queens",
-        "minutes": 24,
+        "route": "A",
+        "bullet": "A",
+        "destination": "Inwood-207 St",
+        "direction": "Manhattan",
+        "headline": "Manhattan",
+        "detail": "Inwood-207 St",
+        "minutes": 15,
         "arriving": false
       }
     ],
@@ -133,6 +133,17 @@
     "rows": [
       {
         "number": 1,
+        "route": "A",
+        "bullet": "A",
+        "destination": "Inwood-207 St",
+        "direction": "Manhattan",
+        "headline": "Manhattan",
+        "detail": "Inwood-207 St",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
         "route": "H",
         "bullet": "SR",
         "destination": "Rockaway Park-Beach 116 St",
@@ -140,17 +151,6 @@
         "headline": "Rockaway Park-Beach 116 St",
         "detail": "Queens",
         "minutes": 6,
-        "arriving": false
-      },
-      {
-        "number": 2,
-        "route": "A",
-        "bullet": "A",
-        "destination": "Far Rockaway-Mott Av",
-        "direction": "Rockaways",
-        "headline": "Far Rockaway-Mott Av",
-        "detail": "Queens",
-        "minutes": 9,
         "arriving": false
       }
     ],
@@ -165,6 +165,17 @@
     "rows": [
       {
         "number": 1,
+        "route": "A",
+        "bullet": "A",
+        "destination": "Inwood-207 St",
+        "direction": "Manhattan",
+        "headline": "Manhattan",
+        "detail": "Inwood-207 St",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
         "route": "H",
         "bullet": "SR",
         "destination": "Rockaway Park-Beach 116 St",
@@ -172,17 +183,6 @@
         "headline": "Rockaway Park-Beach 116 St",
         "detail": "Queens",
         "minutes": 6,
-        "arriving": false
-      },
-      {
-        "number": 2,
-        "route": "A",
-        "bullet": "A",
-        "destination": "Far Rockaway-Mott Av",
-        "direction": "Rockaways",
-        "headline": "Far Rockaway-Mott Av",
-        "detail": "Queens",
-        "minutes": 9,
         "arriving": false
       }
     ],
@@ -197,6 +197,17 @@
     "rows": [
       {
         "number": 1,
+        "route": "A",
+        "bullet": "A",
+        "destination": "Inwood-207 St",
+        "direction": "Manhattan",
+        "headline": "Manhattan",
+        "detail": "Inwood-207 St",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
         "route": "H",
         "bullet": "SR",
         "destination": "Rockaway Park-Beach 116 St",
@@ -204,17 +215,6 @@
         "headline": "Rockaway Park-Beach 116 St",
         "detail": "Queens",
         "minutes": 3,
-        "arriving": false
-      },
-      {
-        "number": 2,
-        "route": "A",
-        "bullet": "A",
-        "destination": "Far Rockaway-Mott Av",
-        "direction": "Rockaways",
-        "headline": "Far Rockaway-Mott Av",
-        "detail": "Queens",
-        "minutes": 6,
         "arriving": false
       }
     ],

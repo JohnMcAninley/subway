@@ -39,7 +39,7 @@ def standard_steps(t):
 
 
 def failing_feed_steps(t, feed):
-    """Refresh normally, then with feed failing until the board goes stale (after 3 refresh intervals)."""
+    """Refresh normally, then with feed failing until the board goes stale (after 90 seconds)."""
     return [{"action": "refresh", "now": t + 300}, {"action": "board", "now": t + 300},
             {"action": "refresh", "now": t + 330, "fail": [feed]}, {"action": "board", "now": t + 330},
             {"action": "refresh", "now": t + 420, "fail": [feed]}, {"action": "board", "now": t + 420}]

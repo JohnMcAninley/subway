@@ -5,6 +5,17 @@
     "rows": [
       {
         "number": 1,
+        "route": "7",
+        "bullet": "7",
+        "destination": "Flushing-Main St",
+        "direction": "Flushing",
+        "headline": "Flushing-Main St",
+        "detail": "Queens",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
         "route": "F",
         "bullet": "F",
         "destination": "Jamaica-179 St",
@@ -13,17 +24,6 @@
         "detail": "Queens",
         "minutes": 0,
         "arriving": true
-      },
-      {
-        "number": 2,
-        "route": "7",
-        "bullet": "7",
-        "destination": "Flushing-Main St",
-        "direction": "Flushing",
-        "headline": "Flushing-Main St",
-        "detail": "Queens",
-        "minutes": 2,
-        "arriving": false
       }
     ],
     "stale": false,
@@ -37,6 +37,17 @@
     "rows": [
       {
         "number": 1,
+        "route": "7",
+        "bullet": "7",
+        "destination": "Flushing-Main St",
+        "direction": "Flushing",
+        "headline": "Flushing-Main St",
+        "detail": "Queens",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
         "route": "F",
         "bullet": "F",
         "destination": "Jamaica-179 St",
@@ -45,17 +56,6 @@
         "detail": "Queens",
         "minutes": 0,
         "arriving": true
-      },
-      {
-        "number": 3,
-        "route": "R",
-        "bullet": "R",
-        "destination": "Bay Ridge-95 St",
-        "direction": "Manhattan",
-        "headline": "Manhattan & Brooklyn",
-        "detail": "Bay Ridge-95 St",
-        "minutes": 4,
-        "arriving": false
       }
     ],
     "stale": false,
@@ -69,6 +69,17 @@
     "rows": [
       {
         "number": 1,
+        "route": "7",
+        "bullet": "7",
+        "destination": "Flushing-Main St",
+        "direction": "Flushing",
+        "headline": "Flushing-Main St",
+        "detail": "Queens",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
         "route": "F",
         "bullet": "F",
         "destination": "Jamaica-179 St",
@@ -77,17 +88,6 @@
         "detail": "Queens",
         "minutes": 0,
         "arriving": true
-      },
-      {
-        "number": 4,
-        "route": "F",
-        "bullet": "F",
-        "destination": "Coney Island-Stillwell Av",
-        "direction": "Manhattan",
-        "headline": "Manhattan & Brooklyn",
-        "detail": "Coney Island-Stillwell Av",
-        "minutes": 4,
-        "arriving": false
       }
     ],
     "stale": false,
@@ -107,19 +107,19 @@
         "direction": "Flushing",
         "headline": "Flushing-Main St",
         "detail": "Queens",
-        "minutes": 1,
-        "arriving": false
+        "minutes": 0,
+        "arriving": true
       },
       {
-        "number": 5,
-        "route": "E",
-        "bullet": "E",
-        "destination": "Jamaica Center-Parsons/Archer",
+        "number": 2,
+        "route": "F",
+        "bullet": "F",
+        "destination": "Jamaica-179 St",
         "direction": "Forest Hills - Jamaica",
-        "headline": "Jamaica Center-Parsons/Archer",
+        "headline": "Jamaica-179 St",
         "detail": "Queens",
-        "minutes": 4,
-        "arriving": false
+        "minutes": 0,
+        "arriving": true
       }
     ],
     "stale": false,
@@ -139,19 +139,19 @@
         "direction": "Flushing",
         "headline": "Flushing-Main St",
         "detail": "Queens",
-        "minutes": 1,
-        "arriving": false
+        "minutes": 0,
+        "arriving": true
       },
       {
         "number": 2,
-        "route": "R",
-        "bullet": "R",
-        "destination": "Bay Ridge-95 St",
-        "direction": "Manhattan",
-        "headline": "Manhattan & Brooklyn",
-        "detail": "Bay Ridge-95 St",
-        "minutes": 3,
-        "arriving": false
+        "route": "F",
+        "bullet": "F",
+        "destination": "Jamaica-179 St",
+        "direction": "Forest Hills - Jamaica",
+        "headline": "Jamaica-179 St",
+        "detail": "Queens",
+        "minutes": 0,
+        "arriving": true
       }
     ],
     "stale": false,
@@ -171,19 +171,19 @@
         "direction": "Flushing",
         "headline": "Flushing-Main St",
         "detail": "Queens",
-        "minutes": 1,
-        "arriving": false
+        "minutes": 0,
+        "arriving": true
       },
       {
         "number": 2,
-        "route": "R",
-        "bullet": "R",
-        "destination": "Bay Ridge-95 St",
-        "direction": "Manhattan",
-        "headline": "Manhattan & Brooklyn",
-        "detail": "Bay Ridge-95 St",
-        "minutes": 3,
-        "arriving": false
+        "route": "F",
+        "bullet": "F",
+        "destination": "Jamaica-179 St",
+        "direction": "Forest Hills - Jamaica",
+        "headline": "Jamaica-179 St",
+        "detail": "Queens",
+        "minutes": 0,
+        "arriving": true
       }
     ],
     "stale": false,
@@ -197,23 +197,23 @@
     "rows": [
       {
         "number": 1,
-        "route": "R",
-        "bullet": "R",
-        "destination": "Bay Ridge-95 St",
-        "direction": "Manhattan",
-        "headline": "Manhattan & Brooklyn",
-        "detail": "Bay Ridge-95 St",
+        "route": "F",
+        "bullet": "F",
+        "destination": "Jamaica-179 St",
+        "direction": "Forest Hills - Jamaica",
+        "headline": "Jamaica-179 St",
+        "detail": "Queens",
         "minutes": 0,
         "arriving": true
       },
       {
         "number": 2,
-        "route": "F",
-        "bullet": "F",
-        "destination": "Coney Island-Stillwell Av",
-        "direction": "Manhattan",
-        "headline": "Manhattan & Brooklyn",
-        "detail": "Coney Island-Stillwell Av",
+        "route": "7",
+        "bullet": "7",
+        "destination": "Flushing-Main St",
+        "direction": "Flushing",
+        "headline": "Flushing-Main St",
+        "detail": "Queens",
         "minutes": 0,
         "arriving": true
       }
@@ -235,39 +235,39 @@
         "direction": "Flushing",
         "headline": "Flushing-Main St",
         "detail": "Queens",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
+        "route": "F",
+        "bullet": "F",
+        "destination": "Jamaica-179 St",
+        "direction": "Forest Hills - Jamaica",
+        "headline": "Jamaica-179 St",
+        "detail": "Queens",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 3,
+        "route": "7",
+        "bullet": "7",
+        "destination": "Flushing-Main St",
+        "direction": "Flushing",
+        "headline": "Flushing-Main St",
+        "detail": "Queens",
         "minutes": 1,
         "arriving": false
       },
       {
-        "number": 2,
+        "number": 4,
         "route": "R",
         "bullet": "R",
         "destination": "Bay Ridge-95 St",
         "direction": "Manhattan",
         "headline": "Manhattan & Brooklyn",
         "detail": "Bay Ridge-95 St",
-        "minutes": 3,
-        "arriving": false
-      },
-      {
-        "number": 3,
-        "route": "F",
-        "bullet": "F",
-        "destination": "Coney Island-Stillwell Av",
-        "direction": "Manhattan",
-        "headline": "Manhattan & Brooklyn",
-        "detail": "Coney Island-Stillwell Av",
-        "minutes": 3,
-        "arriving": false
-      },
-      {
-        "number": 4,
-        "route": "7",
-        "bullet": "7",
-        "destination": "34 St-Hudson Yards",
-        "direction": "Manhattan",
-        "headline": "Manhattan",
-        "detail": "34 St-Hudson Yards",
         "minutes": 3,
         "arriving": false
       }
@@ -289,39 +289,39 @@
         "direction": "Flushing",
         "headline": "Flushing-Main St",
         "detail": "Queens",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
+        "route": "F",
+        "bullet": "F",
+        "destination": "Jamaica-179 St",
+        "direction": "Forest Hills - Jamaica",
+        "headline": "Jamaica-179 St",
+        "detail": "Queens",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 3,
+        "route": "7",
+        "bullet": "7",
+        "destination": "Flushing-Main St",
+        "direction": "Flushing",
+        "headline": "Flushing-Main St",
+        "detail": "Queens",
         "minutes": 1,
         "arriving": false
       },
       {
-        "number": 2,
-        "route": "R",
-        "bullet": "R",
-        "destination": "Bay Ridge-95 St",
-        "direction": "Manhattan",
-        "headline": "Manhattan & Brooklyn",
-        "detail": "Bay Ridge-95 St",
-        "minutes": 3,
-        "arriving": false
-      },
-      {
-        "number": 3,
+        "number": 5,
         "route": "F",
         "bullet": "F",
         "destination": "Coney Island-Stillwell Av",
         "direction": "Manhattan",
         "headline": "Manhattan & Brooklyn",
         "detail": "Coney Island-Stillwell Av",
-        "minutes": 3,
-        "arriving": false
-      },
-      {
-        "number": 5,
-        "route": "E",
-        "bullet": "E",
-        "destination": "Jamaica Center-Parsons/Archer",
-        "direction": "Forest Hills - Jamaica",
-        "headline": "Jamaica Center-Parsons/Archer",
-        "detail": "Queens",
         "minutes": 3,
         "arriving": false
       }
@@ -343,39 +343,39 @@
         "direction": "Flushing",
         "headline": "Flushing-Main St",
         "detail": "Queens",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
+        "route": "F",
+        "bullet": "F",
+        "destination": "Jamaica-179 St",
+        "direction": "Forest Hills - Jamaica",
+        "headline": "Jamaica-179 St",
+        "detail": "Queens",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 3,
+        "route": "7",
+        "bullet": "7",
+        "destination": "Flushing-Main St",
+        "direction": "Flushing",
+        "headline": "Flushing-Main St",
+        "detail": "Queens",
         "minutes": 1,
         "arriving": false
       },
       {
-        "number": 2,
+        "number": 4,
         "route": "R",
         "bullet": "R",
         "destination": "Bay Ridge-95 St",
         "direction": "Manhattan",
         "headline": "Manhattan & Brooklyn",
         "detail": "Bay Ridge-95 St",
-        "minutes": 3,
-        "arriving": false
-      },
-      {
-        "number": 3,
-        "route": "F",
-        "bullet": "F",
-        "destination": "Coney Island-Stillwell Av",
-        "direction": "Manhattan",
-        "headline": "Manhattan & Brooklyn",
-        "detail": "Coney Island-Stillwell Av",
-        "minutes": 3,
-        "arriving": false
-      },
-      {
-        "number": 4,
-        "route": "7",
-        "bullet": "7",
-        "destination": "34 St-Hudson Yards",
-        "direction": "Manhattan",
-        "headline": "Manhattan",
-        "detail": "34 St-Hudson Yards",
         "minutes": 3,
         "arriving": false
       }
@@ -402,34 +402,34 @@
       },
       {
         "number": 2,
-        "route": "R",
-        "bullet": "R",
-        "destination": "Bay Ridge-95 St",
-        "direction": "Manhattan",
-        "headline": "Manhattan & Brooklyn",
-        "detail": "Bay Ridge-95 St",
-        "minutes": 3,
-        "arriving": false
+        "route": "F",
+        "bullet": "F",
+        "destination": "Jamaica-179 St",
+        "direction": "Forest Hills - Jamaica",
+        "headline": "Jamaica-179 St",
+        "detail": "Queens",
+        "minutes": 0,
+        "arriving": true
       },
       {
         "number": 3,
+        "route": "7",
+        "bullet": "7",
+        "destination": "Flushing-Main St",
+        "direction": "Flushing",
+        "headline": "Flushing-Main St",
+        "detail": "Queens",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 5,
         "route": "F",
         "bullet": "F",
         "destination": "Coney Island-Stillwell Av",
         "direction": "Manhattan",
         "headline": "Manhattan & Brooklyn",
         "detail": "Coney Island-Stillwell Av",
-        "minutes": 3,
-        "arriving": false
-      },
-      {
-        "number": 5,
-        "route": "E",
-        "bullet": "E",
-        "destination": "Jamaica Center-Parsons/Archer",
-        "direction": "Forest Hills - Jamaica",
-        "headline": "Jamaica Center-Parsons/Archer",
-        "detail": "Queens",
         "minutes": 3,
         "arriving": false
       }
@@ -456,6 +456,28 @@
       },
       {
         "number": 2,
+        "route": "F",
+        "bullet": "F",
+        "destination": "Jamaica-179 St",
+        "direction": "Forest Hills - Jamaica",
+        "headline": "Jamaica-179 St",
+        "detail": "Queens",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 3,
+        "route": "7",
+        "bullet": "7",
+        "destination": "Flushing-Main St",
+        "direction": "Flushing",
+        "headline": "Flushing-Main St",
+        "detail": "Queens",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 4,
         "route": "R",
         "bullet": "R",
         "destination": "Bay Ridge-95 St",
@@ -466,7 +488,7 @@
         "arriving": false
       },
       {
-        "number": 3,
+        "number": 5,
         "route": "F",
         "bullet": "F",
         "destination": "Coney Island-Stillwell Av",
@@ -477,7 +499,7 @@
         "arriving": false
       },
       {
-        "number": 4,
+        "number": 6,
         "route": "7",
         "bullet": "7",
         "destination": "34 St-Hudson Yards",
@@ -488,7 +510,7 @@
         "arriving": false
       },
       {
-        "number": 5,
+        "number": 7,
         "route": "E",
         "bullet": "E",
         "destination": "Jamaica Center-Parsons/Archer",
@@ -496,28 +518,6 @@
         "headline": "Jamaica Center-Parsons/Archer",
         "detail": "Queens",
         "minutes": 3,
-        "arriving": false
-      },
-      {
-        "number": 6,
-        "route": "E",
-        "bullet": "E",
-        "destination": "World Trade Center",
-        "direction": "Manhattan",
-        "headline": "Manhattan",
-        "detail": "World Trade Center",
-        "minutes": 8,
-        "arriving": false
-      },
-      {
-        "number": 7,
-        "route": "7",
-        "bullet": "7",
-        "destination": "Flushing-Main St",
-        "direction": "Flushing",
-        "headline": "Flushing-Main St",
-        "detail": "Queens",
-        "minutes": 8,
         "arriving": false
       }
     ],
@@ -543,6 +543,28 @@
       },
       {
         "number": 2,
+        "route": "F",
+        "bullet": "F",
+        "destination": "Jamaica-179 St",
+        "direction": "Forest Hills - Jamaica",
+        "headline": "Jamaica-179 St",
+        "detail": "Queens",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 3,
+        "route": "7",
+        "bullet": "7",
+        "destination": "Flushing-Main St",
+        "direction": "Flushing",
+        "headline": "Flushing-Main St",
+        "detail": "Queens",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 4,
         "route": "R",
         "bullet": "R",
         "destination": "Bay Ridge-95 St",
@@ -553,7 +575,7 @@
         "arriving": false
       },
       {
-        "number": 3,
+        "number": 5,
         "route": "F",
         "bullet": "F",
         "destination": "Coney Island-Stillwell Av",
@@ -564,7 +586,7 @@
         "arriving": false
       },
       {
-        "number": 4,
+        "number": 6,
         "route": "7",
         "bullet": "7",
         "destination": "34 St-Hudson Yards",
@@ -575,7 +597,7 @@
         "arriving": false
       },
       {
-        "number": 5,
+        "number": 7,
         "route": "E",
         "bullet": "E",
         "destination": "Jamaica Center-Parsons/Archer",
@@ -583,28 +605,6 @@
         "headline": "Jamaica Center-Parsons/Archer",
         "detail": "Queens",
         "minutes": 3,
-        "arriving": false
-      },
-      {
-        "number": 6,
-        "route": "E",
-        "bullet": "E",
-        "destination": "World Trade Center",
-        "direction": "Manhattan",
-        "headline": "Manhattan",
-        "detail": "World Trade Center",
-        "minutes": 8,
-        "arriving": false
-      },
-      {
-        "number": 7,
-        "route": "7",
-        "bullet": "7",
-        "destination": "Flushing-Main St",
-        "direction": "Flushing",
-        "headline": "Flushing-Main St",
-        "detail": "Queens",
-        "minutes": 8,
         "arriving": false
       }
     ],
@@ -636,8 +636,19 @@
         "direction": "Flushing",
         "headline": "Flushing-Main St",
         "detail": "Queens",
-        "minutes": 8,
-        "arriving": false
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 1,
+        "route": "F",
+        "bullet": "F",
+        "destination": "Jamaica-179 St",
+        "direction": "Forest Hills - Jamaica",
+        "headline": "Jamaica-179 St",
+        "detail": "Queens",
+        "minutes": 0,
+        "arriving": true
       },
       {
         "number": 1,
@@ -648,17 +659,6 @@
         "headline": "Manhattan & Brooklyn",
         "detail": "Bay Ridge-95 St",
         "minutes": 2,
-        "arriving": false
-      },
-      {
-        "number": 1,
-        "route": "E",
-        "bullet": "E",
-        "destination": "Jamaica Center-Parsons/Archer",
-        "direction": "Forest Hills - Jamaica",
-        "headline": "Jamaica Center-Parsons/Archer",
-        "detail": "Queens",
-        "minutes": 3,
         "arriving": false
       }
     ],
@@ -688,8 +688,24 @@
             "direction": "Flushing",
             "headline": "Flushing-Main St",
             "detail": "Queens",
-            "minutes": 8,
-            "arriving": false
+            "minutes": 0,
+            "arriving": true
+          }
+        ]
+      },
+      {
+        "heading": "Forest Hills - Jamaica",
+        "rows": [
+          {
+            "number": 1,
+            "route": "F",
+            "bullet": "F",
+            "destination": "Jamaica-179 St",
+            "direction": "Forest Hills - Jamaica",
+            "headline": "Jamaica-179 St",
+            "detail": "Queens",
+            "minutes": 0,
+            "arriving": true
           }
         ]
       },
@@ -705,22 +721,6 @@
             "headline": "Manhattan & Brooklyn",
             "detail": "Bay Ridge-95 St",
             "minutes": 2,
-            "arriving": false
-          }
-        ]
-      },
-      {
-        "heading": "Forest Hills - Jamaica",
-        "rows": [
-          {
-            "number": 1,
-            "route": "E",
-            "bullet": "E",
-            "destination": "Jamaica Center-Parsons/Archer",
-            "direction": "Forest Hills - Jamaica",
-            "headline": "Jamaica Center-Parsons/Archer",
-            "detail": "Queens",
-            "minutes": 3,
             "arriving": false
           }
         ]
@@ -750,7 +750,29 @@
         "direction": "Flushing",
         "headline": "Flushing-Main St",
         "detail": "Queens",
-        "minutes": 8,
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 1,
+        "route": "F",
+        "bullet": "F",
+        "destination": "Jamaica-179 St",
+        "direction": "Forest Hills - Jamaica",
+        "headline": "Jamaica-179 St",
+        "detail": "Queens",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
+        "route": "E",
+        "bullet": "E",
+        "destination": "Jamaica Center-Parsons/Archer",
+        "direction": "Forest Hills - Jamaica",
+        "headline": "Jamaica Center-Parsons/Archer",
+        "detail": "Queens",
+        "minutes": 3,
         "arriving": false
       },
       {
@@ -762,28 +784,6 @@
         "headline": "Manhattan & Brooklyn",
         "detail": "Bay Ridge-95 St",
         "minutes": 2,
-        "arriving": false
-      },
-      {
-        "number": 2,
-        "route": "F",
-        "bullet": "F",
-        "destination": "Coney Island-Stillwell Av",
-        "direction": "Manhattan",
-        "headline": "Manhattan & Brooklyn",
-        "detail": "Coney Island-Stillwell Av",
-        "minutes": 2,
-        "arriving": false
-      },
-      {
-        "number": 1,
-        "route": "E",
-        "bullet": "E",
-        "destination": "Jamaica Center-Parsons/Archer",
-        "direction": "Forest Hills - Jamaica",
-        "headline": "Jamaica Center-Parsons/Archer",
-        "detail": "Queens",
-        "minutes": 3,
         "arriving": false
       }
     ],
@@ -813,7 +813,34 @@
             "direction": "Flushing",
             "headline": "Flushing-Main St",
             "detail": "Queens",
-            "minutes": 8,
+            "minutes": 0,
+            "arriving": true
+          }
+        ]
+      },
+      {
+        "heading": "Forest Hills - Jamaica",
+        "rows": [
+          {
+            "number": 1,
+            "route": "F",
+            "bullet": "F",
+            "destination": "Jamaica-179 St",
+            "direction": "Forest Hills - Jamaica",
+            "headline": "Jamaica-179 St",
+            "detail": "Queens",
+            "minutes": 0,
+            "arriving": true
+          },
+          {
+            "number": 2,
+            "route": "E",
+            "bullet": "E",
+            "destination": "Jamaica Center-Parsons/Archer",
+            "direction": "Forest Hills - Jamaica",
+            "headline": "Jamaica Center-Parsons/Archer",
+            "detail": "Queens",
+            "minutes": 3,
             "arriving": false
           }
         ]
@@ -830,33 +857,6 @@
             "headline": "Manhattan & Brooklyn",
             "detail": "Bay Ridge-95 St",
             "minutes": 2,
-            "arriving": false
-          },
-          {
-            "number": 2,
-            "route": "F",
-            "bullet": "F",
-            "destination": "Coney Island-Stillwell Av",
-            "direction": "Manhattan",
-            "headline": "Manhattan & Brooklyn",
-            "detail": "Coney Island-Stillwell Av",
-            "minutes": 2,
-            "arriving": false
-          }
-        ]
-      },
-      {
-        "heading": "Forest Hills - Jamaica",
-        "rows": [
-          {
-            "number": 1,
-            "route": "E",
-            "bullet": "E",
-            "destination": "Jamaica Center-Parsons/Archer",
-            "direction": "Forest Hills - Jamaica",
-            "headline": "Jamaica Center-Parsons/Archer",
-            "detail": "Queens",
-            "minutes": 3,
             "arriving": false
           }
         ]

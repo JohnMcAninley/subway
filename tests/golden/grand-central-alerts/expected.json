@@ -5,6 +5,17 @@
     "rows": [
       {
         "number": 1,
+        "route": "5",
+        "bullet": "5",
+        "destination": "Eastchester-Dyre Av",
+        "direction": "Uptown & The Bronx",
+        "headline": "Uptown & The Bronx",
+        "detail": "Eastchester-Dyre Av",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
         "route": "4",
         "bullet": "4",
         "destination": "Crown Hts-Utica Av",
@@ -13,9 +24,43 @@
         "detail": "Crown Hts-Utica Av",
         "minutes": 1,
         "arriving": false
+      }
+    ],
+    "stale": false,
+    "messages": [
+      {
+        "text": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
+        "planned": false
       },
       {
-        "number": 2,
+        "text": "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
+        "planned": true
+      },
+      {
+        "text": "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St",
+        "planned": true
+      }
+    ],
+    "message": "",
+    "groups": []
+  },
+  {
+    "now": 1791732030,
+    "style": "classic",
+    "rows": [
+      {
+        "number": 1,
+        "route": "5",
+        "bullet": "5",
+        "destination": "Eastchester-Dyre Av",
+        "direction": "Uptown & The Bronx",
+        "headline": "Uptown & The Bronx",
+        "detail": "Eastchester-Dyre Av",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 3,
         "route": "6",
         "bullet": "6",
         "destination": "149 St-Hostos",
@@ -45,22 +90,22 @@
     "groups": []
   },
   {
-    "now": 1791732030,
+    "now": 1791732035,
     "style": "classic",
     "rows": [
       {
         "number": 1,
-        "route": "4",
-        "bullet": "4",
-        "destination": "Crown Hts-Utica Av",
-        "direction": "Downtown & Brooklyn",
-        "headline": "Downtown & Brooklyn",
-        "detail": "Crown Hts-Utica Av",
-        "minutes": 1,
-        "arriving": false
+        "route": "5",
+        "bullet": "5",
+        "destination": "Eastchester-Dyre Av",
+        "direction": "Uptown & The Bronx",
+        "headline": "Uptown & The Bronx",
+        "detail": "Eastchester-Dyre Av",
+        "minutes": 0,
+        "arriving": true
       },
       {
-        "number": 3,
+        "number": 4,
         "route": "4",
         "bullet": "4",
         "destination": "Woodlawn",
@@ -90,22 +135,22 @@
     "groups": []
   },
   {
-    "now": 1791732035,
+    "now": 1791732040,
     "style": "classic",
     "rows": [
       {
         "number": 1,
-        "route": "4",
-        "bullet": "4",
-        "destination": "Crown Hts-Utica Av",
-        "direction": "Downtown & Brooklyn",
-        "headline": "Downtown & Brooklyn",
-        "detail": "Crown Hts-Utica Av",
-        "minutes": 1,
-        "arriving": false
+        "route": "5",
+        "bullet": "5",
+        "destination": "Eastchester-Dyre Av",
+        "direction": "Uptown & The Bronx",
+        "headline": "Uptown & The Bronx",
+        "detail": "Eastchester-Dyre Av",
+        "minutes": 0,
+        "arriving": true
       },
       {
-        "number": 4,
+        "number": 5,
         "route": "5",
         "bullet": "5",
         "destination": "Bowling Green",
@@ -135,73 +180,28 @@
     "groups": []
   },
   {
-    "now": 1791732040,
-    "style": "classic",
-    "rows": [
-      {
-        "number": 1,
-        "route": "4",
-        "bullet": "4",
-        "destination": "Crown Hts-Utica Av",
-        "direction": "Downtown & Brooklyn",
-        "headline": "Downtown & Brooklyn",
-        "detail": "Crown Hts-Utica Av",
-        "minutes": 1,
-        "arriving": false
-      },
-      {
-        "number": 5,
-        "route": "4",
-        "bullet": "4",
-        "destination": "Crown Hts-Utica Av",
-        "direction": "Downtown & Brooklyn",
-        "headline": "Downtown & Brooklyn",
-        "detail": "Crown Hts-Utica Av",
-        "minutes": 6,
-        "arriving": false
-      }
-    ],
-    "stale": false,
-    "messages": [
-      {
-        "text": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
-        "planned": false
-      },
-      {
-        "text": "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
-        "planned": true
-      },
-      {
-        "text": "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St",
-        "planned": true
-      }
-    ],
-    "message": "",
-    "groups": []
-  },
-  {
     "now": 1791732045,
     "style": "classic",
     "rows": [
       {
         "number": 1,
+        "route": "5",
+        "bullet": "5",
+        "destination": "Eastchester-Dyre Av",
+        "direction": "Uptown & The Bronx",
+        "headline": "Uptown & The Bronx",
+        "detail": "Eastchester-Dyre Av",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
         "route": "4",
         "bullet": "4",
         "destination": "Crown Hts-Utica Av",
         "direction": "Downtown & Brooklyn",
         "headline": "Downtown & Brooklyn",
         "detail": "Crown Hts-Utica Av",
-        "minutes": 1,
-        "arriving": false
-      },
-      {
-        "number": 2,
-        "route": "6",
-        "bullet": "6",
-        "destination": "149 St-Hostos",
-        "direction": "Uptown & The Bronx",
-        "headline": "Uptown & The Bronx",
-        "detail": "149 St-Hostos",
         "minutes": 1,
         "arriving": false
       }
@@ -230,23 +230,23 @@
     "rows": [
       {
         "number": 1,
-        "route": "4",
-        "bullet": "4",
-        "destination": "Crown Hts-Utica Av",
-        "direction": "Downtown & Brooklyn",
-        "headline": "Downtown & Brooklyn",
-        "detail": "Crown Hts-Utica Av",
-        "minutes": 1,
-        "arriving": false
+        "route": "5",
+        "bullet": "5",
+        "destination": "Eastchester-Dyre Av",
+        "direction": "Uptown & The Bronx",
+        "headline": "Uptown & The Bronx",
+        "detail": "Eastchester-Dyre Av",
+        "minutes": 0,
+        "arriving": true
       },
       {
         "number": 3,
-        "route": "4",
-        "bullet": "4",
-        "destination": "Woodlawn",
+        "route": "6",
+        "bullet": "6",
+        "destination": "149 St-Hostos",
         "direction": "Uptown & The Bronx",
         "headline": "Uptown & The Bronx",
-        "detail": "Woodlawn",
+        "detail": "149 St-Hostos",
         "minutes": 1,
         "arriving": false
       }
@@ -275,6 +275,17 @@
     "rows": [
       {
         "number": 1,
+        "route": "5",
+        "bullet": "5",
+        "destination": "Eastchester-Dyre Av",
+        "direction": "Uptown & The Bronx",
+        "headline": "Uptown & The Bronx",
+        "detail": "Eastchester-Dyre Av",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
         "route": "4",
         "bullet": "4",
         "destination": "Crown Hts-Utica Av",
@@ -283,17 +294,6 @@
         "detail": "Crown Hts-Utica Av",
         "minutes": 0,
         "arriving": true
-      },
-      {
-        "number": 4,
-        "route": "5",
-        "bullet": "5",
-        "destination": "Bowling Green",
-        "direction": "Downtown & Brooklyn",
-        "headline": "Downtown",
-        "detail": "Bowling Green",
-        "minutes": 2,
-        "arriving": false
       }
     ],
     "stale": false,
@@ -320,6 +320,17 @@
     "rows": [
       {
         "number": 1,
+        "route": "5",
+        "bullet": "5",
+        "destination": "Eastchester-Dyre Av",
+        "direction": "Uptown & The Bronx",
+        "headline": "Uptown & The Bronx",
+        "detail": "Eastchester-Dyre Av",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
         "route": "4",
         "bullet": "4",
         "destination": "Crown Hts-Utica Av",
@@ -328,17 +339,6 @@
         "detail": "Crown Hts-Utica Av",
         "minutes": 0,
         "arriving": true
-      },
-      {
-        "number": 5,
-        "route": "4",
-        "bullet": "4",
-        "destination": "Crown Hts-Utica Av",
-        "direction": "Downtown & Brooklyn",
-        "headline": "Downtown & Brooklyn",
-        "detail": "Crown Hts-Utica Av",
-        "minutes": 6,
-        "arriving": false
       }
     ],
     "stale": false,
@@ -365,6 +365,17 @@
     "rows": [
       {
         "number": 1,
+        "route": "5",
+        "bullet": "5",
+        "destination": "Eastchester-Dyre Av",
+        "direction": "Uptown & The Bronx",
+        "headline": "Uptown & The Bronx",
+        "detail": "Eastchester-Dyre Av",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
         "route": "4",
         "bullet": "4",
         "destination": "Crown Hts-Utica Av",
@@ -373,17 +384,6 @@
         "detail": "Crown Hts-Utica Av",
         "minutes": 0,
         "arriving": true
-      },
-      {
-        "number": 2,
-        "route": "6",
-        "bullet": "6",
-        "destination": "149 St-Hostos",
-        "direction": "Uptown & The Bronx",
-        "headline": "Uptown & The Bronx",
-        "detail": "149 St-Hostos",
-        "minutes": 1,
-        "arriving": false
       }
     ],
     "stale": false,
@@ -410,6 +410,17 @@
     "rows": [
       {
         "number": 1,
+        "route": "5",
+        "bullet": "5",
+        "destination": "Eastchester-Dyre Av",
+        "direction": "Uptown & The Bronx",
+        "headline": "Uptown & The Bronx",
+        "detail": "Eastchester-Dyre Av",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
         "route": "4",
         "bullet": "4",
         "destination": "Crown Hts-Utica Av",
@@ -418,17 +429,6 @@
         "detail": "Crown Hts-Utica Av",
         "minutes": 0,
         "arriving": true
-      },
-      {
-        "number": 3,
-        "route": "4",
-        "bullet": "4",
-        "destination": "Woodlawn",
-        "direction": "Uptown & The Bronx",
-        "headline": "Uptown & The Bronx",
-        "detail": "Woodlawn",
-        "minutes": 1,
-        "arriving": false
       }
     ],
     "stale": false,
@@ -455,6 +455,17 @@
     "rows": [
       {
         "number": 1,
+        "route": "5",
+        "bullet": "5",
+        "destination": "Eastchester-Dyre Av",
+        "direction": "Uptown & The Bronx",
+        "headline": "Uptown & The Bronx",
+        "detail": "Eastchester-Dyre Av",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
         "route": "4",
         "bullet": "4",
         "destination": "Crown Hts-Utica Av",
@@ -463,17 +474,6 @@
         "detail": "Crown Hts-Utica Av",
         "minutes": 0,
         "arriving": true
-      },
-      {
-        "number": 4,
-        "route": "5",
-        "bullet": "5",
-        "destination": "Bowling Green",
-        "direction": "Downtown & Brooklyn",
-        "headline": "Downtown",
-        "detail": "Bowling Green",
-        "minutes": 2,
-        "arriving": false
       }
     ],
     "stale": false,
@@ -500,12 +500,12 @@
     "rows": [
       {
         "number": 1,
-        "route": "6",
-        "bullet": "6",
-        "destination": "149 St-Hostos",
+        "route": "5",
+        "bullet": "5",
+        "destination": "Eastchester-Dyre Av",
         "direction": "Uptown & The Bronx",
         "headline": "Uptown & The Bronx",
-        "detail": "149 St-Hostos",
+        "detail": "Eastchester-Dyre Av",
         "minutes": 0,
         "arriving": true
       },
@@ -513,10 +513,10 @@
         "number": 2,
         "route": "4",
         "bullet": "4",
-        "destination": "Woodlawn",
-        "direction": "Uptown & The Bronx",
-        "headline": "Uptown & The Bronx",
-        "detail": "Woodlawn",
+        "destination": "Crown Hts-Utica Av",
+        "direction": "Downtown & Brooklyn",
+        "headline": "Downtown & Brooklyn",
+        "detail": "Crown Hts-Utica Av",
         "minutes": 0,
         "arriving": true
       }

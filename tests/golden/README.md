@@ -103,8 +103,8 @@ What the cases test, for anyone implementing the core:
 - Keep trains with `time <= now + max_minutes * 60`, sorted by
   time (ties keep feed order, then entity order within a feed). This happens
   on `refresh`, with that step's `now`.
-- A train has left once `time < now - 30`, with the `now` of the board or
-  rotation being worked out (not the refresh's). Trains that have left are
+- A train has left once `time < now - departed_seconds` (default 300), with
+  the `now` of the board or rotation being worked out (not the refresh's). Trains that have left are
   skipped everywhere below, and the rest are numbered from 1.
 - The board shows the first `max(max_trains, lines)` of those: `max_trains`,
   or more if the screen has more lines than that.
@@ -203,7 +203,7 @@ other styles `message` is always `""`.
 - A feed that fails keeps its trains from its last successful fetch, and
   the alerts feed its alerts. The alerts feed never makes the board stale.
 - The board is `stale` if any feed for the stops' scheduled routes has never
-  been fetched, or was last fetched more than `3 * refresh_seconds` before
+  been fetched, or was last fetched more than 90 seconds before
   `now`.
 
 ## Capturing and regenerating

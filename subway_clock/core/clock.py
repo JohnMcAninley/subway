@@ -13,13 +13,8 @@ from .headline import headline
 
 log = logging.getLogger(__name__)
 
-# A train leaves the board this long after its arrival time. The feeds go on
-# listing a train for a while after that (a median of 40 to 50 seconds when
-# sampled, sometimes 2 minutes), by when it has usually gone.
-DEPARTED_SECONDS = 30
-
-# The board is marked stale once any feed it needs has failed for this many refreshes.
-STALE_REFRESHES = 3
+# The board is marked stale once any feed it needs hasn't been fetched for this long.
+STALE_SECONDS = 90
 
 # Alerts change slowly and their feed is large, so it is fetched less often than the trains.
 ALERTS_SECONDS = 120
@@ -138,8 +133,8 @@ class Clock:
             self.rotation_index = 0
 
     def _waiting(self, now):
-        """The upcoming trains that haven't left yet."""
-        return [p for p in self.upcoming if p.time >= now - DEPARTED_SECONDS]
+        """The upcoming trains that haven't left yet: see settings.departed_seconds."""
+        return [p for p in self.upcoming if p.time >= now - self.settings.departed_seconds]
 
     def predictions(self, now=None):
         """The trains the board can show: max_trains, or more if there are more lines than that."""
@@ -165,8 +160,7 @@ class Clock:
         reroutes, so their failures don't mark the board stale.
         """
         now = time.time() if now is None else now
-        limit = STALE_REFRESHES * self.settings.refresh_seconds
-        return any(url not in self._feeds or now - self._feeds[url][1] > limit for url in self._scheduled)
+        return any(url not in self._feeds or now - self._feeds[url][1] > STALE_SECONDS for url in self._scheduled)
 
     def messages(self, now=None):
         """The active alerts for the stops and their routes: those happening now, then planned work."""
