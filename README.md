@@ -33,8 +33,8 @@ width at a 3.2:1 ratio. `--fullscreen` is for the device. Press Esc to quit.
 `--dev` opens a normal, resizable window for working on the display:
 
 - The QML in `subway_clock/ui/qml/` reloads whenever a file there is saved.
-- Keys 1-5 resize the window to preview screen shapes: 3.2:1, 4:1, 16:9, 9:16, and 1:3 (like the
-  tall screens in station entrances).
+- Keys 1-5 resize the window to preview screen shapes: 3.2:1, 4:1, 16:9, 9:16 (like the
+  screens in station entrances), and 1:3.
 - S switches between the styles.
 
 ## Settings
@@ -61,7 +61,8 @@ left out uses its default, and the file is optional:
   stations, e.g. Union Sq southbound is `["635S", "R20S", "L03S"]`.
 - `style`: which MTA clock to look like. `classic` is the LCD clocks with a pale blue screen and a
   time strip; `new` is the newer clocks with a card per train, headed by the platform's direction
-  (e.g. "Uptown") over the destination.
+  (e.g. "Uptown & The Bronx") over the destination. In portrait it becomes the screens in station
+  entrances: the time, trains under a heading for each direction, and service alerts at the bottom.
 - `max_trains`, `max_minutes`: show up to `max_trains` trains, and only those arriving within
   `max_minutes`. The board fits as many lines as the screen's shape allows (2 on a wide bar, 4 at
   16:9, up to 10 in portrait); the last line rotates through the trains that don't fit. A screen
@@ -94,8 +95,7 @@ See [docs/design.md](docs/design.md) for display modes, display logic, and theme
 - Realtime: `https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/nyct%2Fgtfs*` (no API key required)
 - Alerts: `https://api-endpoint.mta.info/Dataservice/mtagtfsfeeds/camsys%2Fsubway-alerts`
 - Static: `https://rrgtfsfeeds.s3.amazonaws.com/gtfs_subway.zip` and `gtfs_supplemented.zip`
-- Direction labels: the [MTA Subway Stations](https://data.ny.gov/Transportation/MTA-Subway-Stations/39hk-dx4f)
-  dataset on data.ny.gov
+- Direction labels: the MTA's station list, `http://web.mta.info/developers/data/nyct/subway/Stations.csv`
 
 ## Credits
 
@@ -104,5 +104,7 @@ See [docs/design.md](docs/design.md) for display modes, display logic, and theme
   by Flamurai and others. The bullets are MTA trademarks.
 - [Roboto](https://github.com/googlefonts/roboto-classic) is licensed under the SIL Open Font License
   (`subway_clock/assets/fonts/OFL.txt`).
+- The new style follows Adam Fisher-Cox's
+  [write-up of its design](https://www.adamfishercox.com/portfolio/mta-platform-screens/).
 - The styles are based on photos of the MTA's platform countdown clocks on Wikimedia
   Commons by Ytx21cn, Tdorante10, and others (CC BY-SA 4.0).

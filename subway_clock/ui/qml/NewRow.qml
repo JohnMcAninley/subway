@@ -8,6 +8,7 @@ Item {
     required property var train
     required property var colors
     required property url bulletsUrl
+    property bool numbered: true  // the train's number to the left of the card
 
     readonly property color textColor: train.arriving ? colors.arrivingText : colors.text
     // The direction label is the headline when there is one, as on the real clocks.
@@ -16,6 +17,7 @@ Item {
     readonly property real unit: height  // sizes below are fractions of the line height
 
     Text {
+        visible: row.numbered
         anchors.horizontalCenter: parent.left
         anchors.horizontalCenterOffset: row.unit * 0.2
         anchors.verticalCenter: parent.verticalCenter
@@ -28,8 +30,8 @@ Item {
 
     Rectangle {
         id: card
-        x: row.unit * 0.4
-        width: parent.width - x - row.unit * 0.1
+        x: row.unit * (row.numbered ? 0.4 : 0.15)
+        width: parent.width - x - row.unit * (row.numbered ? 0.1 : 0.15)
         height: row.unit * 0.84
         anchors.verticalCenter: parent.verticalCenter
         radius: row.unit * 0.05

@@ -8,7 +8,7 @@
         "route": "5",
         "bullet": "5",
         "destination": "Eastchester-Dyre Av",
-        "direction": "Uptown",
+        "direction": "Uptown & The Bronx",
         "minutes": 0,
         "arriving": true
       },
@@ -17,18 +17,28 @@
         "route": "4",
         "bullet": "4",
         "destination": "Crown Hts-Utica Av",
-        "direction": "Downtown",
+        "direction": "Downtown & Brooklyn",
         "minutes": 1,
         "arriving": false
       }
     ],
     "stale": false,
     "messages": [
-      "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
-      "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
-      "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St"
+      {
+        "text": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
+        "planned": false
+      },
+      {
+        "text": "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
+        "planned": true
+      },
+      {
+        "text": "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St",
+        "planned": true
+      }
     ],
-    "message": ""
+    "message": "",
+    "groups": []
   },
   {
     "now": 1791732030,
@@ -39,7 +49,7 @@
         "route": "5",
         "bullet": "5",
         "destination": "Eastchester-Dyre Av",
-        "direction": "Uptown",
+        "direction": "Uptown & The Bronx",
         "minutes": 0,
         "arriving": true
       },
@@ -48,18 +58,28 @@
         "route": "6",
         "bullet": "6",
         "destination": "149 St-Hostos",
-        "direction": "Uptown",
+        "direction": "Uptown & The Bronx",
         "minutes": 1,
         "arriving": false
       }
     ],
     "stale": false,
     "messages": [
-      "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
-      "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
-      "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St"
+      {
+        "text": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
+        "planned": false
+      },
+      {
+        "text": "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
+        "planned": true
+      },
+      {
+        "text": "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St",
+        "planned": true
+      }
     ],
-    "message": ""
+    "message": "",
+    "groups": []
   },
   {
     "now": 1791732035,
@@ -70,7 +90,7 @@
         "route": "5",
         "bullet": "5",
         "destination": "Eastchester-Dyre Av",
-        "direction": "Uptown",
+        "direction": "Uptown & The Bronx",
         "minutes": 0,
         "arriving": true
       },
@@ -79,18 +99,28 @@
         "route": "4",
         "bullet": "4",
         "destination": "Woodlawn",
-        "direction": "Uptown",
+        "direction": "Uptown & The Bronx",
         "minutes": 2,
         "arriving": false
       }
     ],
     "stale": false,
     "messages": [
-      "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
-      "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
-      "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St"
+      {
+        "text": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
+        "planned": false
+      },
+      {
+        "text": "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
+        "planned": true
+      },
+      {
+        "text": "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St",
+        "planned": true
+      }
     ],
-    "message": ""
+    "message": "",
+    "groups": []
   },
   {
     "now": 1791732040,
@@ -101,7 +131,7 @@
         "route": "5",
         "bullet": "5",
         "destination": "Eastchester-Dyre Av",
-        "direction": "Uptown",
+        "direction": "Uptown & The Bronx",
         "minutes": 0,
         "arriving": true
       },
@@ -110,18 +140,28 @@
         "route": "5",
         "bullet": "5",
         "destination": "Bowling Green",
-        "direction": "Downtown",
+        "direction": "Downtown & Brooklyn",
         "minutes": 3,
         "arriving": false
       }
     ],
     "stale": false,
     "messages": [
-      "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
-      "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
-      "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St"
+      {
+        "text": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
+        "planned": false
+      },
+      {
+        "text": "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
+        "planned": true
+      },
+      {
+        "text": "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St",
+        "planned": true
+      }
     ],
-    "message": ""
+    "message": "",
+    "groups": []
   },
   {
     "now": 1791732045,
@@ -132,7 +172,7 @@
         "route": "5",
         "bullet": "5",
         "destination": "Eastchester-Dyre Av",
-        "direction": "Uptown",
+        "direction": "Uptown & The Bronx",
         "minutes": 0,
         "arriving": true
       },
@@ -141,18 +181,28 @@
         "route": "4",
         "bullet": "4",
         "destination": "Crown Hts-Utica Av",
-        "direction": "Downtown",
+        "direction": "Downtown & Brooklyn",
         "minutes": 1,
         "arriving": false
       }
     ],
     "stale": false,
     "messages": [
-      "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
-      "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
-      "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St"
+      {
+        "text": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
+        "planned": false
+      },
+      {
+        "text": "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
+        "planned": true
+      },
+      {
+        "text": "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St",
+        "planned": true
+      }
     ],
-    "message": ""
+    "message": "",
+    "groups": []
   },
   {
     "now": 1791732050,
@@ -163,7 +213,7 @@
         "route": "5",
         "bullet": "5",
         "destination": "Eastchester-Dyre Av",
-        "direction": "Uptown",
+        "direction": "Uptown & The Bronx",
         "minutes": 0,
         "arriving": true
       },
@@ -172,18 +222,28 @@
         "route": "6",
         "bullet": "6",
         "destination": "149 St-Hostos",
-        "direction": "Uptown",
+        "direction": "Uptown & The Bronx",
         "minutes": 1,
         "arriving": false
       }
     ],
     "stale": false,
     "messages": [
-      "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
-      "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
-      "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St"
+      {
+        "text": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
+        "planned": false
+      },
+      {
+        "text": "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
+        "planned": true
+      },
+      {
+        "text": "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St",
+        "planned": true
+      }
     ],
-    "message": ""
+    "message": "",
+    "groups": []
   },
   {
     "now": 1791732055,
@@ -194,7 +254,7 @@
         "route": "5",
         "bullet": "5",
         "destination": "Eastchester-Dyre Av",
-        "direction": "Uptown",
+        "direction": "Uptown & The Bronx",
         "minutes": 0,
         "arriving": true
       },
@@ -203,18 +263,28 @@
         "route": "4",
         "bullet": "4",
         "destination": "Crown Hts-Utica Av",
-        "direction": "Downtown",
+        "direction": "Downtown & Brooklyn",
         "minutes": 0,
         "arriving": true
       }
     ],
     "stale": false,
     "messages": [
-      "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
-      "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
-      "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St"
+      {
+        "text": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
+        "planned": false
+      },
+      {
+        "text": "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
+        "planned": true
+      },
+      {
+        "text": "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St",
+        "planned": true
+      }
     ],
-    "message": ""
+    "message": "",
+    "groups": []
   },
   {
     "now": 1791732060,
@@ -225,7 +295,7 @@
         "route": "5",
         "bullet": "5",
         "destination": "Eastchester-Dyre Av",
-        "direction": "Uptown",
+        "direction": "Uptown & The Bronx",
         "minutes": 0,
         "arriving": true
       },
@@ -234,18 +304,28 @@
         "route": "4",
         "bullet": "4",
         "destination": "Crown Hts-Utica Av",
-        "direction": "Downtown",
+        "direction": "Downtown & Brooklyn",
         "minutes": 0,
         "arriving": true
       }
     ],
     "stale": false,
     "messages": [
-      "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
-      "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
-      "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St"
+      {
+        "text": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
+        "planned": false
+      },
+      {
+        "text": "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
+        "planned": true
+      },
+      {
+        "text": "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St",
+        "planned": true
+      }
     ],
-    "message": ""
+    "message": "",
+    "groups": []
   },
   {
     "now": 1791732065,
@@ -256,7 +336,7 @@
         "route": "5",
         "bullet": "5",
         "destination": "Eastchester-Dyre Av",
-        "direction": "Uptown",
+        "direction": "Uptown & The Bronx",
         "minutes": 0,
         "arriving": true
       },
@@ -265,18 +345,28 @@
         "route": "4",
         "bullet": "4",
         "destination": "Crown Hts-Utica Av",
-        "direction": "Downtown",
+        "direction": "Downtown & Brooklyn",
         "minutes": 0,
         "arriving": true
       }
     ],
     "stale": false,
     "messages": [
-      "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
-      "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
-      "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St"
+      {
+        "text": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
+        "planned": false
+      },
+      {
+        "text": "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
+        "planned": true
+      },
+      {
+        "text": "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St",
+        "planned": true
+      }
     ],
-    "message": ""
+    "message": "",
+    "groups": []
   },
   {
     "now": 1791732070,
@@ -287,7 +377,7 @@
         "route": "5",
         "bullet": "5",
         "destination": "Eastchester-Dyre Av",
-        "direction": "Uptown",
+        "direction": "Uptown & The Bronx",
         "minutes": 0,
         "arriving": true
       },
@@ -296,18 +386,28 @@
         "route": "4",
         "bullet": "4",
         "destination": "Crown Hts-Utica Av",
-        "direction": "Downtown",
+        "direction": "Downtown & Brooklyn",
         "minutes": 0,
         "arriving": true
       }
     ],
     "stale": false,
     "messages": [
-      "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
-      "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
-      "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St"
+      {
+        "text": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
+        "planned": false
+      },
+      {
+        "text": "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
+        "planned": true
+      },
+      {
+        "text": "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St",
+        "planned": true
+      }
     ],
-    "message": ""
+    "message": "",
+    "groups": []
   },
   {
     "now": 1791732075,
@@ -318,7 +418,7 @@
         "route": "5",
         "bullet": "5",
         "destination": "Eastchester-Dyre Av",
-        "direction": "Uptown",
+        "direction": "Uptown & The Bronx",
         "minutes": 0,
         "arriving": true
       },
@@ -327,18 +427,28 @@
         "route": "4",
         "bullet": "4",
         "destination": "Crown Hts-Utica Av",
-        "direction": "Downtown",
+        "direction": "Downtown & Brooklyn",
         "minutes": 0,
         "arriving": true
       }
     ],
     "stale": false,
     "messages": [
-      "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
-      "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
-      "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St"
+      {
+        "text": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
+        "planned": false
+      },
+      {
+        "text": "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
+        "planned": true
+      },
+      {
+        "text": "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St",
+        "planned": true
+      }
     ],
-    "message": ""
+    "message": "",
+    "groups": []
   },
   {
     "now": 1791732145,
@@ -349,7 +459,7 @@
         "route": "5",
         "bullet": "5",
         "destination": "Eastchester-Dyre Av",
-        "direction": "Uptown",
+        "direction": "Uptown & The Bronx",
         "minutes": 0,
         "arriving": true
       },
@@ -358,17 +468,27 @@
         "route": "4",
         "bullet": "4",
         "destination": "Crown Hts-Utica Av",
-        "direction": "Downtown",
+        "direction": "Downtown & Brooklyn",
         "minutes": 0,
         "arriving": true
       }
     ],
     "stale": false,
     "messages": [
-      "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
-      "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
-      "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St"
+      {
+        "text": "Downtown [4][6] trains are running with delays after we removed a train with a door problem from service at 149 St-Hostos.",
+        "planned": false
+      },
+      {
+        "text": "[5] runs every 20 minutes and local in both directions between 125 St and Grand Central-42 St",
+        "planned": true
+      },
+      {
+        "text": "In Manhattan, [4] runs local in both directions between 125 St and Grand Central-42 St",
+        "planned": true
+      }
     ],
-    "message": ""
+    "message": "",
+    "groups": []
   }
 ]

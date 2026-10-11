@@ -40,5 +40,5 @@ def test_build_stop_routes_groups_by_parent_across_schedules(tmp_path):
 
 def test_bundled_direction_labels():
     labels = load_direction_labels()
-    assert labels["633"] == {"N": "Uptown", "S": "Downtown"}
-    assert labels["A02"] == {"S": "Downtown"}  # Inwood: "Last Stop" northbound isn't a label
+    assert labels["635"] == {"N": "Uptown & The Bronx", "S": "Downtown & Brooklyn"}
+    assert labels["A02"] == {"S": "Downtown & Brooklyn"}  # Inwood: no label northbound, where no trains go

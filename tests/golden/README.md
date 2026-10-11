@@ -42,6 +42,8 @@ anything left out. `now` is POSIX seconds. Steps run in order:
   alerts feed (`feeds/subway-alerts.pb`) is fetched too, unless it was last
   fetched successfully less than 120 seconds before `now`.
 - `lines`: set how many lines the board has (`"lines": 4`). Cases start with 2.
+- `grouped`: set whether the board is grouped by direction (`"grouped": true`).
+  Cases start ungrouped.
 - `rotate`: advance the last line.
 - `board`: record the board at `now`.
 
@@ -75,10 +77,14 @@ One entry per `board` step:
      "direction": "Downtown", "minutes": 0, "arriving": true}
   ],
   "stale": false,
-  "messages": ["Downtown [4][6] trains are running with delays after ..."],
-  "message": ""
+  "messages": [{"text": "Downtown [4][6] trains are running with delays after ...", "planned": false}],
+  "message": "",
+  "groups": []
 }
 ```
+
+On a grouped board showing more than one direction, `groups` splits the same
+rows by direction: `[{"heading": "Uptown & The Bronx", "rows": [...]}, ...]`.
 
 ## Rules
 
@@ -121,6 +127,20 @@ With `lines` = L and n trains shown:
   arriving, line L shows train L and `rotate` does nothing.
 - With L = 1, the board shows train 1 only, and `rotate` does nothing.
 
+**Grouped boards**
+
+A renderer with room for a list (a portrait screen) asks for a grouped board.
+Nothing rotates, `message` is `""`, and `max_trains` doesn't apply:
+- Take every train kept on `refresh` (see "Which trains") and its `direction`.
+  The headings are the distinct directions in order of first appearance, cut
+  to the first L.
+- With fewer than two headings, `rows` is the first L trains, numbered from
+  1, and `groups` is empty.
+- Otherwise each heading gets `floor(L / headings)` lines, and the first
+  `L mod headings` headings one more. A group's rows are that many of the
+  first trains with its direction, numbered from 1 within the group. `rows`
+  is the groups' rows in order.
+
 **Alerts**
 
 `messages` is empty if `show_alerts` is off. Otherwise, from the alerts feed
@@ -138,16 +158,16 @@ as last fetched:
   - has no `stop_id`, covers the direction of some shown platform, and its
     `route_id` is in `stop_routes` for the stops' parents or is the route of
     a train on the board's kept list (see "Which trains").
-- `messages` is the text of the active, relevant alerts: those whose ID
-  starts with `lmm:alert:` (happening now) first, then the rest (planned
-  work), each in feed order; with repeated texts dropped after the first; and
-  cut to the first 5.
+- `messages` is the active, relevant alerts: those whose ID starts with
+  `lmm:alert:` (happening now, `planned` false) first, then the rest (planned
+  work, `planned` true), each in feed order; with repeated texts dropped after
+  the first; and cut to the first 5.
 
 In the `new` style, alerts take turns with the trains on the last line. Unless
 L = 1 or train L is arriving, the last line goes through trains L to n (or
 just train L if there are no more than L trains; or no train if there are
 fewer than L), then each message twice, and back to the start; each `rotate`
-advances it one place. While it is at a message, `message` is that text and
+advances it one place. While it is at a message, `message` is its text and
 the last line has no row; otherwise `message` is `""`. If its position is past
 the end of that list (the list got shorter), it shows the first entry. In
 other styles `message` is always `""`.

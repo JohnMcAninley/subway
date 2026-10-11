@@ -5,7 +5,7 @@ from dataclasses import dataclass
 import requests
 from google.protobuf.message import DecodeError
 
-from .board import Board, Row, bullet_id
+from .board import Board, Group, Message, Row, bullet_id
 from .feeds import ALERTS_URL, ALL_FEED_URLS, feed_urls, fetch_feed, get_alerts, get_predictions
 from .gtfs import destination
 
@@ -47,6 +47,10 @@ class Clock:
     The board has `lines` lines, set by the renderer to fit its screen. Lines
     1 to lines-1 show the next trains; the last line rotates through the rest
     (and, in some styles, through the service alerts).
+
+    A renderer with room for a list, like a portrait screen, sets `grouped`
+    instead: every line shows a train, split evenly between the directions
+    when there is more than one, and nothing rotates.
     """
 
     def __init__(self, settings, static, fetch_feed=fetch_feed):
@@ -55,6 +59,7 @@ class Clock:
         self.fetch_feed = fetch_feed
         self.upcoming = []  # every train within max_minutes, soonest first
         self._lines = 2
+        self.grouped = False
         self.rotation_index = 0  # position of the last line in what it rotates through
         self.alerts = []
         self._alerts_at = None  # when the alerts were last fetched successfully
@@ -141,13 +146,15 @@ class Clock:
         return any(url not in self._feeds or now - self._feeds[url][1] > limit for url in self._scheduled)
 
     def messages(self, now=None):
-        """Text of the active alerts for the stops and their routes: those happening now, then planned work."""
+        """The active alerts for the stops and their routes: those happening now, then planned work."""
         now = time.time() if now is None else now
         if not self.settings.show_alerts:
             return ()
         relevant = [a for a in self.alerts if a.active(now) and self._affected(a)]
-        texts = [a.text for a in sorted(relevant, key=lambda a: a.planned)]
-        return tuple(dict.fromkeys(texts))[:MAX_MESSAGES]  # Alerts are often repeated per route
+        by_text = {}  # Alerts are often repeated per route
+        for alert in sorted(relevant, key=lambda a: a.planned):
+            by_text.setdefault(alert.text, Message(alert.text, alert.planned))
+        return tuple(by_text.values())[:MAX_MESSAGES]
 
     def _affected(self, alert):
         """True if alert names one of the stops (in a direction shown), or a whole route that serves them."""
@@ -177,20 +184,22 @@ class Clock:
         rotation = [("train", i) for i in trains]
         arriving = count > self._fixed and self._arriving(self._fixed, now)
         if self.settings.style in MESSAGE_LINE_STYLES and not arriving:
-            rotation += [("message", text) for text in self.messages(now) for _ in range(MESSAGE_ROTATIONS)]
+            rotation += [("message", m.text) for m in self.messages(now) for _ in range(MESSAGE_ROTATIONS)]
         return rotation
 
     def rotate(self, now=None):
         """Advance the last line to its next train or alert. Returns False if there is nothing to rotate."""
         now = time.time() if now is None else now
         rotation = self._rotation(now)
-        if len(rotation) < 2:
+        if self.grouped or len(rotation) < 2:
             return False
         self.rotation_index = (self.rotation_index + 1) % len(rotation)
         return True
 
     def board(self, now=None):
         now = time.time() if now is None else now
+        if self.grouped:
+            return self._grouped_board(now)
 
         # The fixed lines always show the next trains.
         indexes = list(range(min(self._fixed, len(self.predictions))))
@@ -205,24 +214,41 @@ class Clock:
             else:
                 message = value
 
-        rows = tuple(self._row(i, now) for i in indexes)
+        rows = tuple(self._row(self.predictions[i], i + 1, now) for i in indexes)
         return Board(style=self.settings.style, rows=rows, stale=self.stale(now),
                      messages=self.messages(now), message=message)
 
-    def _minutes(self, index, now):
-        return (self.predictions[index].time - now) / 60.0
+    def _grouped_board(self, now):
+        """Every line shows a train; with more than one direction, each gets an equal share of the lines."""
+        by_direction = {}  # direction label -> its trains, in order of each direction's next train
+        for pred in self.upcoming:
+            by_direction.setdefault(self.static.direction_label(pred.stop_id), []).append(pred)
+        headings = list(by_direction)[:self.lines]
+
+        if len(headings) < 2:
+            rows = tuple(self._row(pred, i + 1, now) for i, pred in enumerate(self.upcoming[:self.lines]))
+            groups = ()
+        else:
+            share, extra = divmod(self.lines, len(headings))  # Spare lines go to the first directions
+            groups = tuple(
+                Group(heading, tuple(self._row(pred, i + 1, now) for i, pred in
+                                     enumerate(by_direction[heading][:share + (g < extra)])))
+                for g, heading in enumerate(headings))
+            rows = tuple(row for group in groups for row in group.rows)
+        return Board(style=self.settings.style, rows=rows, stale=self.stale(now),
+                     messages=self.messages(now), groups=groups)
 
     def _arriving(self, index, now):
-        return self._minutes(index, now) < 1
+        return self.predictions[index].time - now < 60
 
-    def _row(self, index, now):
-        pred = self.predictions[index]
+    def _row(self, pred, number, now):
+        seconds = pred.time - now
         return Row(
-            number=index + 1,
+            number=number,
             route=pred.route_id,
             bullet=bullet_id(pred.route_id),
             destination=destination(self.static.stop_names, self.static.headsigns, pred.trip_stops, pred.trip_id),
             direction=self.static.direction_label(pred.stop_id),
-            minutes=max(0, int(self._minutes(index, now))),
-            arriving=self._arriving(index, now),
+            minutes=max(0, int(seconds / 60.0)),
+            arriving=seconds < 60,
         )

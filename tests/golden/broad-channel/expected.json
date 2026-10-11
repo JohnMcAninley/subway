@@ -8,7 +8,7 @@
         "route": "A",
         "bullet": "A",
         "destination": "Inwood-207 St",
-        "direction": "Inbound",
+        "direction": "Manhattan",
         "minutes": 0,
         "arriving": true
       },
@@ -24,7 +24,8 @@
     ],
     "stale": false,
     "messages": [],
-    "message": ""
+    "message": "",
+    "groups": []
   },
   {
     "now": 1791668842,
@@ -35,7 +36,7 @@
         "route": "A",
         "bullet": "A",
         "destination": "Inwood-207 St",
-        "direction": "Inbound",
+        "direction": "Manhattan",
         "minutes": 0,
         "arriving": true
       },
@@ -51,7 +52,8 @@
     ],
     "stale": false,
     "messages": [],
-    "message": ""
+    "message": "",
+    "groups": []
   },
   {
     "now": 1791668847,
@@ -62,7 +64,7 @@
         "route": "A",
         "bullet": "A",
         "destination": "Inwood-207 St",
-        "direction": "Inbound",
+        "direction": "Manhattan",
         "minutes": 0,
         "arriving": true
       },
@@ -71,14 +73,15 @@
         "route": "H",
         "bullet": "SR",
         "destination": "Broad Channel",
-        "direction": "Inbound",
+        "direction": "Manhattan",
         "minutes": 12,
         "arriving": false
       }
     ],
     "stale": false,
     "messages": [],
-    "message": ""
+    "message": "",
+    "groups": []
   },
   {
     "now": 1791668852,
@@ -89,7 +92,7 @@
         "route": "A",
         "bullet": "A",
         "destination": "Inwood-207 St",
-        "direction": "Inbound",
+        "direction": "Manhattan",
         "minutes": 0,
         "arriving": true
       },
@@ -98,14 +101,15 @@
         "route": "A",
         "bullet": "A",
         "destination": "Inwood-207 St",
-        "direction": "Inbound",
+        "direction": "Manhattan",
         "minutes": 15,
         "arriving": false
       }
     ],
     "stale": false,
     "messages": [],
-    "message": ""
+    "message": "",
+    "groups": []
   },
   {
     "now": 1791668857,
@@ -116,7 +120,7 @@
         "route": "A",
         "bullet": "A",
         "destination": "Inwood-207 St",
-        "direction": "Inbound",
+        "direction": "Manhattan",
         "minutes": 0,
         "arriving": true
       },
@@ -132,7 +136,8 @@
     ],
     "stale": false,
     "messages": [],
-    "message": ""
+    "message": "",
+    "groups": []
   },
   {
     "now": 1791668897,
@@ -143,7 +148,7 @@
         "route": "A",
         "bullet": "A",
         "destination": "Inwood-207 St",
-        "direction": "Inbound",
+        "direction": "Manhattan",
         "minutes": 0,
         "arriving": true
       },
@@ -159,7 +164,8 @@
     ],
     "stale": false,
     "messages": [],
-    "message": ""
+    "message": "",
+    "groups": []
   },
   {
     "now": 1791669077,
@@ -170,7 +176,7 @@
         "route": "A",
         "bullet": "A",
         "destination": "Inwood-207 St",
-        "direction": "Inbound",
+        "direction": "Manhattan",
         "minutes": 0,
         "arriving": true
       },
@@ -186,6 +192,7 @@
     ],
     "stale": true,
     "messages": [],
-    "message": ""
+    "message": "",
+    "groups": []
   }
 ]

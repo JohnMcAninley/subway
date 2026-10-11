@@ -4,7 +4,7 @@ import logging
 from concurrent.futures import ThreadPoolExecutor
 from pathlib import Path
 
-from PySide6.QtCore import Property, QFileSystemWatcher, QObject, QSize, Qt, QTimer, QUrl, Signal
+from PySide6.QtCore import Property, QFileSystemWatcher, QObject, QSize, Qt, QTimer, QUrl, Signal, Slot
 from PySide6.QtGui import QFontDatabase
 from PySide6.QtQuick import QQuickView
 
@@ -20,8 +20,8 @@ PRESETS = {
     Qt.Key_1: QSize(1920, 600),  # 3.2:1 ultra-wide bar
     Qt.Key_2: QSize(1920, 480),  # 4:1 bar
     Qt.Key_3: QSize(1280, 720),  # 16:9 TV or monitor
-    Qt.Key_4: QSize(608, 1080),  # 9:16 portrait TV or monitor
-    Qt.Key_5: QSize(360, 1080),  # 1:3 tall portrait, like the screens in station entrances
+    Qt.Key_4: QSize(608, 1080),  # 9:16 portrait, like the screens in station entrances
+    Qt.Key_5: QSize(360, 1080),  # 1:3 tall portrait
 }
 
 
@@ -36,7 +36,6 @@ class Display(QObject):
     # Carries a FetchResult from the worker thread back to the UI thread.
     fetched = Signal(object)
     boardChanged = Signal()
-    linesChanged = Signal()
 
     def __init__(self, clock, dev=False):
         super().__init__()
@@ -73,17 +72,13 @@ class Display(QObject):
     def board(self):
         return self._board
 
-    def get_lines(self):
-        return self.clock.lines
-
-    def set_lines(self, lines):
-        # Each style's QML works out how many lines fit the screen.
-        if lines != self.clock.lines:
+    @Slot(int, bool)
+    def setLayout(self, lines, grouped):
+        """Called by the QML with how many lines fit the screen, and whether to group them by direction."""
+        if (lines, grouped) != (self.clock.lines, self.clock.grouped):
             self.clock.lines = lines
-            self.linesChanged.emit()
+            self.clock.grouped = grouped
             self.publish()
-
-    lines = Property(int, get_lines, set_lines, notify=linesChanged)
 
     @Property(str, constant=True)
     def bulletsUrl(self):
@@ -116,6 +111,7 @@ class Display(QObject):
         # PySide passes lists to QML as arrays, but not tuples
         values["rows"] = list(values["rows"])
         values["messages"] = list(values["messages"])
+        values["groups"] = [{**group, "rows": list(group["rows"])} for group in values["groups"]]
         return values
 
     def update_predictions(self):

@@ -46,12 +46,15 @@ def failing_feed_steps(t, feed):
 
 
 def more_lines_steps(t):
-    """Boards for taller screens: 4 lines with the last rotating, then 7, more than max_trains (5)."""
+    """Boards for taller screens: 4 lines with the last rotating; 7, more than max_trains (5); then grouped."""
     steps = [{"action": "lines", "lines": 4}, {"action": "board", "now": t + 60}]
     for k in range(1, 4):
         steps += [{"action": "rotate", "now": t + 60 + 5 * k}, {"action": "board", "now": t + 60 + 5 * k}]
     steps += [{"action": "lines", "lines": 7}, {"action": "board", "now": t + 80},
               {"action": "rotate", "now": t + 85}, {"action": "board", "now": t + 85}]
+    # A portrait screen: grouped by direction, with an even and an odd number of lines.
+    steps += [{"action": "grouped", "grouped": True}, {"action": "lines", "lines": 4}, {"action": "board", "now": t + 90},
+              {"action": "rotate", "now": t + 95}, {"action": "lines", "lines": 5}, {"action": "board", "now": t + 95}]
     return steps
 
 
@@ -140,6 +143,8 @@ def run_case(case_dir):
             clock.refresh(now=step["now"])
         elif step["action"] == "lines":
             clock.lines = step["lines"]
+        elif step["action"] == "grouped":
+            clock.grouped = step["grouped"]
         elif step["action"] == "rotate":
             clock.rotate(now=step["now"])
         elif step["action"] == "board":

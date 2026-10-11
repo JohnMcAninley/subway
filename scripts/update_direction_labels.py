@@ -1,8 +1,9 @@
 """Regenerate subway_clock/assets/direction_labels.json from the MTA's subway station list.
 
-The MTA Subway Stations dataset on data.ny.gov gives each station's direction
-labels, e.g. "Uptown" and "Downtown", as shown on its platform signs. From the
-repo root:
+The MTA's developer station list gives each station's direction labels, e.g.
+"Uptown & The Bronx" and "Downtown & Brooklyn", as shown on its platform
+signs. (The MTA Subway Stations dataset on data.ny.gov has the same stations
+with plainer labels, like "Uptown".) From the repo root:
 
     python scripts/update_direction_labels.py
 """
@@ -13,7 +14,7 @@ from pathlib import Path
 
 import requests
 
-STATIONS_URL = "https://data.ny.gov/api/views/39hk-dx4f/rows.csv?accessType=DOWNLOAD"
+STATIONS_URL = "http://web.mta.info/developers/data/nyct/subway/Stations.csv"
 OUTPUT = Path(__file__).resolve().parent.parent / "subway_clock" / "assets" / "direction_labels.json"
 
 # "Last Stop" marks the direction trains don't leave in, so it never labels a train.

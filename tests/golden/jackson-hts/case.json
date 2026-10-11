@@ -108,6 +108,30 @@
     {
       "action": "board",
       "now": 1791668922
+    },
+    {
+      "action": "grouped",
+      "grouped": true
+    },
+    {
+      "action": "lines",
+      "lines": 4
+    },
+    {
+      "action": "board",
+      "now": 1791668927
+    },
+    {
+      "action": "rotate",
+      "now": 1791668932
+    },
+    {
+      "action": "lines",
+      "lines": 5
+    },
+    {
+      "action": "board",
+      "now": 1791668932
     }
   ]
 }

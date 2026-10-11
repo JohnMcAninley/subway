@@ -322,16 +322,16 @@
   },
   "direction_labels": {
     "635": {
-      "N": "Uptown",
-      "S": "Downtown"
+      "N": "Uptown & The Bronx",
+      "S": "Downtown & Brooklyn"
     },
     "L03": {
-      "N": "West Side",
+      "N": "8 Av",
       "S": "Brooklyn"
     },
     "R20": {
-      "N": "Uptown",
-      "S": "Downtown"
+      "N": "Uptown & Queens",
+      "S": "Downtown & Brooklyn"
     }
   }
 }

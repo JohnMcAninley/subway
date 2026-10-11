@@ -205,6 +205,49 @@ def test_departure_only_first_stop_is_shown():
     assert [r.minutes for r in clock.board(now=NOW).rows] == [4]
 
 
+# Grouped boards, for screens with room for a list
+
+
+def both_ways(*minutes_and_stops, **settings):
+    static = FakeStatic(direction_labels={"633": {"N": "Uptown", "S": "Downtown"}})
+    trips = [six(f"{stop}{minutes}", minutes, stop) for minutes, stop in minutes_and_stops]
+    clock = make_clock(*trips, static=static, stops=["633"], **settings)
+    clock.grouped = True
+    return clock
+
+
+def test_grouped_board_splits_the_lines_between_directions():
+    clock = both_ways((1, "633S"), (2, "633S"), (3, "633N"), (4, "633S"), (5, "633N"), (6, "633N"), max_trains=2)
+    clock.lines = 4
+    board = clock.board(now=NOW)
+    assert [(g.heading, [(r.number, r.minutes) for r in g.rows]) for g in board.groups] == [
+        ("Downtown", [(1, 1), (2, 2)]), ("Uptown", [(1, 3), (2, 5)])]
+    assert board.rows == board.groups[0].rows + board.groups[1].rows
+    assert not clock.rotate(now=NOW)
+
+
+def test_grouped_board_gives_spare_lines_to_the_first_direction():
+    clock = both_ways((1, "633N"), (2, "633S"), (3, "633N"), (4, "633S"), (5, "633N"), (6, "633S"))
+    clock.lines = 5
+    assert [(g.heading, len(g.rows)) for g in clock.board(now=NOW).groups] == [("Uptown", 3), ("Downtown", 2)]
+
+
+def test_grouped_board_with_one_direction_is_a_plain_list():
+    clock = both_ways((1, "633S"), (2, "633S"), (3, "633S"), (4, "633S"), max_trains=2)
+    clock.lines = 3
+    board = clock.board(now=NOW)
+    assert board.groups == ()
+    assert [r.number for r in board.rows] == [1, 2, 3]
+
+
+def test_grouped_board_never_replaces_a_line_with_an_alert():
+    clock = alert_clock(alert("a", "[6] delays", ("6", "", None)), trips=[six("a", 2), six("b", 4)], style="new")
+    clock.grouped = True
+    board = clock.board(now=NOW)
+    assert (len(board.rows), board.message, texts(board.messages)) == (2, "", ("[6] delays",))
+    assert not clock.rotate(now=NOW)
+
+
 # Alerts
 
 
@@ -213,43 +256,47 @@ def alert_clock(*alerts, trips=(), **settings):
     return make_clock(*trips, feeds={ALERTS_URL: alerts_feed(*alerts), url("6"): feed(*trips)}, **settings)
 
 
+def texts(messages):
+    return tuple(m.text for m in messages)
+
+
 def test_alert_for_a_route_at_the_stop():
     clock = alert_clock(alert("a", "[6] delays", ("6", "", None)), alert("b", "[A] delays", ("A", "", None)))
-    assert clock.board(now=NOW).messages == ("[6] delays",)
+    assert texts(clock.board(now=NOW).messages) == ("[6] delays",)
 
 
 def test_alert_for_a_stop_only_in_the_direction_shown():
     alerts = [alert("a", "Uptown [6] skips 28 St", ("6", "633", 0)),
               alert("b", "Downtown [6] skips 28 St", ("6", "633", 1)),
               alert("c", "[6] skips 23 St", ("6", "634", None))]
-    assert alert_clock(*alerts).messages(NOW) == ("Downtown [6] skips 28 St",)
-    assert alert_clock(*alerts, stops=["633"]).messages(NOW) == ("Uptown [6] skips 28 St", "Downtown [6] skips 28 St")
+    assert texts(alert_clock(*alerts).messages(NOW)) == ("Downtown [6] skips 28 St",)
+    assert texts(alert_clock(*alerts, stops=["633"]).messages(NOW)) == ("Uptown [6] skips 28 St", "Downtown [6] skips 28 St")
 
 
 def test_alert_only_while_active():
     clock = alert_clock(alert("a", "Later", ("6", "", None), periods=[(NOW + 600, NOW + 1200)]),
                         alert("b", "Open ended", ("6", "", None), periods=[(NOW - 60, 0)]))
-    assert clock.messages(NOW) == ("Open ended",)
-    assert clock.messages(NOW + 900) == ("Later", "Open ended")
-    assert clock.messages(NOW + 1200) == ("Open ended",)
+    assert texts(clock.messages(NOW)) == ("Open ended",)
+    assert texts(clock.messages(NOW + 900)) == ("Later", "Open ended")
+    assert texts(clock.messages(NOW + 1200)) == ("Open ended",)
 
 
 def test_alerts_happening_now_come_before_planned_work_and_repeats_are_dropped():
     clock = alert_clock(alert("lmm:planned_work:1", "Planned", ("6", "", None)),
                         alert("lmm:alert:2:26", "Delays", ("6", "", None)),
                         alert("lmm:alert:2:29", "Delays", ("6X", "", None)))
-    assert clock.messages(NOW) == ("Delays", "Planned")
+    assert [(m.text, m.planned) for m in clock.messages(NOW)] == [("Delays", False), ("Planned", True)]
 
 
 def test_alert_for_a_rerouted_train_on_the_board():
     clock = alert_clock(alert("a", "[2] runs local", ("2", "", None)), trips=[trip("two", "2", [("633S", 4)])])
-    assert clock.messages(NOW) == ("[2] runs local",)
+    assert texts(clock.messages(NOW)) == ("[2] runs local",)
 
 
 def test_show_alerts_off():
     clock = alert_clock(alert("a", "[6] delays", ("6", "", None)), show_alerts=False)
     assert ALERTS_URL not in clock.fetched
-    assert clock.board(now=NOW).messages == ()
+    assert texts(clock.board(now=NOW).messages) == ()
 
 
 def test_alerts_fetched_every_two_minutes_and_kept_if_fetching_fails():
@@ -258,7 +305,7 @@ def test_alerts_fetched_every_two_minutes_and_kept_if_fetching_fails():
     assert clock.fetched.count(ALERTS_URL) == 1
     clock.fetch_feed = fail_alerts(clock.fetch_feed)
     clock.refresh(now=NOW + 120)
-    assert clock.messages(NOW + 120) == ("[6] delays",)
+    assert texts(clock.messages(NOW + 120)) == ("[6] delays",)
     assert not clock.stale(NOW + 120)
 
 
@@ -293,7 +340,7 @@ def test_classic_style_never_replaces_the_last_line():
     clock = alert_clock(alert("a", "[6] delays", ("6", "", None)), trips=trips)
     assert not clock.rotate(now=NOW)
     board = clock.board(now=NOW)
-    assert (len(board.rows), board.message, board.messages) == (2, "", ("[6] delays",))
+    assert (len(board.rows), board.message, texts(board.messages)) == (2, "", ("[6] delays",))
 
 
 # Settings
