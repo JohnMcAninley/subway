@@ -58,7 +58,8 @@ new version, in the background while the clock runs. Each start shows "Loading
 train times" for the second or two until the first trains are in.
 
 By default the window is frameless at the top left of the screen, the screen's
-width at a 3.2:1 ratio. `--fullscreen` is for the device. Press Esc to quit.
+width at a 3.2:1 ratio. `--fullscreen` is for the device. Press Esc to quit,
+or Enter (or M) for the [settings menu](#settings).
 
 `--dev` opens a normal, resizable window for working on the display:
 
@@ -69,10 +70,24 @@ width at a 3.2:1 ratio. `--fullscreen` is for the device. Press Esc to quit.
 
 ## Settings
 
-Settings are read from `settings.json` (or the `--settings` path). Any setting
-left out uses its default, and the file is optional. The file is read again
-whenever it is saved, so changes show up without a restart (all but `data_dir`);
-if it can't be read, the clock says so in its log and carries on as it was.
+The settings menu, opened with Enter or M, covers the usual ones: the station,
+the style, the station name, alerts, what the last line shows, and whether to
+fetch every feed. Up and Down move, Left and Right change the setting selected,
+and Esc closes it. Changes show at once and are saved to `settings.json`.
+
+"Station" leads to a search: type part of a station's name or one of its routes
+("union", "86 q", "west 4th"), and Enter opens the station found, which lists
+each of its platforms' directions with a box to tick. Tick as many as you like,
+at as many stations as you like. With nothing typed, the search lists the
+stations that have something ticked. Esc goes back a page, and the clock changes
+stops on getting back to the first one; if nothing is ticked it keeps the stops
+it had.
+
+Everything is in `settings.json` (or the `--settings` path), which can also be
+edited by hand. Any setting left out uses its default, and the file is
+optional. The file is read again whenever it is saved, so changes show up
+without a restart (all but `data_dir`); if it can't be read, the clock says so
+in its log and carries on as it was.
 
 ```json
 {
@@ -91,8 +106,9 @@ if it can't be read, the clock says so in its log and carries on as it was.
 }
 ```
 
-- `stops`: GTFS stop IDs (`python scripts/find_station.py` followed by part of a station's name
-  lists them). What you list decides what kind of clock it is:
+- `stops`: GTFS stop IDs (the settings menu shows each direction's beside its box, and
+  `python scripts/find_station.py` followed by part of a station's name lists them). What you
+  list decides what kind of clock it is:
   - One direction at one stop, like the clock over a side platform: a directional ID,
     `["633S"]`.
   - Both directions, like the clock on an island platform: a parent ID, `["633"]`.

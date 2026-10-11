@@ -43,6 +43,9 @@ def main():
     parser.add_argument("--size", type=size, default=QSize(1920, 480), metavar="WIDTHxHEIGHT")
     parser.add_argument("--offset", type=int, default=10, help="seconds after the case's first step (default 10)")
     parser.add_argument("--rotate", type=int, default=0, help="rotations of the last line first (default 0)")
+    parser.add_argument("--keys", default="", metavar="KEYS",
+                        help="keys to press first, to picture the settings menu: names or characters with "
+                             "spaces between, e.g. 'enter enter u n i o n'")
     startup = parser.add_mutually_exclusive_group()
     startup.add_argument("--loading", type=int, metavar="PERCENT",
                          help="draw a first run's loading screen at this percent, instead of the case's trains")
@@ -88,6 +91,9 @@ def main():
     def rotations():
         for _ in range(args.rotate):
             display.rotate_last_line()
+        for key in args.keys.split():
+            display.menu_model.key(" " if key == "space" else key)
+        display.menuChanged.emit()
 
     def resize():
         view.resize(args.size)

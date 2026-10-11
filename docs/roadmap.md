@@ -21,8 +21,9 @@ Last updated 2026-10-11.
   be bought at the moment; see H1.
 - Settings are a JSON file, read again whenever it is saved, so changes take
   effect without a restart; `scripts/find_station.py` finds a station's stop
-  IDs by name. There is no settings screen, device image or update mechanism
-  yet.
+  IDs by name. A settings menu, opened with Enter or M, changes the usual
+  ones from the keyboard, with a search to choose the stations. There is no
+  device image or update mechanism yet.
 
 ## Working in parallel
 
@@ -89,12 +90,6 @@ first step, the `show_station` header, is in.
 |---|---|---|---|
 | D2 | **A home style of its own** | M | Wants a sketch or a description from John first (H3). Ideas: a station-sign header in the black-band Helvetica style with the route bullets; several stations on one screen, each under its own heading (the grouped board already does this by direction); "leave by" times that allow for the walk to the station. |
 
-### E. Settings without editing JSON
-
-| ID | Package | Size | Notes |
-|---|---|---|---|
-| E2 | **Keyboard settings overlay** | L | A QML overlay, opened with a key, for style, rotation, stops, and the toggles. Saves `settings.json` and applies without a restart. The pieces are there: `StationPicker.search` in `core/stations.py` narrows the station list as words are typed, and `Display.apply_settings` puts new settings into effect (all but `data_dir`). Whether the picker's matching is right is to be seen in use here. |
-
 ### F. The device
 
 Blocked on hardware (H1) except where noted.
@@ -126,11 +121,10 @@ it and a product, as read on 2026-10-11; none of it is legal advice.
 ## Suggested order
 
 1. C2, C3 and B3: small, and nothing blocks them.
-2. E2.
-3. A1, A2, A4 and C1 as photos and station visits come in.
-4. S1 early if the clock is to be sold: the answer decides whether there is a
+2. A1, A2, A4 and C1 as photos and station visits come in.
+3. S1 early if the clock is to be sold: the answer decides whether there is a
    product, and it may take a while.
-5. F once there is hardware; F4's PC-testable parts can start earlier.
+4. F once there is hardware; F4's PC-testable parts can start earlier.
 
 ## Waiting on John
 

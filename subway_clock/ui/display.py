@@ -10,6 +10,7 @@ from PySide6.QtGui import QFontDatabase
 from PySide6.QtQuick import QQuickView
 
 from ..core.settings import STYLES, Settings
+from .menu import Menu
 
 ASSETS_DIR = Path(__file__).resolve().parent.parent / "assets"
 QML_DIR = Path(__file__).resolve().parent / "qml"
@@ -23,6 +24,12 @@ PRESETS = {
     Qt.Key_3: QSize(1280, 720),  # 16:9 TV or monitor
     Qt.Key_4: QSize(608, 1080),  # 9:16 portrait, like the screens in station entrances
     Qt.Key_5: QSize(360, 1080),  # 1:3 tall portrait
+}
+
+# The keys the settings menu knows by name; any other reaches it as the character typed.
+MENU_KEYS = {
+    Qt.Key_Up: "up", Qt.Key_Down: "down", Qt.Key_Left: "left", Qt.Key_Right: "right",
+    Qt.Key_Return: "enter", Qt.Key_Enter: "enter", Qt.Key_Escape: "escape", Qt.Key_Backspace: "backspace",
 }
 
 # How long to wait before trying again when the schedules can't be fetched at startup.
@@ -50,7 +57,8 @@ class Display(QObject):
     says what to show in its place.
 
     With settings_path, the settings file is read again whenever it is saved,
-    and the changes take effect without a restart (apply_settings).
+    and the changes take effect without a restart (apply_settings). The
+    settings menu (menu.py), drawn from clock.menu, saves to it.
     """
 
     # Carries a FetchResult from the worker thread back to the UI thread.
@@ -62,6 +70,7 @@ class Display(QObject):
     boardChanged = Signal()
     startupChanged = Signal()
     settingsChanged = Signal()
+    menuChanged = Signal()
 
     def __init__(self, clock, dev=False, settings_path=None):
         super().__init__()
@@ -71,6 +80,8 @@ class Display(QObject):
         self._startup = {"state": "ready", "title": "", "detail": "", "progress": 0.0}
         self._reported = None
         self.closing = False
+        self.settings_path = None
+        self.menu_model = Menu(clock, self.change_settings)
 
         self.executor = ThreadPoolExecutor(max_workers=1)
         self.fetching = None
@@ -201,6 +212,31 @@ class Display(QObject):
     def publish(self):
         self._board = self._to_qml(self.clock.board())
         self.boardChanged.emit()
+        if self.menu_model.open:
+            self.menuChanged.emit()  # It names the station, which it can't until the schedules are in.
+
+    @Property("QVariant", notify=menuChanged)
+    def menu(self):
+        return self.menu_model.view()
+
+    def menu_key(self, event):
+        """Offer a key press to the settings menu. Returns True if it took it."""
+        taken = self.menu_model.key(MENU_KEYS.get(event.key()) or event.text())
+        if taken:
+            self.menuChanged.emit()
+        return taken
+
+    def change_settings(self, settings):
+        """Put settings chosen on the menu into effect, and save them if there is a file to save to."""
+        if self.settings_path is not None:
+            try:
+                settings.save(self.settings_path)
+            except OSError as e:
+                log.warning("Can't save %s, so these settings last until the clock is closed: %s",
+                            self.settings_path, e)
+            else:
+                self.file_settings = settings  # so that reading the file back changes nothing
+        self.apply_settings(settings)
 
     @staticmethod
     def _to_qml(board):
@@ -303,7 +339,10 @@ class Display(QObject):
 
 
 class ClockWindow(QQuickView):
-    """Esc quits. In --dev mode, 1-5 resize to preview screen shapes and S switches style."""
+    """Enter or M opens the settings menu, which has the keys while it is open. Otherwise Esc quits.
+
+    In --dev mode, 1-5 resize to preview screen shapes and S switches style.
+    """
 
     def __init__(self, display):
         super().__init__()
@@ -311,6 +350,8 @@ class ClockWindow(QQuickView):
 
     def keyPressEvent(self, event):
         key = event.key()
+        if self.display.menu_key(event):
+            return
         if key == Qt.Key_Escape:
             self.close()
         elif self.display.dev and key in PRESETS:

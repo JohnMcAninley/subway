@@ -53,6 +53,12 @@ Item {
         }
     }
 
+    SettingsMenu {
+        anchors.fill: parent
+        menu: root.clock.menu
+        bulletsUrl: root.clock.bulletsUrl
+    }
+
     // Tell the core the layout whenever the style's board is replaced or resized.
     function sendLayout() {
         if (style.item && style.item.lines > 0)
