@@ -41,6 +41,9 @@ MENUS = [
     {"case": "jackson-hts", "settings": {"stops": ["G14", "710"], "style": "new"},
      "keys": ["m", "enter", "7", "enter", "enter", "down", "enter", "escape", "x", "y", "z", "escape", "down",
               "down", "down", "down", "down", "down", "left", "left", "escape"]},
+    {"case": "atlantic-av-platforms", "settings": {"stops": ["235S:1"]},
+     "keys": ["enter", "enter", "enter", "up", "enter", "up", "enter", "escape", "escape", "enter", "enter",
+              "enter", "down", "enter", "escape", "escape"]},
     {"case": "broad-channel", "settings": {"stops": ["H04"]},
      "keys": ["enter", "enter", "enter", "enter", "escape", "b", "r", "o", "a", "d", "enter", "enter", "enter",
               "escape", "escape", "escape", "enter"]},
@@ -68,7 +71,7 @@ def menu_run(script):
 def search_tables():
     """Tables to search: every golden case's together, and the whole schedule if it is in data/."""
     merged = {"stop_names": {}, "stop_parents": {}, "stop_routes": {}, "headsigns": {}, "direction_labels": {},
-              "stop_boroughs": {}}
+              "stop_boroughs": {}, "platforms": {}}
     for case_dir in case_dirs():
         for name, table in json.loads((case_dir / "static.json").read_text(encoding="utf-8")).items():
             merged[name].update(table)
@@ -80,7 +83,8 @@ def search_tables():
     if static is not None and static.ready:
         tables.append({"stop_names": static.stop_names, "stop_parents": static.stop_parents,
                        "stop_routes": static.stop_routes, "headsigns": {},
-                       "direction_labels": static.direction_labels, "stop_boroughs": static.stop_boroughs})
+                       "direction_labels": static.direction_labels, "stop_boroughs": static.stop_boroughs,
+                       "platforms": static.platforms})
     return tables
 
 

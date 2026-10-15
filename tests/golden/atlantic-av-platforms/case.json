@@ -1,0 +1,136 @@
+{
+  "description": "Atlantic Av-Barclays Ctr, where the 2 and 3 stop at side platforms and the 4 and 5 at an island between: the southbound 2/3 platform (track 1) and the northbound 4/5 one (track 3), told apart by the tracks in the MTA's extension. The feeds keep every train at the stop, and taller screens show enough of them for the ones left out to be missed.",
+  "captured_at": "2026-10-15T22:39:00+00:00",
+  "settings": {
+    "stops": [
+      "235S:1",
+      "235N:3"
+    ]
+  },
+  "steps": [
+    {
+      "action": "refresh",
+      "now": 1792103940
+    },
+    {
+      "action": "board",
+      "now": 1792103940
+    },
+    {
+      "action": "rotate",
+      "now": 1792103945
+    },
+    {
+      "action": "board",
+      "now": 1792103945
+    },
+    {
+      "action": "rotate",
+      "now": 1792103950
+    },
+    {
+      "action": "board",
+      "now": 1792103950
+    },
+    {
+      "action": "rotate",
+      "now": 1792103955
+    },
+    {
+      "action": "board",
+      "now": 1792103955
+    },
+    {
+      "action": "rotate",
+      "now": 1792103960
+    },
+    {
+      "action": "board",
+      "now": 1792103960
+    },
+    {
+      "action": "refresh",
+      "now": 1792104000
+    },
+    {
+      "action": "board",
+      "now": 1792104000
+    },
+    {
+      "action": "board",
+      "now": 1792104180
+    },
+    {
+      "action": "lines",
+      "lines": 4
+    },
+    {
+      "action": "board",
+      "now": 1792104000
+    },
+    {
+      "action": "rotate",
+      "now": 1792104005
+    },
+    {
+      "action": "board",
+      "now": 1792104005
+    },
+    {
+      "action": "rotate",
+      "now": 1792104010
+    },
+    {
+      "action": "board",
+      "now": 1792104010
+    },
+    {
+      "action": "rotate",
+      "now": 1792104015
+    },
+    {
+      "action": "board",
+      "now": 1792104015
+    },
+    {
+      "action": "lines",
+      "lines": 7
+    },
+    {
+      "action": "board",
+      "now": 1792104020
+    },
+    {
+      "action": "rotate",
+      "now": 1792104025
+    },
+    {
+      "action": "board",
+      "now": 1792104025
+    },
+    {
+      "action": "grouped",
+      "grouped": true
+    },
+    {
+      "action": "lines",
+      "lines": 4
+    },
+    {
+      "action": "board",
+      "now": 1792104030
+    },
+    {
+      "action": "rotate",
+      "now": 1792104035
+    },
+    {
+      "action": "lines",
+      "lines": 5
+    },
+    {
+      "action": "board",
+      "now": 1792104035
+    }
+  ]
+}

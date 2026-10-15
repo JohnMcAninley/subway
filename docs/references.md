@@ -194,10 +194,11 @@ signs' details are from memory, not from a source checked for this.
   yet.
 - Text is green. The bullet is a filled disc (a diamond for express) with
   the route unlit inside it. The bullet is green like the text, whatever the
-  route's colour, and turns with the rest of the line for an arriving train
-  (John, 2026-10-11; these notes used to say red for 1, 2 and 3).
-- **Arriving train**: `0min` and the whole line changes colour, to amber at
-  Times Sq and to red at Nevins St. We use amber.
+  route's colour (John, 2026-10-11; these notes used to say red for 1, 2 and
+  3), and stays green for an arriving train (John, 2026-10-15; they said it
+  turned with the line).
+- **Arriving train**: `0min` and the rest of the line changes colour, to amber
+  at Times Sq and to red at Nevins St. We use amber.
 - Line 2 rotates as on the classic clocks (photos show it numbered `3.`).
 - Long terminals are abbreviated ("Flatbush Av-Bklyn Col"). That is the only
   one we have seen. For the rest we use the MTA's usual short forms ("Bklyn",

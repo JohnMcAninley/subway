@@ -1,5 +1,6 @@
 // MTA GTFS-realtime feeds: which feed carries which route, and reading trip updates and
 // alerts from them. A port of core/feeds.py, whose feeds.json this reads as it is.
+import { splitTrack } from "./gtfs.js"
 import { read } from "./protobuf.js"
 
 const FEEDS = await (await fetch(new URL("feeds.json", import.meta.url))).json()
@@ -20,9 +21,13 @@ export function feedUrls(routes) {
 
 // The parts of GTFS-realtime's FeedMessage the clock reads (see protobuf.read).
 const TIME = { time: [2, "int"] }
+// The MTA's extension to GTFS-realtime stop times: field 1001 of a stop time update, with the
+// track the train is scheduled to use and the one it is actually using, once that is known.
+const NYCT_STOP_TIME = { scheduled_track: [1, "string"], actual_track: [2, "string"] }
 const TRIP_UPDATE = {
     trip: [1, { trip_id: [1, "string"], route_id: [5, "string"] }],
-    stop_time_update: [2, [{ arrival: [2, TIME], departure: [3, TIME], stop_id: [4, "string"] }]],
+    stop_time_update: [2, [{ arrival: [2, TIME], departure: [3, TIME], stop_id: [4, "string"],
+                             nyct: [1001, NYCT_STOP_TIME] }]],
 }
 // The MTA's extension to GTFS-realtime alerts ("Mercury"): field 1001 of an alert, a message
 // whose own fields include these.
@@ -53,11 +58,25 @@ export function Prediction(trip_id, route_id, stop_id, time, trip_stops) {
     return { trip_id, route_id, stop_id, time, trip_stops }
 }
 
+// The track a stop time's train is on, or is to use, from the MTA's extension; "" if it doesn't say.
+export function stopTrack(stopTime) {
+    return stopTime.nyct ? stopTime.nyct.actual_track || stopTime.nyct.scheduled_track : ""
+}
+
 // Upcoming trains in feed at any of stops (a Set).
 //
 // Stops are directional stop IDs ("633S"), or parent stop IDs ("633") for
-// both directions. Realtime stop IDs are always directional.
+// both directions, as in the stops setting. One with a track ("235S:1"; see
+// gtfs.splitTrack) is the trains on that track only, and those the feed
+// gives no track for. Realtime stop IDs are always directional.
 export function getPredictions(feed, stops) {
+    const tracks = new Map()  // stop ID -> the tracks wanted there; "" is every track
+    for (const stop of stops) {
+        const [stopId, track] = splitTrack(stop)
+        if (!tracks.has(stopId))
+            tracks.set(stopId, new Set())
+        tracks.get(stopId).add(track)
+    }
     const predictions = []
 
     for (const entity of feed.entity) {
@@ -68,7 +87,10 @@ export function getPredictions(feed, stops) {
                 const stopId = stopTime.stop_id
                 // A trip's first stop often has only a departure time.
                 const arrives = (stopTime.arrival && stopTime.arrival.time) || (stopTime.departure && stopTime.departure.time)
-                if (arrives && (stops.has(stopId) || stops.has(stopId.slice(0, -1))))
+                const wanted = new Set([...(tracks.get(stopId) || []), ...(tracks.get(stopId.slice(0, -1)) || [])])
+                // Every track, or the train's, or a train the feed gives no track for
+                const track = !arrives || !wanted.size || wanted.has("") ? "" : stopTrack(stopTime)
+                if (arrives && wanted.size && (track === "" || wanted.has(track)))
                     predictions.push(Prediction(trip.trip ? trip.trip.trip_id : "", trip.trip ? trip.trip.route_id : "",
                                                 stopId, arrives, tripStops))
             }

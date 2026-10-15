@@ -203,6 +203,14 @@ in its log and carries on as it was.
     `["635S", "R20S", "L03S"]`.
   - Several stations at once, which no real clock does: the stops nearest a home or office,
     e.g. `["633S", "R18S"]` for downtown trains from either 28 St station.
+  - One platform where a direction has several with the same ID, told apart by the track its
+    trains use: the ID, a colon and the track. At Atlantic Av the 2 and 3 stop at side
+    platforms and the 4 and 5 at an island between, so `["235S:1"]` is the southbound 2/3
+    platform and `["235N:3", "235S:2"]` the 4/5 island. The tracks are the MTA's, from its
+    feeds; the stations this applies to are listed by hand in
+    `subway_clock/assets/platforms.json` (only Atlantic Av so far), and the menu offers their
+    platforms as directions of their own. A train the feed gives no track for shows on every
+    platform.
 - `style`: which MTA clock to look like. `classic` is the LCD clocks with a white screen and a
   time strip; `new` is the newer clocks with a card per train, headed by its direction
   (e.g. "Downtown & Brooklyn") over the destination. In portrait it becomes the screens in station

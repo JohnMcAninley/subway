@@ -10,7 +10,7 @@ from google.protobuf.message import DecodeError
 
 from .board import Board, Group, Message, Route, Row, bullet_id
 from .feeds import ALERTS_URL, ALL_FEED_URLS, feed_urls, fetch_feed, get_alerts, get_predictions
-from .gtfs import destination, terminal
+from .gtfs import destination, split_track, terminal
 from .headline import headline
 
 log = logging.getLogger(__name__)
@@ -242,14 +242,22 @@ class Clock:
         on_board: the routes of the trains the board can show, which may include rerouted ones
         """
         parents = self.static.stop_parents
-        # (parent stop, direction) pairs shown: one for a directional stop, both for a parent stop
-        shown = {(parents.get(stop, stop), d) for stop in self.settings.stops
-                 for d in ("NS" if parents.get(stop, stop) == stop else stop[-1])}
+        # (parent stop, direction) pairs shown: one for a directional stop, both for a parent stop. Each
+        # is given the routes of the platforms shown there, or None for every route if it is all there.
+        shown = {}
+        for stop in self.settings.stops:
+            stop_id, _ = split_track(stop)
+            platform = self.static.platform(stop)
+            for d in "NS" if parents.get(stop_id, stop_id) == stop_id else stop_id[-1]:
+                key = (parents.get(stop_id, stop_id), d)
+                before = shown.get(key, set())
+                shown[key] = None if before is None or not platform else before | set(platform["routes"])
         routes = set(self.static.routes_for(self.settings.stops)) | on_board
         affected = {}
         for route, stop, direction in alert.affects:
             if stop:
-                if any((parents.get(stop, stop), d) in shown for d in direction or "NS"):
+                keys = [(parents.get(stop, stop), d) for d in direction or "NS"]
+                if any(key in shown and (shown[key] is None or route in shown[key]) for key in keys):
                     affected[route] = True
             elif route in routes and any(d in (direction or self._headed(alert, route, parent))
                                          for parent, d in shown):
@@ -377,9 +385,10 @@ class Clock:
         """The Board's station, direction and routes: where the chosen stops are and what stops there."""
         static = self.static
         stops = self.settings.stops
-        names = dict.fromkeys(static.stop_names[stop] for stop in stops if stop in static.stop_names)
+        stop_ids = [split_track(stop)[0] for stop in stops]
+        names = dict.fromkeys(static.stop_names[stop] for stop in stop_ids if stop in static.stop_names)
         # A parent stop is both directions, so there is no one label for it.
-        directional = all(static.stop_parents.get(stop, stop) != stop for stop in stops)
+        directional = all(static.stop_parents.get(stop, stop) != stop for stop in stop_ids)
         labels = {static.direction_label(stop) for stop in stops} if directional else set()
         # Stop by stop, as the bullets on an entrance's sign are grouped by line
         routes = dict.fromkeys(route for stop in stops for route in static.routes_for([stop]))

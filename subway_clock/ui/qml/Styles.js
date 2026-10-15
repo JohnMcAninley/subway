@@ -29,7 +29,7 @@ var colors = {
         messageText: "#000000",
     },
     // The LED signs on the numbered lines. Everything is green, bullets included,
-    // whatever the route's colour; an arriving train's whole line turns amber.
+    // whatever the route's colour; an arriving train's line turns amber, all but the bullet.
     led: {
         background: "#17170d",
         text: "#a8f000",

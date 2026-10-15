@@ -3,7 +3,10 @@
 A Station here is what a rider means by one: a whole complex, such as Union Sq
 with its 4/5/6, L and N/Q/R/W platforms, or a station on its own. Each of its
 stops is one line's platforms, and each direction of a stop has the ID to put
-in the `stops` setting.
+in the `stops` setting. Where a direction has platforms of its own for some of
+its routes, as at Atlantic Av, where the 2 and 3 stop at the sides and the 4
+and 5 at an island between, each of them is a direction of its own, with a
+track in its ID (see gtfs.split_track).
 
 The search is for a picker that narrows as the user types, not for free text:
 every word typed has to start a word of one of the station's names, or be one
@@ -15,7 +18,7 @@ import json
 import re
 from dataclasses import dataclass
 
-from .gtfs import STATIONS_PATH
+from .gtfs import STATIONS_PATH, split_track
 
 # The MTA's abbreviations and what a user might type instead. Station names
 # use both forms ("Park Place", "Bay Ridge Av", "Avenue U"), so each word
@@ -44,8 +47,9 @@ WORD_FORMS = {word: group for group in ABBREVIATIONS for word in group}
 
 @dataclass(frozen=True)
 class Direction:
-    stop_id: str  # the directional stop ID, e.g. "635S"
+    stop_id: str  # the directional stop ID, e.g. "635S", or a platform of it, e.g. "235S:1"
     label: str  # the MTA's name for the direction, e.g. "Downtown & Brooklyn"; "" if unknown
+    routes: tuple[str, ...] = ()  # a platform's routes; empty for the stop's
 
 
 @dataclass(frozen=True)
@@ -128,7 +132,9 @@ class StationPicker:
         if not labels:
             # Not in the station list, so offer both directions unnamed
             labels = {"N": "", "S": ""}
-        directions = tuple(Direction(stop_id + d, labels[d]) for d in "NS" if d in labels)
+        directions = tuple(Direction(f"{stop_id}{d}:{platform['track']}", labels[d], tuple(platform["routes"]))
+                           if platform else Direction(stop_id + d, labels[d])
+                           for d in "NS" if d in labels for platform in static.platforms.get(stop_id + d) or [None])
         return Stop(stop_id, static.stop_names[stop_id], tuple(static.stop_routes.get(stop_id, ())), directions)
 
     def search(self, query, limit=None):
@@ -156,5 +162,6 @@ class StationPicker:
         return 1 if any(name_word.startswith(word) for name_word in name_words) else 0
 
     def station_for(self, stop_id):
-        """The Station a stop ID (directional or parent) belongs to, or None."""
+        """The Station a stop ID (directional or parent, or a platform) belongs to, or None."""
+        stop_id, _ = split_track(stop_id)
         return self._by_stop.get(stop_id) or self._by_stop.get(stop_id[:-1])

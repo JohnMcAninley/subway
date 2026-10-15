@@ -22,7 +22,7 @@ sys.path.insert(0, str(ROOT))
 
 from subway_clock.core.clock import Clock  # noqa: E402
 from subway_clock.core.feeds import ALERTS_URL, ALL_FEED_URLS, fetch_feed  # noqa: E402
-from subway_clock.core.gtfs import StaticTables  # noqa: E402
+from subway_clock.core.gtfs import StaticTables, split_track  # noqa: E402
 from subway_clock.core.settings import Settings  # noqa: E402
 
 GOLDEN_DIR = Path(__file__).resolve().parent / "golden"
@@ -118,6 +118,14 @@ CASES = {
         "settings": {"stops": ["L03S"], "style": "new"},
         "steps": alerts_steps,
     },
+    "atlantic-av-platforms": {
+        "description": "Atlantic Av-Barclays Ctr, where the 2 and 3 stop at side platforms and the 4 and 5 at an "
+                       "island between: the southbound 2/3 platform (track 1) and the northbound 4/5 one (track 3), "
+                       "told apart by the tracks in the MTA's extension. The feeds keep every train at the stop, "
+                       "and taller screens show enough of them for the ones left out to be missed.",
+        "settings": {"stops": ["235S:1", "235N:3"]},
+        "extra_steps": more_lines_steps,
+    },
 }
 
 
@@ -179,7 +187,7 @@ def capture(names):
     for name in names:
         definition = CASES[name]
         settings = Settings(**definition["settings"])
-        stops = set(settings.stops)
+        stops = {split_track(stop)[0] for stop in settings.stops}  # Every platform's trains, to leave some out
         case_dir = GOLDEN_DIR / name
         (case_dir / "feeds").mkdir(parents=True, exist_ok=True)
 
@@ -213,16 +221,19 @@ def capture(names):
                     trimmed.entity.add().CopyFrom(entity)
             (case_dir / "feeds" / "subway-alerts.pb").write_bytes(trimmed.SerializeToString())
 
-        # Only the static tables the case can look up.
-        parents = {s: static.stop_parents[s] for s in stops | trip_stops if s in static.stop_parents}
+        # Only the static tables the case can look up, and the stops' parents, for the settings menu.
+        looked_up = stops | trip_stops | {static.stop_parents.get(s, s) for s in stops}
+        parents = {s: static.stop_parents[s] for s in looked_up if s in static.stop_parents}
         write_json(case_dir / "static.json", {
-            "stop_names": {s: static.stop_names[s] for s in sorted(stops | trip_stops) if s in static.stop_names},
+            "stop_names": {s: static.stop_names[s] for s in sorted(looked_up) if s in static.stop_names},
             "stop_parents": dict(sorted(parents.items())),
             "stop_routes": {p: static.stop_routes[p] for p in sorted({static.stop_parents.get(s, s) for s in stops})
                             if p in static.stop_routes},
             "headsigns": {t: static.headsigns[t] for t in sorted(trip_ids) if t in static.headsigns},
             "direction_labels": direction_labels(static, stops),
             "stop_boroughs": stop_boroughs(static, stops | trip_stops),
+            **({"platforms": {s: static.platforms[s] for s in sorted(static.platforms) if s in parents}}
+               if any(s in static.platforms for s in parents) else {}),
         })
 
         steps = definition.get("steps", standard_steps)(captured_at)

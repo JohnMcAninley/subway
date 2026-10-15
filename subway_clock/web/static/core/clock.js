@@ -3,7 +3,7 @@
 // that both make the same boards.
 import { Board, Group, Message, Route, Row, bulletId } from "./board.js"
 import { ALERTS_URL, ALL_FEED_URLS, feedUrls, fetchFeed, getAlerts, getPredictions } from "./feeds.js"
-import { destination, terminal } from "./gtfs.js"
+import { destination, splitTrack, terminal } from "./gtfs.js"
 import { headline } from "./headline.js"
 
 // The board is marked stale once any feed it needs hasn't been fetched for this long.
@@ -215,19 +215,25 @@ export class Clock {
     // See core/clock.py.
     _affected(alert, onBoard) {
         const parents = this.static
-        // (parent stop, direction) pairs shown: one for a directional stop, both for a parent stop
-        const shown = new Set()
+        // (parent stop, direction) pairs shown: one for a directional stop, both for a parent stop. Each
+        // is given the routes of the platforms shown there, or null for every route if it is all there.
+        const shown = new Map()
         for (const stop of this.settings.stops) {
-            const parent = parents.parent(stop)
-            for (const d of parent === stop ? "NS" : stop.slice(-1))
-                shown.add(parent + " " + d)
+            const [stopId] = splitTrack(stop), platform = this.static.platform(stop)
+            const parent = parents.parent(stopId)
+            for (const d of parent === stopId ? "NS" : stopId.slice(-1)) {
+                const key = parent + " " + d
+                const before = shown.has(key) ? shown.get(key) : new Set()
+                shown.set(key, before === null || !platform ? null : new Set([...before, ...platform.routes]))
+            }
         }
-        const pairs = [...shown].map(pair => pair.split(" "))
+        const pairs = [...shown.keys()].map(pair => pair.split(" "))
         const routes = new Set([...this.static.routes_for(this.settings.stops), ...onBoard])
         const affected = new Set()
         for (const [route, stop, direction] of alert.affects) {
             if (stop) {
-                if ([...(direction || "NS")].some(d => shown.has(parents.parent(stop) + " " + d)))
+                const keys = [...(direction || "NS")].map(d => parents.parent(stop) + " " + d)
+                if (keys.some(key => shown.has(key) && (shown.get(key) === null || shown.get(key).has(route))))
                     affected.add(route)
             } else if (routes.has(route) && pairs.some(([parent, d]) =>
                 (direction ? direction === d : this._headed(alert, route, parent).has(d)))) {
@@ -363,9 +369,10 @@ export class Clock {
     _station() {
         const tables = this.static
         const stops = this.settings.stops
-        const names = new Set(stops.filter(stop => Object.hasOwn(tables.stop_names, stop)).map(stop => tables.stop_names[stop]))
+        const stopIds = stops.map(stop => splitTrack(stop)[0])
+        const names = new Set(stopIds.filter(stop => Object.hasOwn(tables.stop_names, stop)).map(stop => tables.stop_names[stop]))
         // A parent stop is both directions, so there is no one label for it.
-        const directional = stops.every(stop => tables.parent(stop) !== stop)
+        const directional = stopIds.every(stop => tables.parent(stop) !== stop)
         const labels = directional ? new Set(stops.map(stop => tables.direction_label(stop))) : new Set()
         // Stop by stop, as the bullets on an entrance's sign are grouped by line
         const routes = new Set(stops.flatMap(stop => tables.routes_for([stop])))

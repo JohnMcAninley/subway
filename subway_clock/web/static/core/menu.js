@@ -1,6 +1,7 @@
 // The settings menu: what it lists and what each key does. A port of ui/menu.py, which
 // says how it goes; its view() is what the page's menu.js draws, from either.
 import { bulletId } from "./board.js"
+import { splitTrack } from "./gtfs.js"
 import { ROTATIONS, STYLES, replace } from "./settings.js"
 import { StationPicker } from "./stations.js"
 
@@ -171,16 +172,24 @@ export class Menu {
     // The picker's Stop for a parent stop ID (parent) or for a direction's, or null if it doesn't have it.
     _stop(stopId, parent) {
         const station = this.picker.station_for(stopId)
-        const wanted = parent ? stopId : stopId.slice(0, -1)
+        const wanted = parent ? stopId : splitTrack(stopId)[0].slice(0, -1)
         return station ? station.stops.find(stop => stop.stop_id === wanted) || null : null
     }
 
     // The stops setting as directional IDs: a parent stop becomes each of its directions.
+    // So does a direction with platforms of its own become each of them.
     _expand(stops) {
         const expanded = []
         for (const stopId of stops) {
             const stop = this._stop(stopId, true)
-            expanded.push(...(stop ? stop.directions.map(direction => direction.stop_id) : [stopId]))
+            if (stop) {
+                expanded.push(...stop.directions.map(direction => direction.stop_id))
+                continue
+            }
+            const own = this._stop(stopId, false)
+            const platforms = own ? own.directions.map(d => d.stop_id)
+                .filter(id => id !== stopId && splitTrack(id)[0] === stopId) : []
+            expanded.push(...(platforms.length ? platforms : [stopId]))
         }
         return [...new Set(expanded)]
     }
@@ -218,7 +227,8 @@ export class Menu {
             return this._stations().map(station => this._stationRow(station))
         const several = new Set(this.station.stops.map(stop => stop.name)).size > 1
         return this._directions().map(([stop, direction]) => row(
-            direction.label || direction.stop_id, direction.stop_id, several ? stop.name : "", stop.routes,
+            direction.label || direction.stop_id, direction.stop_id, several ? stop.name : "",
+            direction.routes.length ? direction.routes : stop.routes,
             this.chosen.includes(direction.stop_id)))
     }
 

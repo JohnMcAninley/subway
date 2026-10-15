@@ -1,4 +1,5 @@
 """MTA GTFS-realtime feeds: which feed carries which route, and reading trip updates and alerts from them."""
+import collections
 import json
 import re
 from dataclasses import dataclass
@@ -7,6 +8,8 @@ from pathlib import Path
 import requests
 from google.protobuf import empty_pb2, unknown_fields
 from google.transit import gtfs_realtime_pb2
+
+from .gtfs import split_track
 
 with open(Path(__file__).with_name("feeds.json"), encoding="utf-8") as f:
     _FEEDS = json.load(f)
@@ -47,8 +50,14 @@ def get_predictions(feed, stops):
     """Upcoming trains in feed at any of stops.
 
     Stops are directional stop IDs ("633S"), or parent stop IDs ("633") for
-    both directions. Realtime stop IDs are always directional.
+    both directions, as in the stops setting. One with a track ("235S:1"; see
+    gtfs.split_track) is the trains on that track only, and those the feed
+    gives no track for. Realtime stop IDs are always directional.
     """
+    tracks = collections.defaultdict(set)  # stop ID -> the tracks wanted there; "" is every track
+    for stop in stops:
+        stop_id, track = split_track(stop)
+        tracks[stop_id].add(track)
     predictions = []
 
     for entity in feed.entity:
@@ -59,7 +68,8 @@ def get_predictions(feed, stops):
                 stop_id = stop_time.stop_id
                 # A trip's first stop often has only a departure time.
                 arrives = stop_time.arrival.time or stop_time.departure.time
-                if arrives and (stop_id in stops or stop_id[:-1] in stops):
+                wanted = tracks.get(stop_id, set()) | tracks.get(stop_id[:-1], set())
+                if arrives and wanted and ("" in wanted or stop_track(stop_time) in wanted | {""}):
                     predictions.append(Prediction(trip.trip.trip_id, trip.trip.route_id, stop_id, arrives, trip_stops))
 
     return predictions
@@ -98,6 +108,13 @@ class Alert:
 # The alert types that mean a route's trains aren't coming to the stops the alert names.
 NO_SERVICE_TITLES = ("Suspended", "Part Suspended", "Stops Skipped", "No Scheduled Service")
 
+# The MTA's extension to GTFS-realtime stop times: field 1001 of a stop time update, a
+# message with the track the train is scheduled to use (field 1) and the one it is
+# actually using (field 2), once that is known. The MTA numbers the tracks ("1", "2"...).
+NYCT_STOP_TIME = 1001
+NYCT_SCHEDULED_TRACK = 1
+NYCT_ACTUAL_TRACK = 2
+
 # The MTA's extension to GTFS-realtime alerts ("Mercury"): field 1001 of an alert, a message
 # whose own fields include these. The bindings don't know it, so it arrives as unknown fields.
 MERCURY_ALERT = 1001
@@ -124,6 +141,16 @@ def headings(text):
         return ()
     found = (_COMPASS.get(compass.lower(), place) for compass, place in _HEADING.findall(text))
     return tuple(dict.fromkeys(found))
+
+
+def stop_track(stop_time):
+    """The track a stop time's train is on, or is to use, from the MTA's extension; "" if it doesn't say."""
+    for data in _unknown(stop_time, NYCT_STOP_TIME):
+        nyct = empty_pb2.Empty.FromString(data)  # Every field of it is unknown to Empty
+        found = [track for track in _unknown(nyct, NYCT_ACTUAL_TRACK) + _unknown(nyct, NYCT_SCHEDULED_TRACK) if track]
+        if found:
+            return found[0].decode("utf-8")
+    return ""
 
 
 def _unknown(message, number):

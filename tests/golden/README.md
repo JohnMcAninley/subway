@@ -59,6 +59,9 @@ Only the entries the case can look up:
 - `direction_labels`: parent stop ID to its direction labels, e.g.
   `{"N": "Uptown", "S": "Downtown"}`. Either direction may be missing.
 - `stop_boroughs`: parent stop ID to borough code: `M`, `Bk`, `Q`, `Bx` or `SI`
+- `platforms` (only where a case needs it): directional stop ID to its
+  platforms, `[{"track": "1", "routes": ["2", "3"]}, ...]`, for the stops whose
+  platforms in one direction are told apart by track
 
 ### feeds/*.pb
 
@@ -102,6 +105,17 @@ What the cases test, for anyone implementing the core:
 **Which trains**
 - A stop time matches a settings stop if its stop ID equals it, or equals it
   without the final `N`/`S` (so a parent stop matches both directions).
+- A settings stop may end in a colon and a track (`235S:1`). Its stop ID is
+  the part before the colon, matched as above, and a stop time also has to be
+  on that track, or have none given. The track is the MTA's extension to the
+  stop time (field 1001): its `actual_track` (field 2), or if that is missing
+  or empty, its `scheduled_track` (field 1). Wherever these rules look a
+  settings stop up in `static.json`, it is by the stop ID before the colon,
+  except that the stop's routes (`stop_routes`, as used for which feeds to
+  fetch, the board's `routes` and the alerts) are its platform's in
+  `platforms`, when it is listed there.
+- An alert naming a stop with a route (`informed_entity` with both) is about
+  a settings stop with a track only if the route is its platform's.
 - Its time is the arrival time, or the departure time if there is no arrival
   (usual at a trip's first stop). Stop times with neither are ignored.
 - Feeds fetched: all of them if `fetch_all_feeds` (the default), otherwise

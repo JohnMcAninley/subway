@@ -12,7 +12,9 @@ def trip(trip_id, route_id, stop_times):
     """A trip update; stop_times is [(stop_id, minutes from NOW), ...].
 
     Add "departure" to a stop time, as in (stop_id, minutes, "departure"), for a
-    stop with only a departure time, like a trip's first stop.
+    stop with only a departure time, like a trip's first stop. Add "track 1" for
+    the track the train is on there, and "scheduled 1" for the one it is
+    scheduled to use, as the MTA's extension gives them.
     """
     return (trip_id, route_id, stop_times)
 
@@ -27,8 +29,11 @@ def feed(*trips):
         entity.trip_update.trip.route_id = route_id
         for stop_id, minutes, *kind in stop_times:
             update = entity.trip_update.stop_time_update.add(stop_id=stop_id)
-            event = update.departure if kind == ["departure"] else update.arrival
+            event = update.departure if "departure" in kind else update.arrival
             event.time = int(NOW + minutes * 60)
+            tracks = dict(k.split() for k in kind if " " in k)
+            if tracks:
+                update.MergeFromString(nyct_stop_time(tracks.get("scheduled", ""), tracks.get("track", "")))
     return message
 
 
@@ -53,6 +58,15 @@ def mercury_alert(kind, updated):
     """The MTA's extension to an alert, as it is in the feed: field 1001, a message with these two among its fields."""
     kind = kind.encode()
     fields = varint(2 << 3) + varint(int(updated)) + varint(3 << 3 | 2) + varint(len(kind)) + kind
+    return varint(1001 << 3 | 2) + varint(len(fields)) + fields
+
+
+def nyct_stop_time(scheduled, actual):
+    """The MTA's extension to a stop time, as it is in the feed: field 1001, a message with the two tracks."""
+    fields = b""
+    for number, track in ((1, scheduled), (2, actual)):
+        if track:
+            fields += varint(number << 3 | 2) + varint(len(track)) + track.encode()
     return varint(1001 << 3 | 2) + varint(len(fields)) + fields
 
 

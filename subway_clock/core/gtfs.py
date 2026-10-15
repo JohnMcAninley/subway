@@ -21,6 +21,11 @@ SUPPLEMENTED_URL = "https://rrgtfsfeeds.s3.amazonaws.com/gtfs_supplemented.zip"
 # Generated from the MTA's station list by scripts/update_stations.py
 STATIONS_PATH = Path(__file__).resolve().parent.parent / "assets" / "stations.json"
 
+# Platforms that share a stop ID with others in the same direction, told apart by
+# the track their trains use: directional stop ID -> [{"track", "routes"}]. Written
+# by hand, for the stations where it matters; see split_track.
+PLATFORMS_PATH = STATIONS_PATH.with_name("platforms.json")
+
 # Written into an extracted directory once it is complete: the mtime of the zip it came from.
 EXTRACTED_MARKER = ".extracted"
 
@@ -188,6 +193,23 @@ def load_stations(path=STATIONS_PATH):
     return {stop: directions for stop, directions in labels.items() if directions}, boroughs
 
 
+def load_platforms(path=PLATFORMS_PATH):
+    """The bundled platforms; see StaticTables."""
+    with open(path, encoding="utf-8") as f:
+        return json.load(f)
+
+
+def split_track(stop):
+    """A stop in the stops setting as (stop ID, track).
+
+    "235S:1" is the platform of 235S that trains on track 1 stop at, as the
+    realtime feeds number the tracks; a stop with no track ("235S") is every
+    platform it has. The track is "" then.
+    """
+    stop_id, _, track = stop.partition(":")
+    return stop_id, track
+
+
 def terminal(stop_names, trip_stops):
     """The stop ID where a realtime trip ends for riders: the last of its stops with a name, or None."""
     return next((stop_id for stop_id in reversed(trip_stops) if stop_id in stop_names), None)
@@ -256,18 +278,23 @@ class StaticTables:
     direction_labels: parent stop ID -> {"N": label, "S": label}, the MTA's names for
         each platform direction, e.g. {"N": "Uptown", "S": "Downtown"}
     stop_boroughs: parent stop ID -> "M", "Bk", "Q", "Bx" or "SI"
+    platforms: directional stop ID -> [{"track": track, "routes": [route ID, ...]}], for the
+        stops with platforms in one direction that are told apart by track (see split_track)
+
+    The methods taking stop IDs also take a stop with a track, as in the stops setting.
     """
 
     ready = True  # False while the tables are still to be fetched; see StaticData.prepare
 
     def __init__(self, stop_names, stop_parents, stop_routes, headsigns, direction_labels=None,
-                 stop_boroughs=None):
+                 stop_boroughs=None, platforms=None):
         self.stop_names = stop_names
         self.stop_parents = stop_parents
         self.stop_routes = stop_routes
         self.headsigns = headsigns
         self.direction_labels = direction_labels or {}
         self.stop_boroughs = stop_boroughs or {}
+        self.platforms = platforms or {}
         self._terminals = None  # see terminals(); worked out when first asked for
 
     def refresh(self):
@@ -290,17 +317,27 @@ class StaticTables:
 
     def direction_label(self, stop_id):
         """The direction label for a directional stop ID like "633S", or "" if there isn't one."""
+        stop_id, _ = split_track(stop_id)
         return self.direction_labels.get(stop_id[:-1], {}).get(stop_id[-1:], "")
 
     def borough(self, stop_id):
         """The borough code for a stop ID (directional or parent), or "" if unknown."""
+        stop_id, _ = split_track(stop_id)
         return self.stop_boroughs.get(self.stop_parents.get(stop_id, stop_id), "")
 
+    def platform(self, stop):
+        """The platform a stop with a track is ({"track", "routes"}), or None if it has no track or isn't known."""
+        stop_id, track = split_track(stop)
+        return next((p for p in self.platforms.get(stop_id, ()) if p["track"] == track), None) if track else None
+
     def routes_for(self, stops):
-        """Sorted route IDs scheduled at any of stops (directional or parent stop IDs)."""
+        """Sorted route IDs scheduled at any of stops (directional or parent stop IDs, or platforms)."""
         routes = set()
         for stop in stops:
-            routes.update(self.stop_routes.get(self.stop_parents.get(stop, stop), ()))
+            platform = self.platform(stop)
+            stop_id, _ = split_track(stop)
+            routes.update(platform["routes"] if platform
+                          else self.stop_routes.get(self.stop_parents.get(stop_id, stop_id), ()))
         return sorted(routes)
 
 
@@ -384,7 +421,7 @@ class StaticData(StaticTables):
             load_headsigns(self.data_dir / name / "trips.txt", headsigns)
         stop_routes = self._cached_stop_routes(stop_parents, build,
                                                _stage(progress, "Reading schedules", self.DOWNLOADS_SHARE, 1))
-        super().__init__(stop_names, stop_parents, stop_routes, headsigns, *load_stations())
+        super().__init__(stop_names, stop_parents, stop_routes, headsigns, *load_stations(), load_platforms())
 
     def _cached_stop_routes(self, stop_parents, build, progress):
         """build_stop_routes takes seconds (millions of stop_times rows), so cache it until the GTFS changes."""

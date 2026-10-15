@@ -8,7 +8,7 @@ Canvas {
     required property var train
     required property var colors
 
-    // An arriving train's whole line changes colour, bullet and all.
+    // An arriving train's line changes colour, all but the bullet.
     readonly property color textColor: train.arriving ? colors.arriving : colors.text
 
     readonly property int textY: 2  // the top of a capital; descenders reach the line's last row
@@ -39,7 +39,7 @@ Canvas {
         }
 
         draw(LedFont.runs(number), bulletX - 2 - LedFont.width(number), textY, textColor)
-        draw(LedFont.bulletRuns(train.bullet), bulletX, 0, textColor)
+        draw(LedFont.bulletRuns(train.bullet), bulletX, 0, colors.text)
         draw(LedFont.runs(destination), destinationX, textY, textColor)
         draw(LedFont.runs(minutes), width - 1 - LedFont.width(minutes), textY, textColor)
     }

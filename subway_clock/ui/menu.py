@@ -14,6 +14,7 @@ every tick; and if none are ticked the clock keeps the stops it had.
 import dataclasses
 
 from ..core.board import bullet_id
+from ..core.gtfs import split_track
 from ..core.settings import ROTATIONS, STYLES
 from ..core.stations import StationPicker
 
@@ -153,15 +154,24 @@ class Menu:
     def _stop(self, stop_id, parent):
         """The picker's Stop for a parent stop ID (parent) or for a direction's, or None if it doesn't have it."""
         station = self.picker.station_for(stop_id)
-        wanted = stop_id if parent else stop_id[:-1]
+        wanted = stop_id if parent else split_track(stop_id)[0][:-1]
         return next((stop for stop in station.stops if stop.stop_id == wanted), None) if station else None
 
     def _expand(self, stops):
-        """The stops setting as directional IDs: a parent stop becomes each of its directions."""
+        """The stops setting as directional IDs: a parent stop becomes each of its directions.
+
+        So does a direction with platforms of its own become each of them.
+        """
         expanded = []
         for stop_id in stops:
             stop = self._stop(stop_id, parent=True)
-            expanded += [direction.stop_id for direction in stop.directions] if stop else [stop_id]
+            if stop:
+                expanded += [direction.stop_id for direction in stop.directions]
+                continue
+            stop = self._stop(stop_id, parent=False)
+            platforms = [d.stop_id for d in stop.directions
+                         if d.stop_id != stop_id and split_track(d.stop_id)[0] == stop_id] if stop else []
+            expanded += platforms or [stop_id]
         return list(dict.fromkeys(expanded))
 
     def _collapse(self):
@@ -192,7 +202,7 @@ class Menu:
             return [self._station_row(station) for station in self._stations()]
         several = len({stop.name for stop in self.station.stops}) > 1
         return [row(direction.label or direction.stop_id, direction.stop_id, stop.name if several else "",
-                    stop.routes, direction.stop_id in self.chosen)
+                    direction.routes or stop.routes, direction.stop_id in self.chosen)
                 for stop, direction in self._directions()]
 
     def _where(self):

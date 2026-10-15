@@ -1,0 +1,1171 @@
+[
+  {
+    "now": 1792103940,
+    "style": "classic",
+    "rows": [
+      {
+        "number": 1,
+        "route": "5",
+        "bullet": "5",
+        "destination": "Nereid Av",
+        "direction": "Manhattan",
+        "headline": "Manhattan & The Bronx",
+        "detail": "Nereid Av",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
+        "route": "3",
+        "bullet": "3",
+        "destination": "New Lots Av",
+        "direction": "Flatbush - New Lots",
+        "headline": "New Lots Av",
+        "detail": "Brooklyn",
+        "minutes": 2,
+        "arriving": false
+      }
+    ],
+    "stale": false,
+    "messages": [],
+    "message": "",
+    "takeover": false,
+    "groups": [],
+    "station": "Atlantic Av-Barclays Ctr",
+    "direction": "",
+    "routes": [
+      {
+        "route": "2",
+        "bullet": "2"
+      },
+      {
+        "route": "3",
+        "bullet": "3"
+      },
+      {
+        "route": "4",
+        "bullet": "4"
+      },
+      {
+        "route": "5",
+        "bullet": "5"
+      }
+    ]
+  },
+  {
+    "now": 1792103945,
+    "style": "classic",
+    "rows": [
+      {
+        "number": 1,
+        "route": "5",
+        "bullet": "5",
+        "destination": "Nereid Av",
+        "direction": "Manhattan",
+        "headline": "Manhattan & The Bronx",
+        "detail": "Nereid Av",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 3,
+        "route": "5",
+        "bullet": "5",
+        "destination": "Eastchester-Dyre Av",
+        "direction": "Manhattan",
+        "headline": "Manhattan & The Bronx",
+        "detail": "Eastchester-Dyre Av",
+        "minutes": 4,
+        "arriving": false
+      }
+    ],
+    "stale": false,
+    "messages": [],
+    "message": "",
+    "takeover": false,
+    "groups": [],
+    "station": "Atlantic Av-Barclays Ctr",
+    "direction": "",
+    "routes": [
+      {
+        "route": "2",
+        "bullet": "2"
+      },
+      {
+        "route": "3",
+        "bullet": "3"
+      },
+      {
+        "route": "4",
+        "bullet": "4"
+      },
+      {
+        "route": "5",
+        "bullet": "5"
+      }
+    ]
+  },
+  {
+    "now": 1792103950,
+    "style": "classic",
+    "rows": [
+      {
+        "number": 1,
+        "route": "5",
+        "bullet": "5",
+        "destination": "Nereid Av",
+        "direction": "Manhattan",
+        "headline": "Manhattan & The Bronx",
+        "detail": "Nereid Av",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 4,
+        "route": "4",
+        "bullet": "4",
+        "destination": "Woodlawn",
+        "direction": "Manhattan",
+        "headline": "Manhattan & The Bronx",
+        "detail": "Woodlawn",
+        "minutes": 5,
+        "arriving": false
+      }
+    ],
+    "stale": false,
+    "messages": [],
+    "message": "",
+    "takeover": false,
+    "groups": [],
+    "station": "Atlantic Av-Barclays Ctr",
+    "direction": "",
+    "routes": [
+      {
+        "route": "2",
+        "bullet": "2"
+      },
+      {
+        "route": "3",
+        "bullet": "3"
+      },
+      {
+        "route": "4",
+        "bullet": "4"
+      },
+      {
+        "route": "5",
+        "bullet": "5"
+      }
+    ]
+  },
+  {
+    "now": 1792103955,
+    "style": "classic",
+    "rows": [
+      {
+        "number": 1,
+        "route": "5",
+        "bullet": "5",
+        "destination": "Nereid Av",
+        "direction": "Manhattan",
+        "headline": "Manhattan & The Bronx",
+        "detail": "Nereid Av",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 5,
+        "route": "4",
+        "bullet": "4",
+        "destination": "Woodlawn",
+        "direction": "Manhattan",
+        "headline": "Manhattan & The Bronx",
+        "detail": "Woodlawn",
+        "minutes": 9,
+        "arriving": false
+      }
+    ],
+    "stale": false,
+    "messages": [],
+    "message": "",
+    "takeover": false,
+    "groups": [],
+    "station": "Atlantic Av-Barclays Ctr",
+    "direction": "",
+    "routes": [
+      {
+        "route": "2",
+        "bullet": "2"
+      },
+      {
+        "route": "3",
+        "bullet": "3"
+      },
+      {
+        "route": "4",
+        "bullet": "4"
+      },
+      {
+        "route": "5",
+        "bullet": "5"
+      }
+    ]
+  },
+  {
+    "now": 1792103960,
+    "style": "classic",
+    "rows": [
+      {
+        "number": 1,
+        "route": "5",
+        "bullet": "5",
+        "destination": "Nereid Av",
+        "direction": "Manhattan",
+        "headline": "Manhattan & The Bronx",
+        "detail": "Nereid Av",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
+        "route": "3",
+        "bullet": "3",
+        "destination": "New Lots Av",
+        "direction": "Flatbush - New Lots",
+        "headline": "New Lots Av",
+        "detail": "Brooklyn",
+        "minutes": 1,
+        "arriving": false
+      }
+    ],
+    "stale": false,
+    "messages": [],
+    "message": "",
+    "takeover": false,
+    "groups": [],
+    "station": "Atlantic Av-Barclays Ctr",
+    "direction": "",
+    "routes": [
+      {
+        "route": "2",
+        "bullet": "2"
+      },
+      {
+        "route": "3",
+        "bullet": "3"
+      },
+      {
+        "route": "4",
+        "bullet": "4"
+      },
+      {
+        "route": "5",
+        "bullet": "5"
+      }
+    ]
+  },
+  {
+    "now": 1792104000,
+    "style": "classic",
+    "rows": [
+      {
+        "number": 1,
+        "route": "5",
+        "bullet": "5",
+        "destination": "Nereid Av",
+        "direction": "Manhattan",
+        "headline": "Manhattan & The Bronx",
+        "detail": "Nereid Av",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
+        "route": "3",
+        "bullet": "3",
+        "destination": "New Lots Av",
+        "direction": "Flatbush - New Lots",
+        "headline": "New Lots Av",
+        "detail": "Brooklyn",
+        "minutes": 1,
+        "arriving": false
+      }
+    ],
+    "stale": false,
+    "messages": [],
+    "message": "",
+    "takeover": false,
+    "groups": [],
+    "station": "Atlantic Av-Barclays Ctr",
+    "direction": "",
+    "routes": [
+      {
+        "route": "2",
+        "bullet": "2"
+      },
+      {
+        "route": "3",
+        "bullet": "3"
+      },
+      {
+        "route": "4",
+        "bullet": "4"
+      },
+      {
+        "route": "5",
+        "bullet": "5"
+      }
+    ]
+  },
+  {
+    "now": 1792104180,
+    "style": "classic",
+    "rows": [
+      {
+        "number": 1,
+        "route": "5",
+        "bullet": "5",
+        "destination": "Nereid Av",
+        "direction": "Manhattan",
+        "headline": "Manhattan & The Bronx",
+        "detail": "Nereid Av",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
+        "route": "3",
+        "bullet": "3",
+        "destination": "New Lots Av",
+        "direction": "Flatbush - New Lots",
+        "headline": "New Lots Av",
+        "detail": "Brooklyn",
+        "minutes": 0,
+        "arriving": true
+      }
+    ],
+    "stale": true,
+    "messages": [],
+    "message": "",
+    "takeover": false,
+    "groups": [],
+    "station": "Atlantic Av-Barclays Ctr",
+    "direction": "",
+    "routes": [
+      {
+        "route": "2",
+        "bullet": "2"
+      },
+      {
+        "route": "3",
+        "bullet": "3"
+      },
+      {
+        "route": "4",
+        "bullet": "4"
+      },
+      {
+        "route": "5",
+        "bullet": "5"
+      }
+    ]
+  },
+  {
+    "now": 1792104000,
+    "style": "classic",
+    "rows": [
+      {
+        "number": 1,
+        "route": "5",
+        "bullet": "5",
+        "destination": "Nereid Av",
+        "direction": "Manhattan",
+        "headline": "Manhattan & The Bronx",
+        "detail": "Nereid Av",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
+        "route": "3",
+        "bullet": "3",
+        "destination": "New Lots Av",
+        "direction": "Flatbush - New Lots",
+        "headline": "New Lots Av",
+        "detail": "Brooklyn",
+        "minutes": 1,
+        "arriving": false
+      },
+      {
+        "number": 3,
+        "route": "5",
+        "bullet": "5",
+        "destination": "Eastchester-Dyre Av",
+        "direction": "Manhattan",
+        "headline": "Manhattan & The Bronx",
+        "detail": "Eastchester-Dyre Av",
+        "minutes": 3,
+        "arriving": false
+      },
+      {
+        "number": 4,
+        "route": "4",
+        "bullet": "4",
+        "destination": "Woodlawn",
+        "direction": "Manhattan",
+        "headline": "Manhattan & The Bronx",
+        "detail": "Woodlawn",
+        "minutes": 4,
+        "arriving": false
+      }
+    ],
+    "stale": false,
+    "messages": [],
+    "message": "",
+    "takeover": false,
+    "groups": [],
+    "station": "Atlantic Av-Barclays Ctr",
+    "direction": "",
+    "routes": [
+      {
+        "route": "2",
+        "bullet": "2"
+      },
+      {
+        "route": "3",
+        "bullet": "3"
+      },
+      {
+        "route": "4",
+        "bullet": "4"
+      },
+      {
+        "route": "5",
+        "bullet": "5"
+      }
+    ]
+  },
+  {
+    "now": 1792104005,
+    "style": "classic",
+    "rows": [
+      {
+        "number": 1,
+        "route": "5",
+        "bullet": "5",
+        "destination": "Nereid Av",
+        "direction": "Manhattan",
+        "headline": "Manhattan & The Bronx",
+        "detail": "Nereid Av",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
+        "route": "3",
+        "bullet": "3",
+        "destination": "New Lots Av",
+        "direction": "Flatbush - New Lots",
+        "headline": "New Lots Av",
+        "detail": "Brooklyn",
+        "minutes": 1,
+        "arriving": false
+      },
+      {
+        "number": 3,
+        "route": "5",
+        "bullet": "5",
+        "destination": "Eastchester-Dyre Av",
+        "direction": "Manhattan",
+        "headline": "Manhattan & The Bronx",
+        "detail": "Eastchester-Dyre Av",
+        "minutes": 3,
+        "arriving": false
+      },
+      {
+        "number": 5,
+        "route": "4",
+        "bullet": "4",
+        "destination": "Woodlawn",
+        "direction": "Manhattan",
+        "headline": "Manhattan & The Bronx",
+        "detail": "Woodlawn",
+        "minutes": 8,
+        "arriving": false
+      }
+    ],
+    "stale": false,
+    "messages": [],
+    "message": "",
+    "takeover": false,
+    "groups": [],
+    "station": "Atlantic Av-Barclays Ctr",
+    "direction": "",
+    "routes": [
+      {
+        "route": "2",
+        "bullet": "2"
+      },
+      {
+        "route": "3",
+        "bullet": "3"
+      },
+      {
+        "route": "4",
+        "bullet": "4"
+      },
+      {
+        "route": "5",
+        "bullet": "5"
+      }
+    ]
+  },
+  {
+    "now": 1792104010,
+    "style": "classic",
+    "rows": [
+      {
+        "number": 1,
+        "route": "5",
+        "bullet": "5",
+        "destination": "Nereid Av",
+        "direction": "Manhattan",
+        "headline": "Manhattan & The Bronx",
+        "detail": "Nereid Av",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
+        "route": "3",
+        "bullet": "3",
+        "destination": "New Lots Av",
+        "direction": "Flatbush - New Lots",
+        "headline": "New Lots Av",
+        "detail": "Brooklyn",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 3,
+        "route": "5",
+        "bullet": "5",
+        "destination": "Eastchester-Dyre Av",
+        "direction": "Manhattan",
+        "headline": "Manhattan & The Bronx",
+        "detail": "Eastchester-Dyre Av",
+        "minutes": 3,
+        "arriving": false
+      },
+      {
+        "number": 4,
+        "route": "4",
+        "bullet": "4",
+        "destination": "Woodlawn",
+        "direction": "Manhattan",
+        "headline": "Manhattan & The Bronx",
+        "detail": "Woodlawn",
+        "minutes": 4,
+        "arriving": false
+      }
+    ],
+    "stale": false,
+    "messages": [],
+    "message": "",
+    "takeover": false,
+    "groups": [],
+    "station": "Atlantic Av-Barclays Ctr",
+    "direction": "",
+    "routes": [
+      {
+        "route": "2",
+        "bullet": "2"
+      },
+      {
+        "route": "3",
+        "bullet": "3"
+      },
+      {
+        "route": "4",
+        "bullet": "4"
+      },
+      {
+        "route": "5",
+        "bullet": "5"
+      }
+    ]
+  },
+  {
+    "now": 1792104015,
+    "style": "classic",
+    "rows": [
+      {
+        "number": 1,
+        "route": "5",
+        "bullet": "5",
+        "destination": "Nereid Av",
+        "direction": "Manhattan",
+        "headline": "Manhattan & The Bronx",
+        "detail": "Nereid Av",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
+        "route": "3",
+        "bullet": "3",
+        "destination": "New Lots Av",
+        "direction": "Flatbush - New Lots",
+        "headline": "New Lots Av",
+        "detail": "Brooklyn",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 3,
+        "route": "5",
+        "bullet": "5",
+        "destination": "Eastchester-Dyre Av",
+        "direction": "Manhattan",
+        "headline": "Manhattan & The Bronx",
+        "detail": "Eastchester-Dyre Av",
+        "minutes": 3,
+        "arriving": false
+      },
+      {
+        "number": 5,
+        "route": "4",
+        "bullet": "4",
+        "destination": "Woodlawn",
+        "direction": "Manhattan",
+        "headline": "Manhattan & The Bronx",
+        "detail": "Woodlawn",
+        "minutes": 8,
+        "arriving": false
+      }
+    ],
+    "stale": false,
+    "messages": [],
+    "message": "",
+    "takeover": false,
+    "groups": [],
+    "station": "Atlantic Av-Barclays Ctr",
+    "direction": "",
+    "routes": [
+      {
+        "route": "2",
+        "bullet": "2"
+      },
+      {
+        "route": "3",
+        "bullet": "3"
+      },
+      {
+        "route": "4",
+        "bullet": "4"
+      },
+      {
+        "route": "5",
+        "bullet": "5"
+      }
+    ]
+  },
+  {
+    "now": 1792104020,
+    "style": "classic",
+    "rows": [
+      {
+        "number": 1,
+        "route": "5",
+        "bullet": "5",
+        "destination": "Nereid Av",
+        "direction": "Manhattan",
+        "headline": "Manhattan & The Bronx",
+        "detail": "Nereid Av",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
+        "route": "3",
+        "bullet": "3",
+        "destination": "New Lots Av",
+        "direction": "Flatbush - New Lots",
+        "headline": "New Lots Av",
+        "detail": "Brooklyn",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 3,
+        "route": "5",
+        "bullet": "5",
+        "destination": "Eastchester-Dyre Av",
+        "direction": "Manhattan",
+        "headline": "Manhattan & The Bronx",
+        "detail": "Eastchester-Dyre Av",
+        "minutes": 3,
+        "arriving": false
+      },
+      {
+        "number": 4,
+        "route": "4",
+        "bullet": "4",
+        "destination": "Woodlawn",
+        "direction": "Manhattan",
+        "headline": "Manhattan & The Bronx",
+        "detail": "Woodlawn",
+        "minutes": 3,
+        "arriving": false
+      },
+      {
+        "number": 5,
+        "route": "4",
+        "bullet": "4",
+        "destination": "Woodlawn",
+        "direction": "Manhattan",
+        "headline": "Manhattan & The Bronx",
+        "detail": "Woodlawn",
+        "minutes": 8,
+        "arriving": false
+      },
+      {
+        "number": 6,
+        "route": "3",
+        "bullet": "3",
+        "destination": "New Lots Av",
+        "direction": "Flatbush - New Lots",
+        "headline": "New Lots Av",
+        "detail": "Brooklyn",
+        "minutes": 9,
+        "arriving": false
+      },
+      {
+        "number": 7,
+        "route": "5",
+        "bullet": "5",
+        "destination": "Eastchester-Dyre Av",
+        "direction": "Manhattan",
+        "headline": "Manhattan & The Bronx",
+        "detail": "Eastchester-Dyre Av",
+        "minutes": 9,
+        "arriving": false
+      }
+    ],
+    "stale": false,
+    "messages": [],
+    "message": "",
+    "takeover": false,
+    "groups": [],
+    "station": "Atlantic Av-Barclays Ctr",
+    "direction": "",
+    "routes": [
+      {
+        "route": "2",
+        "bullet": "2"
+      },
+      {
+        "route": "3",
+        "bullet": "3"
+      },
+      {
+        "route": "4",
+        "bullet": "4"
+      },
+      {
+        "route": "5",
+        "bullet": "5"
+      }
+    ]
+  },
+  {
+    "now": 1792104025,
+    "style": "classic",
+    "rows": [
+      {
+        "number": 1,
+        "route": "5",
+        "bullet": "5",
+        "destination": "Nereid Av",
+        "direction": "Manhattan",
+        "headline": "Manhattan & The Bronx",
+        "detail": "Nereid Av",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
+        "route": "3",
+        "bullet": "3",
+        "destination": "New Lots Av",
+        "direction": "Flatbush - New Lots",
+        "headline": "New Lots Av",
+        "detail": "Brooklyn",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 3,
+        "route": "5",
+        "bullet": "5",
+        "destination": "Eastchester-Dyre Av",
+        "direction": "Manhattan",
+        "headline": "Manhattan & The Bronx",
+        "detail": "Eastchester-Dyre Av",
+        "minutes": 3,
+        "arriving": false
+      },
+      {
+        "number": 4,
+        "route": "4",
+        "bullet": "4",
+        "destination": "Woodlawn",
+        "direction": "Manhattan",
+        "headline": "Manhattan & The Bronx",
+        "detail": "Woodlawn",
+        "minutes": 3,
+        "arriving": false
+      },
+      {
+        "number": 5,
+        "route": "4",
+        "bullet": "4",
+        "destination": "Woodlawn",
+        "direction": "Manhattan",
+        "headline": "Manhattan & The Bronx",
+        "detail": "Woodlawn",
+        "minutes": 8,
+        "arriving": false
+      },
+      {
+        "number": 6,
+        "route": "3",
+        "bullet": "3",
+        "destination": "New Lots Av",
+        "direction": "Flatbush - New Lots",
+        "headline": "New Lots Av",
+        "detail": "Brooklyn",
+        "minutes": 8,
+        "arriving": false
+      },
+      {
+        "number": 7,
+        "route": "5",
+        "bullet": "5",
+        "destination": "Eastchester-Dyre Av",
+        "direction": "Manhattan",
+        "headline": "Manhattan & The Bronx",
+        "detail": "Eastchester-Dyre Av",
+        "minutes": 9,
+        "arriving": false
+      }
+    ],
+    "stale": false,
+    "messages": [],
+    "message": "",
+    "takeover": false,
+    "groups": [],
+    "station": "Atlantic Av-Barclays Ctr",
+    "direction": "",
+    "routes": [
+      {
+        "route": "2",
+        "bullet": "2"
+      },
+      {
+        "route": "3",
+        "bullet": "3"
+      },
+      {
+        "route": "4",
+        "bullet": "4"
+      },
+      {
+        "route": "5",
+        "bullet": "5"
+      }
+    ]
+  },
+  {
+    "now": 1792104030,
+    "style": "classic",
+    "rows": [
+      {
+        "number": 1,
+        "route": "5",
+        "bullet": "5",
+        "destination": "Nereid Av",
+        "direction": "Manhattan",
+        "headline": "Manhattan & The Bronx",
+        "detail": "Nereid Av",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
+        "route": "5",
+        "bullet": "5",
+        "destination": "Eastchester-Dyre Av",
+        "direction": "Manhattan",
+        "headline": "Manhattan & The Bronx",
+        "detail": "Eastchester-Dyre Av",
+        "minutes": 3,
+        "arriving": false
+      },
+      {
+        "number": 1,
+        "route": "3",
+        "bullet": "3",
+        "destination": "New Lots Av",
+        "direction": "Flatbush - New Lots",
+        "headline": "New Lots Av",
+        "detail": "Brooklyn",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
+        "route": "3",
+        "bullet": "3",
+        "destination": "New Lots Av",
+        "direction": "Flatbush - New Lots",
+        "headline": "New Lots Av",
+        "detail": "Brooklyn",
+        "minutes": 8,
+        "arriving": false
+      }
+    ],
+    "stale": false,
+    "messages": [],
+    "message": "",
+    "takeover": false,
+    "groups": [
+      {
+        "heading": "Manhattan",
+        "rows": [
+          {
+            "number": 1,
+            "route": "5",
+            "bullet": "5",
+            "destination": "Nereid Av",
+            "direction": "Manhattan",
+            "headline": "Manhattan & The Bronx",
+            "detail": "Nereid Av",
+            "minutes": 0,
+            "arriving": true
+          },
+          {
+            "number": 2,
+            "route": "5",
+            "bullet": "5",
+            "destination": "Eastchester-Dyre Av",
+            "direction": "Manhattan",
+            "headline": "Manhattan & The Bronx",
+            "detail": "Eastchester-Dyre Av",
+            "minutes": 3,
+            "arriving": false
+          }
+        ]
+      },
+      {
+        "heading": "Flatbush - New Lots",
+        "rows": [
+          {
+            "number": 1,
+            "route": "3",
+            "bullet": "3",
+            "destination": "New Lots Av",
+            "direction": "Flatbush - New Lots",
+            "headline": "New Lots Av",
+            "detail": "Brooklyn",
+            "minutes": 0,
+            "arriving": true
+          },
+          {
+            "number": 2,
+            "route": "3",
+            "bullet": "3",
+            "destination": "New Lots Av",
+            "direction": "Flatbush - New Lots",
+            "headline": "New Lots Av",
+            "detail": "Brooklyn",
+            "minutes": 8,
+            "arriving": false
+          }
+        ]
+      }
+    ],
+    "station": "Atlantic Av-Barclays Ctr",
+    "direction": "",
+    "routes": [
+      {
+        "route": "2",
+        "bullet": "2"
+      },
+      {
+        "route": "3",
+        "bullet": "3"
+      },
+      {
+        "route": "4",
+        "bullet": "4"
+      },
+      {
+        "route": "5",
+        "bullet": "5"
+      }
+    ]
+  },
+  {
+    "now": 1792104035,
+    "style": "classic",
+    "rows": [
+      {
+        "number": 1,
+        "route": "5",
+        "bullet": "5",
+        "destination": "Nereid Av",
+        "direction": "Manhattan",
+        "headline": "Manhattan & The Bronx",
+        "detail": "Nereid Av",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
+        "route": "5",
+        "bullet": "5",
+        "destination": "Eastchester-Dyre Av",
+        "direction": "Manhattan",
+        "headline": "Manhattan & The Bronx",
+        "detail": "Eastchester-Dyre Av",
+        "minutes": 3,
+        "arriving": false
+      },
+      {
+        "number": 3,
+        "route": "4",
+        "bullet": "4",
+        "destination": "Woodlawn",
+        "direction": "Manhattan",
+        "headline": "Manhattan & The Bronx",
+        "detail": "Woodlawn",
+        "minutes": 3,
+        "arriving": false
+      },
+      {
+        "number": 1,
+        "route": "3",
+        "bullet": "3",
+        "destination": "New Lots Av",
+        "direction": "Flatbush - New Lots",
+        "headline": "New Lots Av",
+        "detail": "Brooklyn",
+        "minutes": 0,
+        "arriving": true
+      },
+      {
+        "number": 2,
+        "route": "3",
+        "bullet": "3",
+        "destination": "New Lots Av",
+        "direction": "Flatbush - New Lots",
+        "headline": "New Lots Av",
+        "detail": "Brooklyn",
+        "minutes": 8,
+        "arriving": false
+      }
+    ],
+    "stale": false,
+    "messages": [],
+    "message": "",
+    "takeover": false,
+    "groups": [
+      {
+        "heading": "Manhattan",
+        "rows": [
+          {
+            "number": 1,
+            "route": "5",
+            "bullet": "5",
+            "destination": "Nereid Av",
+            "direction": "Manhattan",
+            "headline": "Manhattan & The Bronx",
+            "detail": "Nereid Av",
+            "minutes": 0,
+            "arriving": true
+          },
+          {
+            "number": 2,
+            "route": "5",
+            "bullet": "5",
+            "destination": "Eastchester-Dyre Av",
+            "direction": "Manhattan",
+            "headline": "Manhattan & The Bronx",
+            "detail": "Eastchester-Dyre Av",
+            "minutes": 3,
+            "arriving": false
+          },
+          {
+            "number": 3,
+            "route": "4",
+            "bullet": "4",
+            "destination": "Woodlawn",
+            "direction": "Manhattan",
+            "headline": "Manhattan & The Bronx",
+            "detail": "Woodlawn",
+            "minutes": 3,
+            "arriving": false
+          }
+        ]
+      },
+      {
+        "heading": "Flatbush - New Lots",
+        "rows": [
+          {
+            "number": 1,
+            "route": "3",
+            "bullet": "3",
+            "destination": "New Lots Av",
+            "direction": "Flatbush - New Lots",
+            "headline": "New Lots Av",
+            "detail": "Brooklyn",
+            "minutes": 0,
+            "arriving": true
+          },
+          {
+            "number": 2,
+            "route": "3",
+            "bullet": "3",
+            "destination": "New Lots Av",
+            "direction": "Flatbush - New Lots",
+            "headline": "New Lots Av",
+            "detail": "Brooklyn",
+            "minutes": 8,
+            "arriving": false
+          }
+        ]
+      }
+    ],
+    "station": "Atlantic Av-Barclays Ctr",
+    "direction": "",
+    "routes": [
+      {
+        "route": "2",
+        "bullet": "2"
+      },
+      {
+        "route": "3",
+        "bullet": "3"
+      },
+      {
+        "route": "4",
+        "bullet": "4"
+      },
+      {
+        "route": "5",
+        "bullet": "5"
+      }
+    ]
+  }
+]

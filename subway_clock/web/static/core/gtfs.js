@@ -15,6 +15,10 @@ export const SUPPLEMENTED_URL = "https://rrgtfsfeeds.s3.amazonaws.com/gtfs_suppl
 // The bundled station list (assets/stations.json, from scripts/update_stations.py)
 export const STATIONS = await (await fetch(new URL("../assets/stations.json", import.meta.url))).json()
 
+// Platforms that share a stop ID with others in the same direction, told apart by the
+// track their trains use (assets/platforms.json): see core/gtfs.py.
+export const PLATFORMS = await (await fetch(new URL("../assets/platforms.json", import.meta.url))).json()
+
 // schedules.json is built every hour (.github/workflows/pages.yml); older than this, something has stopped.
 const STALE_DAYS = 2
 
@@ -35,6 +39,13 @@ export function loadStations() {
         boroughs[stop] = station.borough
     }
     return [labels, boroughs]
+}
+
+// A stop in the stops setting as [stop ID, track]: "235S:1" is the platform of 235S that trains
+// on track 1 stop at; a stop with no track ("235S") is every platform it has, and its track "".
+export function splitTrack(stop) {
+    const colon = stop.indexOf(":")
+    return colon < 0 ? [stop, ""] : [stop.slice(0, colon), stop.slice(colon + 1)]
 }
 
 // The stop ID where a realtime trip ends for riders: the last of its stops with a name, or null.
@@ -65,14 +76,20 @@ export function destination(stopNames, headsigns, tripStops, tripId) {
 // direction_labels: parent stop ID -> {"N": label, "S": label}, the MTA's names for
 //     each platform direction, e.g. {"N": "Uptown", "S": "Downtown"}
 // stop_boroughs: parent stop ID -> "M", "Bk", "Q", "Bx" or "SI"
+// platforms: directional stop ID -> [{ track, routes }], for the stops with platforms in one
+//     direction that are told apart by track (see splitTrack)
+//
+// The methods taking stop IDs also take a stop with a track, as in the stops setting.
 export class StaticTables {
-    constructor({ stop_names, stop_parents, stop_routes, headsigns, direction_labels = {}, stop_boroughs = {} }) {
+    constructor({ stop_names, stop_parents, stop_routes, headsigns, direction_labels = {}, stop_boroughs = {},
+                  platforms = {} }) {
         this.ready = true  // false while the tables are still to be fetched; see StaticData.prepare
-        this.set({ stop_names, stop_parents, stop_routes, headsigns, direction_labels, stop_boroughs })
+        this.set({ stop_names, stop_parents, stop_routes, headsigns, direction_labels, stop_boroughs, platforms })
     }
 
-    set({ stop_names, stop_parents, stop_routes, headsigns, direction_labels, stop_boroughs }) {
-        Object.assign(this, { stop_names, stop_parents, stop_routes, headsigns, direction_labels, stop_boroughs })
+    set({ stop_names, stop_parents, stop_routes, headsigns, direction_labels, stop_boroughs, platforms = {} }) {
+        Object.assign(this, { stop_names, stop_parents, stop_routes, headsigns, direction_labels, stop_boroughs,
+                              platforms })
         this._terminals = null  // see terminals(); worked out when first asked for
     }
 
@@ -104,25 +121,33 @@ export class StaticTables {
 
     // The direction label for a directional stop ID like "633S", or "" if there isn't one.
     direction_label(stopId) {
+        stopId = splitTrack(stopId)[0]
         const labels = this.direction_labels[stopId.slice(0, -1)]
         return (labels && labels[stopId.slice(-1)]) || ""
     }
 
-    // The parent of a stop ID, or the stop itself if it has none.
+    // The parent of a stop ID, or the stop itself if it has none. (Not of a stop with a track.)
     parent(stopId) {
         return Object.hasOwn(this.stop_parents, stopId) ? this.stop_parents[stopId] : stopId
     }
 
     // The borough code for a stop ID (directional or parent), or "" if unknown.
     borough(stopId) {
-        return this.stop_boroughs[this.parent(stopId)] || ""
+        return this.stop_boroughs[this.parent(splitTrack(stopId)[0])] || ""
     }
 
-    // Sorted route IDs scheduled at any of stops (directional or parent stop IDs).
+    // The platform a stop with a track is ({ track, routes }), or null if it has no track or isn't known.
+    platform(stop) {
+        const [stopId, track] = splitTrack(stop)
+        return (track && (this.platforms[stopId] || []).find(platform => platform.track === track)) || null
+    }
+
+    // Sorted route IDs scheduled at any of stops (directional or parent stop IDs, or platforms).
     routes_for(stops) {
         const routes = new Set()
         for (const stop of stops) {
-            for (const route of this.stop_routes[this.parent(stop)] || [])
+            const platform = this.platform(stop)
+            for (const route of platform ? platform.routes : this.stop_routes[this.parent(splitTrack(stop)[0])] || [])
                 routes.add(route)
         }
         return [...routes].sort()
@@ -304,7 +329,8 @@ export class StaticData extends StaticTables {
         const [labels, boroughs] = loadStations()
         if (this._kept.published) {
             const { stop_names, stop_parents, stop_routes, headsigns } = this._kept.published.tables
-            this.set({ stop_names, stop_parents, stop_routes, headsigns, direction_labels: labels, stop_boroughs: boroughs })
+            this.set({ stop_names, stop_parents, stop_routes, headsigns, direction_labels: labels, stop_boroughs: boroughs,
+                       platforms: PLATFORMS })
             return
         }
         const { stops, sources } = this._kept
@@ -321,7 +347,7 @@ export class StaticData extends StaticTables {
         this.set({
             stop_names: stops.names, stop_parents: stops.parents, headsigns,
             stop_routes: Object.fromEntries([...stopRoutes].map(([stop, routes]) => [stop, [...routes].sort()])),
-            direction_labels: labels, stop_boroughs: boroughs,
+            direction_labels: labels, stop_boroughs: boroughs, platforms: PLATFORMS,
         })
     }
 }

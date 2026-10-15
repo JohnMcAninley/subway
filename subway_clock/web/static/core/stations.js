@@ -1,6 +1,6 @@
 // Finding stations by name, to choose a clock's stops without knowing GTFS stop IDs.
 // A port of core/stations.py, which says how the search works.
-import { STATIONS } from "./gtfs.js"
+import { STATIONS, splitTrack } from "./gtfs.js"
 
 // The MTA's abbreviations and what a user might type instead. Station names
 // use both forms ("Park Place", "Bay Ridge Av", "Avenue U"), so each word
@@ -26,10 +26,11 @@ const ABBREVIATIONS = [
 ]
 const WORD_FORMS = new Map(ABBREVIATIONS.flatMap(group => group.map(word => [word, group])))
 
-// A direction trains leave a stop in. stop_id: the directional stop ID, e.g. "635S"; label: the
-// MTA's name for the direction, e.g. "Downtown & Brooklyn"; "" if unknown.
-export function Direction(stop_id, label) {
-    return { stop_id, label }
+// A direction trains leave a stop in. stop_id: the directional stop ID, e.g. "635S", or a platform
+// of it, e.g. "235S:1"; label: the MTA's name for the direction, e.g. "Downtown & Brooklyn"; ""
+// if unknown; routes: a platform's routes, empty for the stop's.
+export function Direction(stop_id, label, routes = []) {
+    return { stop_id, label, routes }
 }
 
 // One line's platforms. stop_id: the parent stop ID, e.g. "635", which as a setting means every
@@ -115,7 +116,9 @@ export class StationPicker {
             // Not in the station list, so offer both directions unnamed
             labels = { N: "", S: "" }
         }
-        const directions = [..."NS"].filter(d => d in labels).map(d => Direction(stopId + d, labels[d]))
+        const directions = [..."NS"].filter(d => d in labels).flatMap(d => (tables.platforms[stopId + d] || [null])
+            .map(platform => platform ? Direction(stopId + d + ":" + platform.track, labels[d], [...platform.routes])
+                                      : Direction(stopId + d, labels[d])))
         return Stop(stopId, tables.stop_names[stopId], [...(tables.stop_routes[stopId] || [])], directions)
     }
 
@@ -145,8 +148,9 @@ export class StationPicker {
         return [...nameWords].some(nameWord => nameWord.startsWith(word)) ? 1 : 0
     }
 
-    // The Station a stop ID (directional or parent) belongs to, or null.
+    // The Station a stop ID (directional or parent, or a platform) belongs to, or null.
     station_for(stopId) {
+        stopId = splitTrack(stopId)[0]
         return this._byStop.get(stopId) || this._byStop.get(stopId.slice(0, -1)) || null
     }
 }

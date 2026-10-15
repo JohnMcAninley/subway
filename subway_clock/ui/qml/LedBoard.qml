@@ -3,8 +3,10 @@ import "LedFont.js" as LedFont
 import "Styles.js" as Styles
 
 // The LED signs on the numbered lines: a matrix of red, green and amber dots,
-// 16 rows to a line. The board is drawn at one pixel per dot, scaled up, and
-// covered with a mask that leaves a round hole over each dot. With
+// 16 rows to a line. The board is drawn at one pixel per dot, scaled up to the
+// next whole number of pixels a dot, and covered with a mask that leaves a
+// round hole over each dot; that is then scaled down, smoothly, to fill the
+// width. With
 // showStation, the top names the station as the sign over an entrance does;
 // the real signs don't.
 Rectangle {
@@ -23,8 +25,9 @@ Rectangle {
     // get 2 lines and taller ones more, like the 4-line signs on mezzanines.
     readonly property int columns: 192
     readonly property int lineDots: 16
-    readonly property int pitch: Math.max(1, Math.floor(width / columns))
-    readonly property int slots: Math.floor(height / (lineDots * pitch))  // lines the screen has room for
+    readonly property real fit: Math.max(0.01, Math.min(width / columns, height / lineDots))  // pixels a dot
+    readonly property int pitch: Math.ceil(fit)  // pixels a dot as drawn, before scaling down to fit
+    readonly property int slots: Math.floor(height / (lineDots * fit))  // lines the screen has room for
 
     // The station's routes go beside its name if they fit there, abbreviating it if that
     // is what it takes, or on a line of their own if that still leaves two lines for
@@ -50,11 +53,14 @@ Rectangle {
     color: "black"
 
     Item {
-        // Whole pixels, so the dots stay sharp
-        x: Math.floor((root.width - width) / 2)
-        y: Math.floor((root.height - height) / 2)
+        x: (root.width - width * root.fit / root.pitch) / 2
+        y: (root.height - height * root.fit / root.pitch) / 2
         width: root.columns * root.pitch
         height: (root.lines + root.headerLines) * root.lineDots * root.pitch
+        transform: Scale { xScale: root.fit / root.pitch; yScale: root.fit / root.pitch }
+        layer.enabled: root.fit !== root.pitch
+        layer.smooth: true
+        layer.mipmap: true
 
         Rectangle {
             id: matrix
