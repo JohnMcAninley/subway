@@ -18,8 +18,6 @@ the one given as --browser.
 """
 import argparse
 import json
-import os
-import shutil
 import subprocess
 import sys
 import tempfile
@@ -38,27 +36,12 @@ from subway_clock.core.clock import Clock  # noqa: E402
 from subway_clock.core.gtfs import StaticTables  # noqa: E402
 from subway_clock.core.settings import STYLES, Settings  # noqa: E402
 from subway_clock.ui.display import Display, load_fonts  # noqa: E402
+from subway_clock.web.browser import find_browser  # noqa: E402
 
 
 def size(value):
     width, height = value.lower().split("x")
     return QSize(int(width), int(height))
-
-
-# Where a browser that can draw a page without a window is to be found: commands, then the usual places.
-BROWSERS = ("chromium", "chromium-browser", "google-chrome", "chrome", "msedge")
-BROWSER_PATHS = (
-    r"C:\Program Files\Google\Chrome\Application\chrome.exe",
-    r"C:\Program Files (x86)\Google\Chrome\Application\chrome.exe",
-    r"C:\Program Files (x86)\Microsoft\Edge\Application\msedge.exe",
-    r"C:\Program Files\Microsoft\Edge\Application\msedge.exe",
-    "/Applications/Google Chrome.app/Contents/MacOS/Google Chrome",
-)
-
-
-def find_browser():
-    found = next(filter(None, map(shutil.which, BROWSERS)), None)
-    return found or next(filter(os.path.exists, BROWSER_PATHS), None)
 
 
 def capture_web(clock, args):

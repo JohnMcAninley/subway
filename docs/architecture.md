@@ -102,9 +102,9 @@ later, and the open source as the relief valve.
   (see "What a browser may fetch"), and they are 5 MB and 19 MB. `gtfs.py`
   stays in Python as a build tool, run on a schedule (a GitHub Action),
   publishing the prepared tables as JSON beside the page. If the job stops,
-  the page goes on with old tables and drifts as the schedules change. How
-  big the tables are isn't measured; the headsigns for every trip are the
-  bulk and may want trimming.
+  the page goes on with old tables and drifts as the schedules change. They
+  measured 852 KB on 2026-10-15, 90 KB as GitHub Pages sends it compressed;
+  the headsigns for every trip are 800 KB of that.
 - **The feeds** come straight from the MTA, which a browser is allowed to
   read, until there is a relay.
 - **To keep it alive:** a service worker keeps the page and the tables on the
@@ -120,8 +120,19 @@ Order of work:
 1. The hardware test above.
 2. Port the core and the menu to JavaScript, and switch the page to them,
    with the settings in the browser. This doesn't depend on the hardware, at
-   the price of two cores for a while.
-3. The schedule job, the service worker and the reload.
+   the price of two cores for a while. **Done on 2026-10-14, ahead of the
+   test**, so that the static page can be compared with Qt and the local
+   server for a week or so, and carried on a phone to compare with the real
+   clocks. It is `web/static/core` and `standalone.html`; the server's page
+   is unchanged. The golden cases are run on it in a browser without a
+   window rather than in Node. For now it reads the schedule zips through a
+   CORS proxy, and in the page: about 25 MB downloaded and 180 MB unpacked
+   on a first start, which takes seconds on a PC, kept in IndexedDB after.
+3. The schedule job, the service worker and the reload. **The job is done
+   (2026-10-15)**: `.github/workflows/pages.yml` runs `build_site.py
+   --schedules` every hour and publishes `schedules.json` beside the page,
+   which reads it in place of the zips, falling back to a proxy if one is
+   set. The service worker and the reload are left.
 4. The relay, when there is a product.
 
 ### During development: a CORS proxy for the schedules

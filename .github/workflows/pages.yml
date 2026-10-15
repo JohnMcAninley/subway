@@ -1,0 +1,51 @@
+# Publishes the page with the JavaScript core (scripts/build_site.py) to GitHub Pages
+# on every push to master, and every hour with the schedule tables built afresh from
+# the MTA's zips (schedules.json), as the supplemented schedule is republished about
+# hourly. Pages must be turned on first, with "GitHub Actions" as its source
+# (Settings, Pages).
+#
+# GitHub stops running scheduled workflows in a repository with no commits for 60
+# days; the page then keeps the last tables published, and says in the browser's
+# console that they are getting old. Running this by hand (Actions, Pages, Run
+# workflow) or pushing anything starts it again.
+#
+# A repository variable SCHEDULE_PROXY, if set, is the CORS proxy the page falls back
+# to if schedules.json can't be fetched. It is public on the page, so leave it unset
+# for a proxy with a key of yours in it, and give that to each browser with ?proxy=.
+name: Pages
+
+on:
+  push:
+    branches: [master]
+  schedule:
+    - cron: "17 * * * *"
+  workflow_dispatch:
+
+permissions:
+  contents: read
+  pages: write
+  id-token: write
+
+concurrency:
+  group: pages
+  cancel-in-progress: true
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-python@v5
+        with:
+          python-version: "3.12"
+      # What scripts/build_site.py imports; not Qt
+      - run: pip install requests gtfs-realtime-bindings
+      - run: python scripts/build_site.py build/site --schedules data --proxy "${{ vars.SCHEDULE_PROXY }}"
+      - uses: actions/upload-pages-artifact@v3
+        with:
+          path: build/site
+      - id: deployment
+        uses: actions/deploy-pages@v4

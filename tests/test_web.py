@@ -1,14 +1,19 @@
 """The web front end's server (web/server.py): what it hands the page, without a browser."""
+import importlib.util
 import json
 import threading
 import urllib.error
 import urllib.request
+from pathlib import Path
 
 import pytest
 
 from conftest import NOW, make_clock, trip
+from subway_clock.core.gtfs import StaticTables
 from subway_clock.core.settings import Settings
 from subway_clock.web.server import Service, library, make_server
+
+ROOT = Path(__file__).resolve().parent.parent
 
 
 def six(trip_id, minutes):
@@ -176,3 +181,40 @@ def test_the_menu_is_posted_to_as_json_and_answers_with_the_state(served):
     assert served("/api/menu", b"{}")[0] == 400
     assert served("/api/menu", b"not json")[0] == 400
     assert json.loads(served("/api/state")[2])["menu"]["open"] is True
+
+
+def test_build_site_makes_the_standalone_page_as_plain_files(tmp_path):
+    spec = importlib.util.spec_from_file_location("build_site", ROOT / "scripts" / "build_site.py")
+    build_site = importlib.util.module_from_spec(spec)
+    spec.loader.exec_module(build_site)
+
+    site = tmp_path / "site"
+    build_site.build(site, proxy="https://proxy.example/?url=")
+    assert b'src="standalone.js"' in (site / "index.html").read_bytes()
+    assert not (site / "main.js").exists() and not (site / "standalone.html").exists()
+    for path in ("page.js", "core/clock.js", "core/feeds.json", "qml/Styles.js", "assets/stations.json",
+                 "assets/fonts/Roboto.ttf", "assets/bullets/NYCS-bull-trans-6d.svg"):
+        assert (site / path).is_file(), path
+    assert ".pragma" not in (site / "qml" / "LedFont.js").read_text(encoding="utf-8")
+    assert json.loads((site / "config.json").read_text(encoding="utf-8")) == {"proxy": "https://proxy.example/?url="}
+    assert not (site / "schedules.json").exists()
+
+    tables = StaticTables({"635": "14 St-Union Sq", "635S": "14 St-Union Sq"}, {"635": "635", "635S": "635"},
+                          {"635": ["4", "5", "6"]}, {"000600_6..S03R": "Brooklyn Bridge-City Hall"})
+    build_site.build(site, tables=tables)
+    published = json.loads((site / "schedules.json").read_text(encoding="utf-8"))
+    assert published.pop("built")
+    assert published == {"stop_names": tables.stop_names, "stop_parents": tables.stop_parents,
+                         "stop_routes": tables.stop_routes, "headsigns": tables.headsigns}
+    assert json.loads((site / "config.json").read_text(encoding="utf-8")) == {"schedules": "schedules.json"}
+
+
+def test_serves_the_standalone_page_and_its_proxy_config(served):
+    status, _, body = served("/standalone.html")
+    assert status == 200 and b'src="standalone.js"' in body
+    assert json.loads(served("/config.json")[2]) == {"proxy": "proxy?url="}
+    status, content_type, body = served("/core/feeds.json")
+    assert status == 200 and "alerts" in json.loads(body)
+    assert served("/core/clock.js")[0] == 200
+    # It passes on the schedules and nothing else.
+    assert served("/proxy?url=https%3A%2F%2Fexample.com%2F")[0] == 404

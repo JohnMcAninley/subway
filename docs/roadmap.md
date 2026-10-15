@@ -6,7 +6,7 @@ Finished packages are taken out; what they built is described in the README,
 `tests/golden/README.md` (the spec for what the core produces). IDs aren't
 reused, so a gap in the numbering is a finished package.
 
-Last updated 2026-10-11.
+Last updated 2026-10-14.
 
 ## Where things stand
 
@@ -21,6 +21,12 @@ Last updated 2026-10-11.
   the same styles and the settings menu in a browser, with HTML and CSS. The
   Python core stays: a small server runs the clock and hands the page its
   `Board` as JSON.
+- The core and the settings menu are also ported to JavaScript
+  (`subway_clock/web/static/core`), so the same page can run as plain files
+  on a static host (`scripts/build_site.py`), fetching the schedules through
+  a CORS proxy. It is checked against the Python core in a browser
+  (`tests/test_js_core.py`). It is there to compare the three ways of
+  running the clock for a while: Qt, the local server, and the static page.
 - Development is on a PC for now. The intended device, a Pi Zero 2 W, can't
   be bought at the moment; see H1.
 - Settings are a JSON file, read again whenever it is saved, so changes take
@@ -49,6 +55,10 @@ The split between the core and the renderers is what makes this possible.
   and `LedFont.js` are served to the page as they are, so a change there
   reaches both, and anything they define at the top level must stay plain
   JavaScript.
+- **Two cores, for now.** `core/*.py` and `web/static/core/*.js` (with
+  `ui/menu.py` and `core/menu.js`) are the same logic twice: a **core**
+  package changes both, and `tests/test_js_core.py` runs the golden cases
+  on the JavaScript one too.
 - **Shared files to coordinate on:** `Main.qml`, `Styles.js`, `display.py`,
   `settings.py`, `README.md`.
 - **Done means:** tests pass, the README and the references or golden spec
@@ -123,7 +133,7 @@ Blocked on hardware (H1) except where noted.
 | ID | Package | Size | Notes |
 |---|---|---|---|
 | G1 | **Finish checking the page against Qt** | S | The page is in (see "Where things stand"). Compared with Qt's captures so far, and matching but for a pixel or two of text width: each style at 1920x600 or 1920x480, `new` at 1280x720 and 608x1080, the station header, an alert on the last line, the no-service alert wide and in portrait, the loading screens, and the menu's three pages. Still to do: every golden case at every `--dev` preset size; 360x1080, which the headless browsers `capture.py --web` uses can't be made narrow enough for (a real browser window can); and bullets inside an alert's text, which have a full space either side on the page and less in Qt. |
-| G2 | **The core in the page** | L | Only if the web wins (H5); `docs/architecture.md` has the whole plan and what was weighed. The page becomes plain files on a static host with the logic in it: the core and the settings menu ported to JavaScript and checked against the golden cases (needs Node), settings kept in the browser, the feeds fetched from the MTA directly, and the schedule tables built by `gtfs.py` on a schedule and published beside the page, as a browser can't read the schedule zips. Then a service worker so a device starts without the host, and a reload when there is a new version. S2's relay becomes a mirror of the feeds that the page is pointed at. |
+| G2 | **The core in the page: the rest** | M | The port is in, for comparing (see "Where things stand"); the rest only if the web wins (H5). `docs/architecture.md` has the plan. The schedule tables are built by `gtfs.py` every hour and published beside the page (2026-10-15). Left: a service worker so a device starts without the host; a reload when there is a new version. Meanwhile, every change to the core is made in both, and `tests/test_js_core.py` says when they disagree. S2's relay becomes a mirror of the feeds that the page is pointed at. |
 
 ### S. Selling a prebuilt clock
 

@@ -9,6 +9,12 @@ menu. The keys pressed and the clicks made on the page are posted to /api/menu
 for the menu (ui/menu.py), which is the same one the Qt front end has.
 
 Nothing here needs Qt, so it runs on a machine with no screen.
+
+It also serves standalone.html, the page with the JavaScript core in it
+(static/core), which needs no server of its own once it is on a static host
+(scripts/build_site.py). For trying it here, /proxy passes on the two schedule
+zips that a page can't read from the MTA itself, and config.json points the
+page at it.
 """
 import argparse
 import dataclasses
@@ -25,7 +31,7 @@ from urllib.parse import parse_qs, unquote, urlsplit
 import requests
 
 from ..core.clock import Clock
-from ..core.gtfs import StaticData
+from ..core.gtfs import SUBWAY_URL, SUPPLEMENTED_URL, StaticData
 from ..core.settings import Settings
 from ..ui.menu import Menu
 
@@ -33,6 +39,10 @@ PACKAGE_DIR = Path(__file__).resolve().parent.parent
 STATIC_DIR = Path(__file__).resolve().parent / "static"
 ASSETS_DIR = PACKAGE_DIR / "assets"
 QML_DIR = PACKAGE_DIR / "ui" / "qml"
+FEEDS_PATH = PACKAGE_DIR / "core" / "feeds.json"  # for the JavaScript core, as core/feeds.json
+
+# What /proxy will fetch for a page: only the schedules, so that it is no use as anyone's proxy.
+PROXIED = (SUBWAY_URL, SUPPLEMENTED_URL)
 
 # The QML's JavaScript libraries that the page uses as they are: see library().
 LIBRARIES = ("Styles", "Messages", "LedFont")
@@ -278,6 +288,12 @@ class Handler(BaseHTTPRequestHandler):
         path = unquote(url.path)
         if path == "/api/state":
             self.send_state(url.query)
+        elif path == "/proxy":
+            self.send_proxied(parse_qs(url.query).get("url", [""])[0])
+        elif path == "/config.json":
+            self.send_content(json.dumps({"proxy": "proxy?url="}).encode("utf-8"), TYPES[".json"])
+        elif path == "/core/feeds.json":
+            self.send_content(FEEDS_PATH.read_bytes(), TYPES[".json"])
         elif path.startswith("/qml/") and path[5:-3] in LIBRARIES and path.endswith(".js"):
             self.send_content(library(path[5:-3]).encode("utf-8"), TYPES[".js"])
         elif path.startswith("/assets/"):
@@ -309,6 +325,31 @@ class Handler(BaseHTTPRequestHandler):
             return
         state = self.server.service.state(lines, values.get("grouped", ["0"])[0] == "1")
         self.send_content(json.dumps(state).encode("utf-8"), TYPES[".json"])
+
+    def send_proxied(self, url):
+        """Pass on one of the schedule zips, with the headers the page reads."""
+        if url not in PROXIED:
+            self.send_error(HTTPStatus.NOT_FOUND)
+            return
+        try:
+            response = requests.get(url, stream=True, timeout=30)
+            response.raise_for_status()
+        except requests.RequestException as e:
+            log.warning("Fetching %s for a page failed: %s", url, e)
+            self.send_error(HTTPStatus.BAD_GATEWAY)
+            return
+        with response:
+            self.send_response(HTTPStatus.OK)
+            for header in ("Content-Type", "Content-Length", "Last-Modified"):
+                if header in response.headers:
+                    self.send_header(header, response.headers[header])
+            self.send_header("Cache-Control", "no-cache")
+            self.end_headers()
+            try:
+                for chunk in response.iter_content(chunk_size=65536):
+                    self.wfile.write(chunk)
+            except ConnectionError:
+                pass  # The page stopped reading, as it does when it already has this copy
 
     def send_file(self, root, name):
         file = (root / name).resolve()

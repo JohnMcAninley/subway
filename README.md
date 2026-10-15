@@ -87,6 +87,71 @@ asks it for the board about once a second. If the page loses the server it keeps
 and after 15 seconds says the times may be out of date. Several pages can be open at once, of
 different shapes; they share the settings (and the menu, which is open on all of them or none).
 
+### As plain files, with the core in the page
+
+The same page can also run the clock itself, with the core ported to JavaScript
+(`subway_clock/web/static/core`), so that it needs no server of its own: put it on any static
+host and open it on a phone. It is checked against the Python core by the golden cases (see
+Development), and is here to be compared with the other two for a while; see
+[docs/architecture.md](docs/architecture.md).
+
+```sh
+python scripts/build_site.py --schedules data   # writes build/site
+python -m http.server -d build/site             # or put build/site on any static host
+```
+
+`.github/workflows/pages.yml` publishes it to GitHub Pages on every push to master and every
+hour, once Pages is turned on with "GitHub Actions" as its source. To try it without building,
+the Python server serves it too, at `http://127.0.0.1:8000/standalone.html`.
+
+Settings are kept in the browser, and can be given in the address, which the menu keeps up to
+date: `?stops=635S,R20S,L03S&style=new` is a whole clock, so each clock wanted can be a
+bookmark. The names are those of `settings.json`. On a phone, tap the clock for the menu, and tap
+the search's line to bring up the keyboard.
+
+The trains come straight from the MTA, which lets a page read its feeds. The schedules don't:
+a page can't read the MTA's schedule zips. So `build_site.py --schedules data` reads them in
+Python (downloading them into `data/` if they have changed) and writes the tables beside the
+page as `schedules.json`, under a megabyte, and less than 100 KB as most hosts send it; the
+workflow does this every hour, as the MTA republishes the supplemented schedule about that
+often. If GitHub stops running it (it does for a repository with no commits in 60 days), the
+page goes on with the last tables published, and says in the browser's console that they are
+getting old.
+
+Without `schedules.json`, or if it can't be fetched, the page reads the zips itself, through a
+CORS proxy. Give it one once per browser by adding it to the address, `?proxy=https://...` (the schedule's
+address is added to the end, encoded, or put where the proxy's address says `{url}`); it is then
+kept in the browser and taken out of the address, so a link passed on doesn't carry it.
+`?proxy=` with nothing after it forgets it. `build_site.py --proxy` sets a default for everyone
+instead, in `config.json`, which is public once hosted (the workflow's is the repository
+variable `SCHEDULE_PROXY`). The Python server's own copy of the page uses the server as its
+proxy, for the two schedule zips only.
+
+Of the public proxies tried on 2026-10-14, none passed the zips on: corsproxy.io wants an API
+key, and its free plan refuses zip files; allorigins, codetabs, cors.eu.org and others refused or timed
+out. A proxy of your own is a few lines on Cloudflare Workers' free plan, for example:
+
+```js
+export default {
+    async fetch(request) {
+        const url = new URL(request.url).searchParams.get("url")
+        if (!/^https:\/\/rrgtfsfeeds\.s3\.amazonaws\.com\/gtfs_(subway|supplemented)\.zip$/.test(url))
+            return new Response("Not found", { status: 404 })
+        const response = await fetch(url)
+        const headers = new Headers(response.headers)
+        headers.set("Access-Control-Allow-Origin", "*")
+        return new Response(response.body, { status: response.status, headers })
+    },
+}
+```
+
+and then `?proxy=https://<your worker>.workers.dev/?url=`.
+
+Through a proxy, the first start downloads both zips (about 25 MB) and reads them, which takes a
+few seconds on a PC. Either way, what the page has is kept in the browser, so later starts are
+immediate, and every hour it looks for new tables, downloading them only when they have changed. Fetching every feed (the default) is about 430 KB every 10 seconds, which on a
+phone's data plan may be worth turning off in the menu.
+
 ## Settings
 
 The settings menu, opened with Enter or M, covers the usual ones: the station,
@@ -197,6 +262,11 @@ window, so the two front ends can be compared screen for screen. Two things it c
 classic style's ticker, which doesn't move there, and a window narrower than about 500 pixels,
 which those browsers don't allow.
 
+`tests/test_js_core.py` runs the JavaScript core in the same browser, without a window, on every
+golden case, and checks it against the Python core on scripts of keys for the settings menu and
+queries for the station search; with the schedules in `data/`, also that it reads them into the
+same tables. It is skipped if no browser is found. Node isn't needed.
+
 ## Layout
 
 - `subway_clock/core/`: data and display logic, with no UI code. `Clock` produces a `Board` (the screen description) that renderers draw as-is.
@@ -205,7 +275,9 @@ which those browsers don't allow.
 - `subway_clock/web/`: the web front end. `server.py` runs the clock's timers without Qt and serves
   the `Board` as JSON; the page in `static/` draws it, a file for each style as in `ui/qml/`,
   with the same proportions. The colours, the alerts' text and the LED lettering are not copies:
-  the page is served `ui/qml/Styles.js`, `Messages.js` and `LedFont.js` themselves.
+  the page is served `ui/qml/Styles.js`, `Messages.js` and `LedFont.js` themselves. `page.js`
+  draws whatever core it is given: the server's (`main.js`), or the JavaScript port in
+  `static/core` (`standalone.js`), a module for each of the Python core's and the menu's.
 - `subway_clock/assets/`: route bullets, the Roboto font, and the direction labels,
   boroughs and complexes (`stations.json`, regenerated by `scripts/update_stations.py`).
 - `tests/`: run with `pytest`. `tests/golden/` holds golden cases (captured live feeds and the

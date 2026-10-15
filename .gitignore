@@ -4,3 +4,6 @@ venv/
 # Static GTFS cache and local settings
 data/
 settings.json
+
+# The page with the JavaScript core, as plain files (scripts/build_site.py)
+build/

@@ -16,6 +16,20 @@ html, body {
     background: #000000;
 }
 
+/* The field a screen keyboard types into, out of sight: see page.js. 16px, or a phone zooms to it. */
+#typing {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 1px;
+    height: 1px;
+    padding: 0;
+    border: 0;
+    opacity: 0;
+    font-size: 16px;
+    pointer-events: none;
+}
+
 #clock, #menu {
     position: fixed;
     inset: 0;

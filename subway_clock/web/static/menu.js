@@ -1,11 +1,13 @@
 import { bullet, el, vars } from "./dom.js"
 
 // The settings menu, drawn over whichever style is showing. What it lists and
-// what each key does is decided in Python (ui/menu.py); this draws its view,
-// which ui/qml/SettingsMenu.qml describes and whose sizes these are. A mouse
-// goes back to Python too, through act: a click on a row, the button that does
-// what Esc does (as does a click beside the menu), and the wheel.
-export function settingsMenu(root, act) {
+// what each key does is decided by the core (ui/menu.py, or core/menu.js in the
+// page); this draws its view, which ui/qml/SettingsMenu.qml describes and whose
+// sizes these are. A mouse goes back to the core too, through act: a click on a
+// row, the button that does what Esc does (as does a click beside the menu), and
+// the wheel. A tap on the search's line calls type(), to bring up a screen
+// keyboard (see page.js).
+export function settingsMenu(root, act, type) {
     let drawn = ""
 
     root.addEventListener("click", () => act({ back: true }))
@@ -50,8 +52,10 @@ export function settingsMenu(root, act) {
         panel.addEventListener("wheel", event => act({ scroll: event.deltaY < 0 ? -1 : 1 }), { passive: true })
         if (searching) {
             // What has been typed, or until something is, what to type
-            panel.append(el("div", "query" + (menu.query === "" ? " prompt" : ""),
-                            el("span", "typed", menu.query === "" ? menu.prompt : menu.query), el("i", "caret")))
+            const query = el("div", "query" + (menu.query === "" ? " prompt" : ""),
+                             el("span", "typed", menu.query === "" ? menu.prompt : menu.query), el("i", "caret"))
+            query.addEventListener("click", type)
+            panel.append(query)
         }
         panel.append(list, el("div", "keys", el("span", "", menu.keys)))
         root.replaceChildren(el("div", "shade"), panel)
